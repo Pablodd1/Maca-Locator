@@ -1,0 +1,6 @@
+{
+  "name": "MACALOCATOR",
+  "description": "Premium automotive service booking, emergency roadside assistance, and vehicle diagnostic locator.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
