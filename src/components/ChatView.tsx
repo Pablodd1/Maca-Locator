@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldCheck, Send, User, LifeBuoy, Mic, MicOff, Volume2, VolumeX, Sparkles, MapPin } from "lucide-react";
+import { speakHuman } from "@/lib/voice";
 
 type Message = {
   id: string;
@@ -16,7 +17,7 @@ export function ChatView() {
     { 
       id: '1', 
       role: 'model', 
-      text: 'Hello! Welcome to the MACALOCATOR VIP Support Desk. We are a premier fully mobile car service: we dispatch our certified elite mechanics straight to your driveway, workspace, or roadside location in Colombia. How can I help schedule your at-home service or assist with vehicle diagnostics today?' 
+      text: 'Welcome to the MACALOCATOR VIP Concierge — Miami & Miami Beach\u2019s premier mobile car service. Our certified technicians come straight to your driveway, office valet, or roadside location.\n\nBienvenido al conserje VIP de MACALOCATOR. Nuestros técnicos van directamente hasta usted en Miami y Miami Beach.\n\nByenvini nan sèvis concierge MACALOCATOR — nou vini jiskapò ou nan Miami ak Miami Beach.\n\nHow can we take care of your vehicle today? · ¿En qué le servimos hoy? · Kijan nou ka ede w jodi a?'
     }
   ]);
   const [input, setInput] = useState('');
@@ -34,7 +35,8 @@ export function ChatView() {
     if (SpeechRecognition) {
       const rec = new SpeechRecognition();
       rec.continuous = false;
-      rec.lang = "en-US";
+      // es-US handles Spanish natively and English well — ideal for Miami.
+      rec.lang = "es-US";
       rec.interimResults = false;
 
       rec.onstart = () => {
@@ -71,20 +73,11 @@ export function ChatView() {
 
   const speakText = (text: string) => {
     if (!speakResponses) return;
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      // Strip markdown code blocks before speaking to sound clean
-      const cleanedText = text.replace(/```[\s\S]*?```/g, "[code block omitted]").replace(/[`*_]/g, "");
-      const utterance = new SpeechSynthesisUtterance(cleanedText);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Natural"));
-      if (preferredVoice) utterance.voice = preferredVoice;
-
-      window.speechSynthesis.speak(utterance);
-    }
+    // The multilingual greeting is spoken in English only; regular replies are
+    // spoken in whichever language the concierge answered with.
+    const englishLine = text.split("\n").find((l) => /[a-z]/i.test(l)) || text;
+    const isMultilingualGreeting = text.includes("Byenvini");
+    speakHuman(isMultilingualGreeting ? englishLine : text);
   };
 
   const startListening = () => {
@@ -178,7 +171,7 @@ export function ChatView() {
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 border border-slate-200 text-slate-700'}`}>
                   {msg.role === 'user' ? <User className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4 text-blue-700" />}
                 </div>
-                <div className={`p-3.5 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-sm shadow-sm' : 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-sm shadow-sm'}`}>
+                <div className={`p-3.5 rounded-2xl text-sm whitespace-pre-line ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-sm shadow-sm' : 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-sm shadow-sm'}`}>
                   {msg.text}
                 </div>
               </div>
@@ -237,7 +230,7 @@ export function ChatView() {
           <Input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={isListening ? "Listening closely..." : "Ask your vehicle questions..."}
+            placeholder={isListening ? "Listening closely..." : "Ask anything — English, Español, or Kreyòl..."}
             className="flex-1 bg-white border-slate-200 focus-visible:ring-blue-600 rounded-xl"
             disabled={isLoading}
           />

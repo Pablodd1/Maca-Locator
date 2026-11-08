@@ -29,7 +29,7 @@ const defaultVehicles: Vehicle[] = [
     make: "Tesla",
     model: "Model 3",
     year: 2022,
-    licensePlate: "EV-987-COL",
+    licensePlate: "EV-987-FL",
     currentMilage: 12500,
     lastOilChangeMilage: 0, // Electric, but good for demo
     lastTireRotationMilage: 8000,
@@ -39,7 +39,7 @@ const defaultVehicles: Vehicle[] = [
     make: "Chevrolet",
     model: "Bolt EV",
     year: 2021,
-    licensePlate: "EV-123-BOG",
+    licensePlate: "EV-123-FL",
     currentMilage: 18400,
     lastOilChangeMilage: 0,
     lastTireRotationMilage: 15000,
@@ -77,7 +77,7 @@ const defaultUser: User = {
   id: "u1",
   name: "Jasmel Acosta",
   email: "jasmelacosta@gmail.com",
-  phone: "+57 300 123 4567"
+  phone: "+1 (305) 555-0123"
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

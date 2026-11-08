@@ -126,13 +126,13 @@ export function AdminView() {
   const [transcriptionResult, setTranscriptionResult] = useState<string | null>(null);
 
   // 3. Twilio SMS / Call states
-  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState(user?.phone || "+57 300 123 4567");
+  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState(user?.phone || "+1 (305) 555-0123");
   const [twilioSmsTemplate, setTwilioSmsTemplate] = useState("MACALOCATOR VIP Alerts: Our certified Mobile Workshop is en route to your driveway. Current ETA is 11 minutes. Click to track live: https://macalocator.co/t/t1");
   const [twilioLogs, setTwilioLogs] = useState<Array<{ id: string; type: "sms" | "call"; to: string; text: string; status: string; timestamp: string }>>([
     {
       id: "tw-1",
       type: "sms",
-      to: "+57 300 123 4567",
+      to: "+1 (305) 555-0123",
       text: "Booking #b2 Battery Diagnostic is now IN PROGRESS. Our elite mobile engineer is on-site.",
       status: "Delivered",
       timestamp: "10:02 AM"
@@ -140,7 +140,7 @@ export function AdminView() {
     {
       id: "tw-2",
       type: "call",
-      to: "+57 300 987 6543",
+      to: "+1 (305) 555-0456",
       text: "Simulated Automated Dispatch Warning: Driver safety override check required.",
       status: "Completed",
       timestamp: "09:41 AM"
@@ -190,9 +190,9 @@ export function AdminView() {
     setTimeout(() => {
       let reply = "";
       if (userPrompt.toLowerCase().includes("jasmel") || userPrompt.toLowerCase().includes("acosta")) {
-        reply = `[Front Desk AI] Verified client "Jasmel Acosta". Currently has registered a 2022 Tesla Model 3 (EV-987-COL) and a scheduled Tire Rotation for July 10 at 10:00 AM. Recommending pre-dispatch dispatch message via Twilio with torque audit details.`;
+        reply = `[Front Desk AI] Verified client "Jasmel Acosta". Currently has registered a 2022 Tesla Model 3 (EV-987-FL) and a scheduled Tire Rotation for July 10 at 10:00 AM. Recommending pre-dispatch dispatch message via Twilio with torque audit details.`;
       } else if (userPrompt.toLowerCase().includes("oil") || userPrompt.toLowerCase().includes("fluid")) {
-        reply = `[Front Desk AI] Service Analysis: "Fluid Flush / Oil change" is highly requested by standard hybrid/combustion models, but restricted for our premium electric fleet. Current synthetic inventory in Bogotá warehouse: 45 Gallons 0W-20, 12 OEM EV filters.`;
+        reply = `[Front Desk AI] Service Analysis: "Fluid Flush / Oil change" is highly requested by standard hybrid/combustion models, but restricted for our premium electric fleet. Current synthetic inventory in Miami warehouse: 45 Gallons 0W-20, 12 OEM EV filters.`;
       } else {
         reply = `[Front Desk AI Analysis] I have analyzed your request regarding: "${userPrompt}". We suggest utilizing "Mobile Diagnostic Unit 1" for immediate scheduling, which has an active 100% calibration index and is fully equipped for EV system recovery.`;
       }
@@ -209,7 +209,7 @@ export function AdminView() {
       setTranscriptionResult(`[911 EMERGENCY roadside transcript]
 Caller: "My name is Carlos. I'm stranded near Calle 100 with my Taycan. The computer says auxiliary voltage critical. Please send help!"
 Extracted Model: Porsche Taycan (Premium EV)
-Location Coordinates: Bogotá - Calle 100 Intersect
+Location Coordinates: Brickell Avenue & SW 100 Intersect
 Requested Service: Battery Diagnostic`);
       setIsTranscribing(false);
     }, 1500);
@@ -596,7 +596,7 @@ Requested Service: Battery Diagnostic`);
   "client": {
     "name": "${user?.name || "Jasmel Acosta"}",
     "email": "${user?.email || "jasmelacosta@gmail.com"}",
-    "phone": "${user?.phone || "+57 300 123 4567"}"
+    "phone": "${user?.phone || "+1 (305) 555-0123"}"
   },
   "fleet_active_count": ${vehicles.length},
   "bookings": [
@@ -641,7 +641,7 @@ Requested Service: Battery Diagnostic`);
                 <div className="flex items-center justify-between border-b pb-2">
                   <div>
                     <p className="font-bold text-slate-800">Unit 1: Mobile Diagnostic</p>
-                    <p className="text-[10px] text-slate-500">Bogotá - Chicó Norte</p>
+                    <p className="text-[10px] text-slate-500">Miami Beach - South of Fifth</p>
                   </div>
                   <span className="text-[9px] bg-blue-50 text-blue-700 font-extrabold px-1.5 py-0.5 rounded border border-blue-200">
                     Active
@@ -650,7 +650,7 @@ Requested Service: Battery Diagnostic`);
                 <div className="flex items-center justify-between border-b pb-2">
                   <div>
                     <p className="font-bold text-slate-800">Unit 2: Rapid Response Flatbed</p>
-                    <p className="text-[10px] text-slate-500">Bogotá - Calle 26</p>
+                    <p className="text-[10px] text-slate-500">Downtown Miami - Brickell</p>
                   </div>
                   <span className="text-[9px] bg-emerald-50 text-emerald-700 font-extrabold px-1.5 py-0.5 rounded border border-emerald-200">
                     On-Call
@@ -659,7 +659,7 @@ Requested Service: Battery Diagnostic`);
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-bold text-slate-800">Unit 3: High-Voltage Tech</p>
-                    <p className="text-[10px] text-slate-500">Bogotá - Usaquén</p>
+                    <p className="text-[10px] text-slate-500">Coral Gables - Miracle Mile</p>
                   </div>
                   <span className="text-[9px] bg-blue-50 text-blue-700 font-extrabold px-1.5 py-0.5 rounded border border-blue-200">
                     Active
@@ -902,7 +902,7 @@ Requested Service: Battery Diagnostic`);
                     Dispatch Workload Distribution
                   </CardTitle>
                   <CardDescription className="text-xs">
-                    Current task status breakdown across mobile diagnostic teams in Bogotá.
+                    Current task status breakdown across mobile diagnostic teams in Miami.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6 flex-1 flex flex-col items-center justify-center">
@@ -1348,7 +1348,7 @@ Requested Service: Battery Diagnostic`);
                     <Input
                       value={twilioPhoneNumber}
                       onChange={(e) => setTwilioPhoneNumber(e.target.value)}
-                      placeholder="+57 300 123 4567"
+                      placeholder="+1 (305) 555-0123"
                       className="h-11 rounded-xl text-xs sm:text-sm border-slate-200 font-bold font-mono focus-visible:ring-red-500"
                     />
                   </div>
@@ -1426,7 +1426,7 @@ Requested Service: Battery Diagnostic`);
                     <span className="text-[10px] text-slate-400 font-mono">TTS Audio engine</span>
                   </div>
                   <p className="text-[11px] text-slate-600 leading-relaxed italic">
-                    "This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Bogotá. Please ensure safe vehicle access."
+                    "This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access."
                   </p>
                   <Button
                     type="button"
@@ -1434,7 +1434,7 @@ Requested Service: Battery Diagnostic`);
                     className="h-8 text-[10px] font-bold text-slate-700 border-slate-200 bg-white hover:bg-slate-50"
                     onClick={() => {
                       setIsPlayingCallAudio(true);
-                      const speech = new SpeechSynthesisUtterance("This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Bogotá. Please ensure safe vehicle access.");
+                      const speech = new SpeechSynthesisUtterance("This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access.");
                       speech.onend = () => setIsPlayingCallAudio(false);
                       window.speechSynthesis.speak(speech);
                     }}
@@ -1498,7 +1498,7 @@ Requested Service: Battery Diagnostic`);
                   <span>$0.0075 USD / SMS</span>
                 </div>
                 <p className="text-[10px] text-slate-400 leading-relaxed mt-2">
-                  Twilio messaging uses certified route codes inside Colombia to ensure immediate dispatch alert delivery to customers like <strong>Jasmel Acosta</strong>.
+                  Twilio messaging uses certified route codes inside Miami-Dade to ensure immediate dispatch alert delivery to customers like <strong>Jasmel Acosta</strong>.
                 </p>
               </CardContent>
             </Card>

@@ -13,7 +13,7 @@ export function BookingView() {
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
   const [selectedDate, setSelectedDate] = useState("2026-07-02");
   const [selectedTime, setSelectedTime] = useState("");
-  const [serviceAddress, setServiceAddress] = useState("VIP Client Suite, Carrera 7 #113, Bogotá, Colombia");
+  const [serviceAddress, setServiceAddress] = useState("VIP Residence, 1000 Brickell Plaza, Miami, FL");
 
   const services = [
     { name: "Full Mobile Diagnostics", desc: "Premium electronic scan, battery diagnostics & calibration check at your site." },
@@ -66,7 +66,7 @@ export function BookingView() {
             <ShieldCheck className="w-5 h-5 text-blue-600" />
             Executive Service Scheduler
           </CardTitle>
-          <CardDescription className="text-xs">Schedule professional automotive maintenance delivered directly to your doorstep in Colombia.</CardDescription>
+          <CardDescription className="text-xs">Schedule professional automotive maintenance delivered directly to your doorstep in Miami & Miami Beach.</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           {/* Step 1: Select Service */}
@@ -147,7 +147,7 @@ export function BookingView() {
                       type="text" 
                       value={serviceAddress} 
                       onChange={(e) => setServiceAddress(e.target.value)}
-                      placeholder="Enter home or office address in Colombia"
+                      placeholder="Enter home or office address in Miami or Miami Beach"
                       className="bg-white border-slate-200 rounded-lg focus-visible:ring-blue-600 text-xs h-9"
                     />
                     <p className="text-[10px] text-slate-400">Our VIP mobile workshop team travels straight to this exact address.</p>

@@ -3,13 +3,14 @@ import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { Mic, MicOff, Volume2, VolumeX, HelpCircle, Navigation, Sparkles, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { speakHuman } from "@/lib/voice";
 
 export function VoiceController() {
   const navigate = useNavigate();
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [speechSupported, setSpeechSupported] = useState(false);
-  const [voiceFeedback, setVoiceFeedback] = useState("Ready for your voice command.");
+  const [voiceFeedback, setVoiceFeedback] = useState("Ready when you are — English or Spanish.");
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showHelp, setShowHelp] = useState(false);
   
@@ -24,22 +25,24 @@ export function VoiceController() {
       setSpeechSupported(true);
       const rec = new SpeechRecognition();
       rec.continuous = false;
-      rec.lang = "en-US";
+      // es-US understands English well AND native Spanish — the best single
+      // setting for Miami's bilingual clientele.
+      rec.lang = "es-US";
       rec.interimResults = false;
-      
+
       rec.onstart = () => {
         setIsListening(true);
         setTranscript("Listening...");
-        speak("I am listening for your destination.");
+        speak("Go ahead, I'm listening.", "Estoy lista, dígame.");
       };
 
       rec.onerror = (event: any) => {
         console.error("Speech recognition error", event.error);
         setIsListening(false);
         if (event.error === "not-allowed") {
-          setVoiceFeedback("Microphone access blocked. Please allow permissions.");
+          setVoiceFeedback("Microphone blocked — please allow access.");
         } else {
-          setVoiceFeedback("Could not recognize. Please try again.");
+          setVoiceFeedback("Sorry, I didn't catch that. Try again?");
         }
       };
 
@@ -57,66 +60,54 @@ export function VoiceController() {
     }
   }, []);
 
-  const speak = (text: string) => {
+  const speak = (en: string, es?: string) => {
     if (!soundEnabled) return;
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.05;
-      
-      // Try to find a premium female/male natural sounding voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const executiveVoice = voices.find(
-        (v) =>
-          v.name.includes("Google US English") ||
-          v.name.includes("Premium") ||
-          v.name.includes("Natural")
-      );
-      if (executiveVoice) utterance.voice = executiveVoice;
-
-      window.speechSynthesis.speak(utterance);
-    }
+    speakHuman(es ?? en, es ? "es" : "en");
   };
+
+  const hasAny = (cmd: string, words: string[]) => words.some((w) => cmd.includes(w));
 
   const handleVoiceCommand = (cmd: string) => {
     let handled = false;
-    
-    if (cmd.includes("home") || cmd.includes("dashboard") || cmd.includes("main")) {
+
+    if (hasAny(cmd, ["home", "dashboard", "casa", "inicio", "principal"])) {
       navigate("/");
-      setVoiceFeedback("Navigating you to your Home Dashboard.");
-      speak("Welcome back to your MACALOCATOR VIP Dashboard.");
+      setVoiceFeedback("Taking you home.");
+      speak("Welcome back to your dashboard.", "Bienvenido de nuevo a su panel.");
       handled = true;
-    } else if (cmd.includes("book") || cmd.includes("schedule") || cmd.includes("reserve") || cmd.includes("service")) {
+    } else if (hasAny(cmd, ["book", "schedule", "reserve", "service", "reserv", "cita", "agenda", "servicio"])) {
       navigate("/booking");
-      setVoiceFeedback("Opening premium booking scheduler.");
-      speak("Opening our white glove service scheduler. We will dispatch our expert technician to your exact address.");
+      setVoiceFeedback("Opening the scheduler.");
+      speak("Let's get you booked. Our technician will come straight to you.", "Con gusto. Nuestro técnico irá directamente hasta usted.");
       handled = true;
-    } else if (cmd.includes("chat") || cmd.includes("support") || cmd.includes("assistant") || cmd.includes("help desk")) {
+    } else if (hasAny(cmd, ["chat", "support", "assistant", "help desk", "soporte", "ayuda", "asistente", "conversa"])) {
       navigate("/chat");
-      setVoiceFeedback("Navigating to executive support.");
-      speak("Connecting you to our VIP Auto Support Desk.");
+      setVoiceFeedback("Connecting you to the concierge.");
+      speak("Connecting you with our concierge team.", "Le conecto con nuestro conserje.");
       handled = true;
-    } else if (cmd.includes("profile") || cmd.includes("car") || cmd.includes("vehicle") || cmd.includes("garage")) {
+    } else if (hasAny(cmd, ["profile", "car", "vehicle", "garage", "perfil", "carro", "vehiculo", "garaje"])) {
       navigate("/profile");
-      setVoiceFeedback("Opening your premium vehicle garage.");
-      speak("Here are your registered VIP vehicles and maintenance logs.");
+      setVoiceFeedback("Here are your vehicles.");
+      speak("Here are your vehicles and their service history.", "Aquí están sus vehículos y su historial.");
       handled = true;
-    } else if (cmd.includes("marketing") || cmd.includes("asset") || cmd.includes("flyer")) {
+    } else if (hasAny(cmd, ["marketing", "asset", "flyer", "mercado", "publicidad"])) {
       navigate("/marketing");
-      setVoiceFeedback("Opening marketing assets engine.");
-      speak("Opening our generative marketing assets studio.");
+      setVoiceFeedback("Opening the creative studio.");
+      speak("Opening the marketing studio.", "Abriendo el estudio de marketing.");
       handled = true;
-    } else if (cmd.includes("emergency") || cmd.includes("help") || cmd.includes("sos") || cmd.includes("accident")) {
+    } else if (hasAny(cmd, ["emergency", "sos", "accident", "emergencia", "auxilio", "accidente"])) {
       navigate("/emergency");
-      setVoiceFeedback("🚨 Emergency SOS mode activated!");
-      speak("Warning: Emergency mode activated. Dispatching priority immediate response team to your GPS location.");
+      setVoiceFeedback("🚨 Emergency mode — help is on the way.");
+      speak("Emergency mode is on. We're getting a response team to your location right now.", "Modo de emergencia activado. Ya vamos en camino a su ubicación.");
       handled = true;
     }
 
     if (!handled) {
-      setVoiceFeedback(`Command "${cmd}" not recognized. Say: "Go Home", "Book Service", "Support Desk", or "Emergency".`);
-      speak("Command not matched. You can say: Go Home, Book Service, Support Desk, or Emergency.");
+      setVoiceFeedback(`I didn't quite get that. Try: "Book Service" · "Reservar" · "Emergency"`);
+      speak(
+        "Sorry, I didn't catch that. You can say book service, support, or emergency.",
+        "No le entendí. Puede decir reservar, soporte, o emergencia."
+      );
     }
   };
 
@@ -160,7 +151,7 @@ export function VoiceController() {
           </h2>
           
           <p className="text-xs text-slate-300 leading-relaxed">
-            At MACALOCATOR, we provide <span className="text-blue-300 font-semibold">100% door-to-door, at-home, or at-work services</span>. Our expert mechanics travel straight to you with premium tools. Command this system with your voice!
+            At MACALOCATOR, we provide <span className="text-blue-300 font-semibold">100% door-to-door, at-home, or at-work services</span> across Miami & Miami Beach. Our expert mechanics travel straight to you with premium tools. Command this system with your voice — English or Spanish!
           </p>
         </div>
 
@@ -272,7 +263,9 @@ export function VoiceController() {
             <div className="mt-3 text-[11px] bg-blue-500/10 text-blue-300 p-2.5 rounded-lg border border-blue-500/20 flex items-start gap-2">
               <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
               <p>
-                <strong>VIP Dispatch Model:</strong> Unlike regular garages, MACALOCATOR operates in reverse. Whether you book via speech command, calendar scheduling, or SOS, our team loads professional diagnostic kits and drives directly to your designated villa, garage, or office in Colombia.
+                <strong>Habla Español / English / Kreyòl:</strong> Voice commands work in English and Spanish — say "Book Service" or "Reservar cita". The concierge chat answers in all three languages of our Miami & Miami Beach clientele.
+                <br /><br />
+                <strong>VIP Dispatch Model:</strong> Unlike regular garages, MACALOCATOR operates in reverse. Whether you book via speech command, calendar scheduling, or SOS, our team loads professional diagnostic kits and drives directly to your penthouse, villa, yacht dock, or office in Miami & Miami Beach.
               </p>
             </div>
           </motion.div>

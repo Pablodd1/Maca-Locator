@@ -870,7 +870,7 @@ export function UserProfile() {
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-slate-500">License Plate</label>
-                      <Input placeholder="EV-123-BOG" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} required />
+                      <Input placeholder="EV-123-FL" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} required />
                     </div>
                   </div>
 

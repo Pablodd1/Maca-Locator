@@ -47,7 +47,7 @@ const mapPoints: MapPoint[] = [
     id: "t1",
     type: "team",
     name: "Mobile Diagnostic Unit 1",
-    locationName: "Bogotá - Chicó Norte",
+    locationName: "Miami Beach - South of Fifth",
     lat: 32,
     lng: 68,
     status: "En Route",
@@ -59,7 +59,7 @@ const mapPoints: MapPoint[] = [
     id: "t2",
     type: "team",
     name: "Rapid Response Flatbed 2",
-    locationName: "Bogotá - Calle 26",
+    locationName: "Downtown Miami - Brickell",
     lat: 68,
     lng: 35,
     status: "Ready & On Call",
@@ -71,7 +71,7 @@ const mapPoints: MapPoint[] = [
     id: "t3",
     type: "team",
     name: "Elite High-Voltage Specialist 3",
-    locationName: "Bogotá - Usaquén",
+    locationName: "Coral Gables - Miracle Mile",
     lat: 15,
     lng: 78,
     status: "Active Worksite",
@@ -420,7 +420,7 @@ export function Dashboard() {
                   <MapIcon className="w-5 h-5 text-blue-600" />
                   VIP Logistics & Dispatch Map
                 </CardTitle>
-                <CardDescription className="text-xs">Real-time status of emergency service teams & pending roadside requests across Bogotá.</CardDescription>
+                <CardDescription className="text-xs">Real-time status of emergency service teams & pending roadside requests across Miami.</CardDescription>
               </div>
               
               {/* Map Filter Controls */}
@@ -452,7 +452,7 @@ export function Dashboard() {
               {/* Map Canvas Frame */}
               <div className="w-full h-[360px] bg-[#f8fafc] relative overflow-hidden border-b select-none">
                 
-                {/* Visual Grid Schematic Background of Bogotá, Colombia */}
+                {/* Visual Grid Schematic Background of Miami Beach, FL */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
                   {/* Grid Lines */}
                   <defs>
@@ -666,7 +666,7 @@ export function Dashboard() {
                         <span className="h-1.5 w-1.5 bg-blue-400 rounded-full inline-block animate-pulse" />
                         Live Average Index
                       </span>
-                      <span className="text-[9px] text-slate-400 font-bold tracking-wider font-mono">BOGOTÁ, COL</span>
+                      <span className="text-[9px] text-slate-400 font-bold tracking-wider font-mono">MIAMI BEACH, FL</span>
                     </div>
 
                     {/* Price Range display */}

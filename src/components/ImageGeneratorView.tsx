@@ -68,7 +68,7 @@ export function ImageGeneratorView() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Description</label>
             <Input 
-              placeholder="e.g. A sleek modern electric charger station in Bogota at sunset"
+              placeholder="e.g. A sleek modern electric charger station on Miami Beach at sunset"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
