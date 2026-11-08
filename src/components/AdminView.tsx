@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
 import { useAppState } from "../context/AppContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -130,14 +131,14 @@ export function AdminView() {
   const [transcriptionResult, setTranscriptionResult] = useState<string | null>(null);
 
   // 3. Twilio SMS / Call states + Telegram + channel modes
-  const [channelModes, setChannelModes] = useState<ChannelMode>({ sms: false, voice: false, telegram: false });
+  const [channelModes, setChannelModes] = useState<ChannelMode>({ sms: false, whatsapp: false, voice: false, telegram: false, email: false });
   const [twilioPhoneNumber, setTwilioPhoneNumber] = useState(user?.phone || "+1 (305) 555-0123");
   const [telegramChatId, setTelegramChatId] = useState("");
   const [twilioSmsTemplate, setTwilioSmsTemplate] = useState("MACALOCATOR VIP Alerts: Our certified Mobile Workshop is en route to your driveway. Current ETA is 11 minutes. Click to track live: https://macalocator.co/t/t1");
   const [isSendingTelegram, setIsSendingTelegram] = useState(false);
   const [isSweeping, setIsSweeping] = useState(false);
   const [sweepSummary, setSweepSummary] = useState<string | null>(null);
-  const [twilioLogs, setTwilioLogs] = useState<Array<{ id: string; type: "sms" | "call" | "telegram"; to: string; text: string; status: string; timestamp: string; mode: "live" | "demo" }>>([
+  const [twilioLogs, setTwilioLogs] = useState<Array<{ id: string; type: "sms" | "whatsapp" | "call" | "telegram" | "email"; to: string; text: string; status: string; timestamp: string; mode: "live" | "demo" }>>([
     {
       id: "tw-1",
       type: "sms",
@@ -217,7 +218,7 @@ export function AdminView() {
     setIsTranscribing(true);
     setTranscriptionResult(null);
     setTimeout(() => {
-      setTranscriptionResult(`[911 EMERGENCY roadside transcript]
+      setTranscriptionResult(`[SIMULATED 911 EMERGENCY roadside transcript]
 Caller: "My name is Carlos. I'm stranded near Calle 100 with my Taycan. The computer says auxiliary voltage critical. Please send help!"
 Extracted Model: Porsche Taycan (Premium EV)
 Location Coordinates: Brickell Avenue & SW 100 Intersect
@@ -240,7 +241,7 @@ Requested Service: Battery Diagnostic`);
   };
 
   // Twilio Trigger SMS — real /api/notify call (demo mode if no credentials)
-  const logNotification = (type: "sms" | "call" | "telegram", to: string, text: string, ok: boolean, mode: "live" | "demo") => {
+  const logNotification = (type: "sms" | "whatsapp" | "call" | "telegram" | "email", to: string, text: string, ok: boolean, mode: "live" | "demo") => {
     const newLog = {
       id: "tw-" + Math.random().toString(36).substring(2, 11),
       type,
@@ -300,17 +301,19 @@ Requested Service: Battery Diagnostic`);
       const vehicleLabel = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "client vehicle";
       const clientMsg = `${reminderMessage(b)} Vehicle: ${vehicleLabel}.`;
       const staffMsg = staffDispatchMessage(b, user?.name || "VIP client");
-      const [smsRes, voiceRes, tgRes] = await Promise.all([
+      const [smsRes, waRes, voiceRes, tgRes] = await Promise.all([
         notify({ channel: "sms", to: user?.phone || twilioPhoneNumber, message: clientMsg }),
+        notify({ channel: "whatsapp", to: (user?.phone || twilioPhoneNumber).replace(/[^\d+]/g, ""), message: clientMsg }),
         notify({ channel: "voice", to: user?.phone || twilioPhoneNumber, message: clientMsg }),
         notify({ channel: "telegram", to: telegramChatId, message: staffMsg }),
       ]);
       logNotification("sms", user?.phone || twilioPhoneNumber, clientMsg, smsRes.ok, smsRes.mode);
+      logNotification("whatsapp", (user?.phone || twilioPhoneNumber).replace(/[^\d+]/g, ""), clientMsg, waRes.ok, waRes.mode);
       logNotification("call", user?.phone || twilioPhoneNumber, clientMsg, voiceRes.ok, voiceRes.mode);
       logNotification("telegram", telegramChatId || "staff group", staffMsg, tgRes.ok, tgRes.mode);
       sent += 1;
     }
-    setSweepSummary(soon.length === 0 ? "No bookings within the next 24 hours." : `Sweep complete: ${sent} booking(s) reminded via SMS, voice call & Telegram.`);
+    setSweepSummary(soon.length === 0 ? "No bookings within the next 24 hours." : `Sweep complete: ${sent} booking(s) reminded via SMS, WhatsApp, voice call & Telegram.`);
     setIsSweeping(false);
   };
 
@@ -379,15 +382,23 @@ Requested Service: Battery Diagnostic`);
             </p>
           </div>
 
-          <Button 
-            variant="outline" 
-            className="border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-white text-xs h-10 font-bold shrink-0 self-start md:self-auto gap-2"
-            onClick={handleSyncData}
-            disabled={isSyncing}
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-blue-400" : ""}`} />
-            {isSyncing ? "Syncing Platform Database..." : "Force Sync Platform Data"}
-          </Button>
+          <div className="flex gap-2 shrink-0 self-start md:self-auto">
+            <Link
+              to="/marketing"
+              className="inline-flex items-center gap-2 border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-white text-xs h-10 px-4 font-bold rounded-xl"
+            >
+              Marketing Studio
+            </Link>
+            <Button
+              variant="outline"
+              className="border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-white text-xs h-10 font-bold gap-2"
+              onClick={handleSyncData}
+              disabled={isSyncing}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-blue-400" : ""}`} />
+              {isSyncing ? "Syncing Platform Database..." : "Force Sync Platform Data"}
+            </Button>
+          </div>
         </div>
 
         {/* Operational Tabs navigation */}
@@ -420,7 +431,7 @@ Requested Service: Battery Diagnostic`);
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
-            🤖 Front Desk AI Assistant
+            🤖 Front Desk AI Assistant (Simulated)
           </button>
           <button
             onClick={() => setActiveAdminTab("twilio")}
@@ -440,7 +451,7 @@ Requested Service: Battery Diagnostic`);
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
-            💬 Staff & Client Intercom
+            💬 Staff & Client Intercom (Simulated)
           </button>
         </div>
       </div>
@@ -1452,11 +1463,17 @@ Requested Service: Battery Diagnostic`);
                     <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.sms ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
                       SMS {channelModes.sms ? "LIVE" : "DEMO"}
                     </span>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.whatsapp ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                      WHATSAPP {channelModes.whatsapp ? "LIVE" : "DEMO"}
+                    </span>
                     <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.voice ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
                       VOICE {channelModes.voice ? "LIVE" : "DEMO"}
                     </span>
                     <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.telegram ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
                       TELEGRAM {channelModes.telegram ? "LIVE" : "DEMO"}
+                    </span>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.email ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                      EMAIL {channelModes.email ? "LIVE" : "DEMO"}
                     </span>
                   </div>
                 </div>
@@ -1525,7 +1542,7 @@ Requested Service: Battery Diagnostic`);
                     </Button>
                   </div>
                   <p className="text-[11px] text-amber-800 leading-relaxed">
-                    Every booking in the next 24 hours gets a client reminder (SMS + automated voice call, in the client's language) and the staff team gets a Telegram dispatch brief.
+                    Every booking in the next 24 hours gets a client reminder (SMS + WhatsApp + automated voice call, in the client's language) and the staff team gets a Telegram dispatch brief.
                   </p>
                   {sweepSummary && (
                     <p className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">{sweepSummary}</p>
@@ -1577,7 +1594,7 @@ Requested Service: Battery Diagnostic`);
                     <div key={log.id} className="border-b border-slate-900/40 pb-1.5">
                       <p className="flex justify-between items-center">
                         <span className="text-white font-bold">
-                          {log.type === "sms" ? "✉️ Outbound SMS" : log.type === "telegram" ? "📨 Telegram" : "📞 Voice Call"}
+                          {log.type === "sms" ? "✉️ Outbound SMS" : log.type === "whatsapp" ? "🟢 WhatsApp" : log.type === "telegram" ? "📨 Telegram" : log.type === "email" ? "📧 Email" : "📞 Voice Call"}
                           <span className={`ml-2 text-[8px] px-1 py-0.5 rounded font-mono ${log.mode === "live" ? "bg-emerald-900 text-emerald-300" : "bg-slate-800 text-slate-400"}`}>{log.mode.toUpperCase()}</span>
                         </span>
                         <span className="text-slate-500">{log.timestamp}</span>

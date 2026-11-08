@@ -2,7 +2,7 @@
 // Real provider calls when env credentials exist; otherwise a clearly-labeled
 // demo mode that composes and returns the exact payload that would be sent.
 
-export type Channel = "sms" | "voice" | "telegram";
+export type Channel = "sms" | "whatsapp" | "voice" | "telegram" | "email";
 
 export type NotifyResult = {
   channel: Channel;
@@ -15,8 +15,10 @@ export type NotifyResult = {
 export function channelStatus() {
   return {
     sms: Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER),
+    whatsapp: Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM),
     voice: Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER),
     telegram: Boolean(process.env.TELEGRAM_BOT_TOKEN),
+    email: Boolean(process.env.RESEND_API_KEY && process.env.NOTIFICATION_EMAIL_FROM),
   };
 }
 
@@ -47,11 +49,12 @@ export async function sendNotification(opts: {
   to: string;
   message: string;
   lang?: "en" | "es";
+  subject?: string;
   origin?: string;
 }): Promise<NotifyResult> {
   const { channel, to, message, lang = "en", origin } = opts;
-  if (!["sms", "voice", "telegram"].includes(channel)) {
-    return { channel, mode: "demo", ok: false, to, detail: `Unknown channel "${channel}" — use sms, voice, or telegram.` };
+  if (!["sms", "whatsapp", "voice", "telegram", "email"].includes(channel)) {
+    return { channel, mode: "demo", ok: false, to, detail: `Unknown channel "${channel}" — use sms, whatsapp, voice, telegram, or email.` };
   }
   const status = channelStatus();
 
@@ -72,16 +75,39 @@ export async function sendNotification(opts: {
       return { channel, mode: "live", ok: true, to: chatId, detail: "Telegram message delivered." };
     }
 
-    if (channel === "sms") {
-      if (!status.sms) {
-        return { channel, mode: "demo", ok: true, to, detail: "Twilio credentials not set — SMS composed, not sent." };
+    if (channel === "sms" || channel === "whatsapp") {
+      const isWhatsApp = channel === "whatsapp";
+      if (!status[channel]) {
+        return { channel, mode: "demo", ok: true, to, detail: `Twilio credentials not set — ${isWhatsApp ? "WhatsApp message" : "SMS"} composed, not sent.` };
       }
       const data = await twilioSend("Messages.json", {
-        To: to,
-        From: process.env.TWILIO_FROM_NUMBER!,
+        To: isWhatsApp ? `whatsapp:${to}` : to,
+        From: isWhatsApp ? `whatsapp:${process.env.TWILIO_WHATSAPP_FROM}` : process.env.TWILIO_FROM_NUMBER!,
         Body: message,
       });
-      return { channel, mode: "live", ok: true, to, detail: `SMS queued (SID ${data.sid}).` };
+      return { channel, mode: "live", ok: true, to, detail: `${isWhatsApp ? "WhatsApp" : "SMS"} queued (SID ${data.sid}).` };
+    }
+
+    if (channel === "email") {
+      if (!status.email) {
+        return { channel, mode: "demo", ok: true, to, detail: "RESEND_API_KEY / NOTIFICATION_EMAIL_FROM not set — email composed, not sent." };
+      }
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: process.env.NOTIFICATION_EMAIL_FROM,
+          to: [to],
+          subject: opts.subject || "MACALOCATOR",
+          text: message,
+        }),
+      });
+      const data: any = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.message || `Resend HTTP ${res.status}`);
+      return { channel, mode: "live", ok: true, to, detail: `Email queued (ID ${data.id}).` };
     }
 
     // voice — Twilio outbound call reading the reminder with <Say>
@@ -97,6 +123,24 @@ export async function sendNotification(opts: {
     return { channel, mode: "live", ok: true, to, detail: `Voice call queued (SID ${data.sid}).` };
   } catch (err: any) {
     return { channel, mode: status[channel] ? "live" : "demo", ok: false, to, detail: `Provider error: ${err?.message || err}` };
+  }
+}
+
+// Reply to an inbound client SMS (used by the two-way webhook).
+export async function twilioSmsReply(to: string, body: string): Promise<NotifyResult> {
+  const live = channelStatus().sms;
+  if (!live) {
+    return { channel: "sms", mode: "demo", ok: true, to, detail: `Reply composed (demo): "${body}"` };
+  }
+  try {
+    const data = await twilioSend("Messages.json", {
+      To: to,
+      From: process.env.TWILIO_FROM_NUMBER!,
+      Body: body,
+    });
+    return { channel: "sms", mode: "live", ok: true, to, detail: `Reply sent (SID ${data.sid}).` };
+  } catch (err: any) {
+    return { channel: "sms", mode: "live", ok: false, to, detail: `Provider error: ${err?.message || err}` };
   }
 }
 

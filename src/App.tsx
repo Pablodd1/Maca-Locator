@@ -12,7 +12,7 @@ import { BookingView } from "./components/BookingView";
 import { UserProfile } from "./components/UserProfile";
 import { ImageGeneratorView } from "./components/ImageGeneratorView";
 import { AdminView } from "./components/AdminView";
-import { CarFront, AlertCircle, CalendarDays, MessageSquare, Home, ImageIcon, User, ShieldCheck } from "lucide-react";
+import { CarFront, AlertCircle, CalendarDays, MessageSquare, Home, User, ShieldCheck } from "lucide-react";
 import { MacalocatorLogo } from "./components/MacalocatorLogo";
 import { VoiceController } from "./components/VoiceController";
 
@@ -41,10 +41,6 @@ function Navigation() {
         <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${location.pathname === '/profile' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
           <User className="w-4 h-4" />
           Profile & Vehicles
-        </Link>
-        <Link to="/marketing" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${location.pathname === '/marketing' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-          <ImageIcon className="w-4 h-4" />
-          Marketing Assets
         </Link>
         <Link to="/admin" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-sm ${location.pathname === '/admin' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
           <ShieldCheck className="w-4 h-4" />

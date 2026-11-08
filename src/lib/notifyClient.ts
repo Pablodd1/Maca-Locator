@@ -1,9 +1,9 @@
 // Client wrapper for the MACALOCATOR notification hub (/api/notify).
 // Bilingual EN/ES templates so reminders match each client's language.
 
-export type ChannelMode = { sms: boolean; voice: boolean; telegram: boolean };
+export type ChannelMode = { sms: boolean; whatsapp: boolean; voice: boolean; telegram: boolean; email: boolean };
 export type NotifyResponse = {
-  channel: "sms" | "voice" | "telegram";
+  channel: "sms" | "whatsapp" | "voice" | "telegram" | "email";
   mode: "live" | "demo";
   ok: boolean;
   to: string;
@@ -14,17 +14,18 @@ export async function getChannelModes(): Promise<ChannelMode> {
   try {
     const res = await fetch("/api/notify");
     const data = await res.json();
-    return data.channels || { sms: false, voice: false, telegram: false };
+    return data.channels || { sms: false, whatsapp: false, voice: false, telegram: false, email: false };
   } catch {
-    return { sms: false, voice: false, telegram: false };
+    return { sms: false, whatsapp: false, voice: false, telegram: false, email: false };
   }
 }
 
 export async function notify(opts: {
-  channel: "sms" | "voice" | "telegram";
+  channel: "sms" | "whatsapp" | "voice" | "telegram" | "email";
   to?: string;
   message: string;
   lang?: "en" | "es";
+  subject?: string;
 }): Promise<NotifyResponse> {
   const res = await fetch("/api/notify", {
     method: "POST",

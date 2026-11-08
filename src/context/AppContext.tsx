@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, Vehicle, ServiceBooking } from "../types";
 import { isGoogleConnected, createCalendarEvent } from "../lib/googleApi";
+import { notify } from "../lib/notifyClient";
 
 type NotificationPreferences = {
   oilChange: boolean;
@@ -146,6 +147,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       status: "pending",
     };
     setBookings((prev) => [booking, ...prev]);
+
+    // Confirmation fan-out: client email + WhatsApp (best-effort; the server
+    // composes in demo mode when provider keys are absent) + staff Telegram.
+    const clientEmail = user?.email || "";
+    const clientPhone = user?.phone || "";
+    const confirmMsg = `MACALOCATOR — ${newB.type} confirmed for ${newB.date} at ${newB.time}. Our technician comes straight to you. Reply 1 to confirm or 2 to reschedule. / Confirmado: nuestro técnico irá hasta usted.`;
+    if (clientEmail) {
+      notify({ channel: "email", to: clientEmail, message: confirmMsg, subject: `MACALOCATOR — ${newB.type} confirmed` })
+        .catch(() => {});
+    }
+    if (clientPhone) {
+      notify({ channel: "whatsapp", to: clientPhone.replace(/[^\d+]/g, ""), message: confirmMsg })
+        .catch(() => {});
+    }
+    notify({ channel: "telegram", message: `🆕 MACALOCATOR — New booking: ${newB.type} · ${newB.date} ${newB.time} · Client: ${user?.name || "VIP client"}` })
+      .catch(() => {});
 
     // Automatically Sync to Google Calendar if connected!
     if (isGoogleConnected()) {

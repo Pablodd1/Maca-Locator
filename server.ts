@@ -67,7 +67,7 @@ async function startServer() {
   });
 
   app.post("/api/notify", async (req, res) => {
-    const { channel, to, message, lang } = req.body || {};
+    const { channel, to, message, lang, subject } = req.body || {};
     if (!channel || !message?.trim()) {
       res.status(400).json({ error: "channel and message are required" });
       return;
@@ -77,9 +77,42 @@ async function startServer() {
       to: to || "",
       message,
       lang: lang === "es" ? "es" : "en",
+      subject,
       origin: `http://localhost:${PORT}`,
     });
     res.status(result.ok ? 200 : 502).json(result);
+  });
+
+  // Two-way SMS webhook (Twilio) — dev mirror of api/sms/webhook.ts
+  app.post("/api/sms/webhook", express.urlencoded({ extended: false }), async (req, res) => {
+    const body = (req.body?.Body as string) || (req.query.Body as string) || "";
+    const from = (req.body?.From as string) || (req.query.From as string) || "unknown";
+    if (!body.trim()) {
+      res.status(200).send("MACALOCATOR two-way SMS webhook online.");
+      return;
+    }
+    const t = body.trim().toLowerCase();
+    let reply: string;
+    let intent: string;
+    if (/^(1|y|yes|confirm|c|si|sí|confirmo|ok)\b/.test(t)) {
+      reply = "MACALOCATOR: Confirmed — your appointment stands. / Confirmado: nuestro técnico irá hasta usted.";
+      intent = "confirmed";
+    } else if (/^(2|r|reschedule|change|cambio|cambiar|reprogramar)\b/.test(t)) {
+      reply = "MACALOCATOR: Of course — our concierge will call you shortly to reschedule. / Con gusto: le llamaremos para reprogramar.";
+      intent = "reschedule";
+    } else {
+      reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: le responderemos pronto.";
+      intent = "free-text (needs human)";
+    }
+    console.log(`[sms-webhook] ${from}: "${body}" → ${intent}`);
+    if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+      await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: process.env.TELEGRAM_CHAT_ID, text: `📲 MACALOCATOR — ${from}: "${body}" → ${intent}` }),
+      }).catch(() => {});
+    }
+    res.status(200).json({ reply, intent, mode: process.env.TWILIO_ACCOUNT_SID ? "live" : "demo" });
   });
 
   // TwiML voice script Twilio fetches when a reminder call connects
