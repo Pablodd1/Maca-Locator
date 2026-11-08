@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
-import { sendNotification, channelStatus, buildTwiml, type Channel } from "./lib/notify-server";
+import { sendNotification, channelStatus, buildTwiml, type Channel } from "./lib/notify-server.ts";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";

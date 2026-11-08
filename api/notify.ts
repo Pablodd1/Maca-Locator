@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sendNotification, channelStatus, type Channel } from "../lib/notify-server";
+import { sendNotification, channelStatus, type Channel } from "../lib/notify-server.ts";
 
 // Dispatch hub for SMS / voice-call / Telegram notifications.
 // GET  -> which channels are live vs demo

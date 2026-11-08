@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { buildTwiml } from "../../lib/notify-server";
+import { buildTwiml } from "../../lib/notify-server.ts";
 
 // TwiML endpoint Twilio fetches when an outbound reminder call connects.
 // Renders the reminder as speech with <Say> — no audio assets needed.
