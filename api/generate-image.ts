@@ -17,17 +17,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { prompt, aspectRatio } = req.body;
     const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.models.generateImages({
-      model: "gemini-3.1-flash-image-preview",
-      prompt,
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-image",
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
       config: {
-        numberOfImages: 1,
-        aspectRatio: aspectRatio || "1:1",
+        responseModalities: ["IMAGE"],
+        imageConfig: { aspectRatio: aspectRatio || "1:1" },
       },
     });
-    const b64 = response.generatedImages?.[0]?.image?.imageBytes;
+    const part = response.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
+    const b64 = part?.inlineData?.data;
+    const mimeType = part?.inlineData?.mimeType || "image/png";
     if (b64) {
-      return res.json({ image: `data:image/jpeg;base64,${b64}` });
+      return res.json({ image: `data:${mimeType};base64,${b64}` });
     }
     throw new Error("No image generated");
   } catch (error) {

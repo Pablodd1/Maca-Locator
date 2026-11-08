@@ -18,7 +18,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const ai = new GoogleGenAI({ apiKey });
     const { messages } = req.body;
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash",
+      model: "gemini-3.8-flash",
       contents: messages,
     });
     return res.json({ text: response.text });
