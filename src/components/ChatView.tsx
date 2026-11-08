@@ -102,7 +102,8 @@ export function ChatView() {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', text: input };
+    const userText = input;
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', text: userText };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
@@ -117,15 +118,31 @@ export function ChatView() {
       });
       
       const data = await response.json();
-      if (data.text) {
-        setMessages(prev => [...prev, { id: Date.now().toString(), role: 'model', text: data.text }]);
-      }
+      if (!response.ok || !data.text) throw new Error('AI concierge unavailable');
+      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'model', text: data.text }]);
     } catch (error) {
-      console.error(error);
-      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'model', text: "I apologize, our concierge dispatch servers are highly loaded. How else can I assist with your premium on-site service?" }]);
+      console.warn('[MACALOCATOR] Gemini API unavailable — demo concierge engaged.', error);
+      // Demo mode: canned concierge so the showcase never dead-ends without a GEMINI_API_KEY.
+      // Handover includes a .env guide — plug in a key and this path goes live automatically.
+      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'model', text: demoConciergeReply(userText) }]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Offline demo responder — keyword-matched VIP concierge answers.
+  const demoConciergeReply = (raw: string): string => {
+    const q = raw.toLowerCase();
+    if (/(tow|tow|grua|grúa)/.test(q)) return "Our Rapid Response Flatbed units run 24/7. A flatbed tow to your preferred shop or home starts at $89 inside the city ring — share your location via the Emergency tab and the nearest unit is typically on scene in 15–25 minutes.";
+    if (/(jump|battery|bateria|batería|dead)/.test(q)) return "We dispatch auxiliary battery jumps on the spot for $49, or a full mobile battery diagnostic with replacement sourcing if the cell won't hold charge. Book it under 'Battery Diagnostic' in the Book Service tab.";
+    if (/(tire|tyre|llanta|flat|rotation|rotate)/.test(q)) return "Tire rotation at your location starts at $39. If you've got a flat, our technician brings a calibrated torque wrench and can mount your spare or patch on-site — select 'Tire Rotation' or tap Emergency → Other with your location.";
+    if (/(price|cost|how much|precio|cuanto|cuánto|rate)/.test(q)) return "Typical on-site services: full mobile diagnostics from $79, tire rotation $39, battery service $49, concierge flatbed towing from $89. Your Dashboard includes a live cost estimator — pick your vehicle and service for an instant quote.";
+    if (/(where|location|ubicacion|ubicación|area|zone|city)/.test(q)) return "MACALOCATOR is 100% mobile — we come to your driveway, office parking, or roadside position anywhere in the metro area. The live map on your Dashboard shows every unit, its status, and ETA in real time.";
+    if (/(book|schedule|appointment|cita|reserv)/.test(q)) return "Easy — head to the Book Service tab, choose your service, confirm the address, and pick a date and time. You'll see it move from pending → confirmed → in progress → completed, and it can sync straight to your Google Calendar.";
+    if (/(oil|change|mantenimiento|maintenance)/.test(q)) return "We track mileage per vehicle in your garage and remind you when oil service is due. For EVs like your Tesla or Bolt, we swap in high-voltage battery health checks and cabin-filter service instead — the estimator adjusts automatically for electric powertrains.";
+    if (/(hour|hours|open|abierto|when)/.test(q)) return "Emergency roadside runs 24/7. Scheduled concierge services run 7:00 AM – 8:00 PM, seven days a week, including hotel and workplace parking locations.";
+    if (/(human|agent|person|llamar|call|phone)/.test(q)) return "Of course — you can reach the front desk directly from the Emergency tab, or press the call button once a unit is dispatched. Our admin console routes every request to a live coordinator in seconds.";
+    return "Great question — our concierge desk can help with that. I can book an on-site service, quote pricing from the live estimator, or dispatch emergency assistance. What would you like to do first?";
   };
 
   return (

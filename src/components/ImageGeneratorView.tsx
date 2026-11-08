@@ -23,14 +23,35 @@ export function ImageGeneratorView() {
         body: JSON.stringify({ prompt, aspectRatio })
       });
       const data = await res.json();
-      if (data.image) {
-        setImage(data.image);
-      }
+      if (!res.ok || !data.image) throw new Error("Image API unavailable");
+      setImage(data.image);
     } catch (error) {
-      console.error(error);
+      console.warn("[MACALOCATOR] Image API unavailable — demo placeholder engaged.", error);
+      // Demo mode: branded placeholder so the Creative Studio flow is fully clickable
+      // without a GEMINI_API_KEY. Plug a key into env and real generations appear here.
+      setImage(buildDemoAsset(prompt, aspectRatio));
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Offline demo asset — branded schematic card rendered as an SVG data URI.
+  const buildDemoAsset = (text: string, ratio: string): string => {
+    const dims: Record<string, [number, number]> = {
+      "1:1": [800, 800], "3:4": [750, 1000], "4:3": [1000, 750], "9:16": [562, 1000],
+      "16:9": [1280, 720], "21:9": [1470, 630], "3:2": [1050, 700], "2:3": [700, 1050],
+    };
+    const [w, h] = dims[ratio] || [1000, 750];
+    const safe = text.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c] || c);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+<rect width="${w}" height="${h}" fill="url(#g)"/>
+<g stroke="#ffffff22">${Array.from({ length: Math.floor(h / 40) }, (_, i) => `<line x1="0" y1="${i * 40}" x2="${w}" y2="${i * 40}"/>`).join("")}</g>
+<text x="${w / 2}" y="${h / 2 - 20}" fill="#93c5fd" font-family="monospace" font-size="${Math.max(18, w / 40)}" text-anchor="middle" letter-spacing="4">MACALOCATOR</text>
+<text x="${w / 2}" y="${h / 2 + 20}" fill="#e2e8f0" font-family="monospace" font-size="${Math.max(12, w / 70)}" text-anchor="middle">${safe.slice(0, 70)}</text>
+<text x="${w / 2}" y="${h - 24}" fill="#64748b" font-family="monospace" font-size="12" text-anchor="middle">DEMO PREVIEW — connect GEMINI_API_KEY for AI-generated creatives</text>
+</svg>`;
+    return "data:image/svg+xml;base64," + btoa(svg);
   };
 
   return (
