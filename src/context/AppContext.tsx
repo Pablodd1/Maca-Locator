@@ -50,7 +50,7 @@ const defaultBookings: ServiceBooking[] = [
   {
     id: "b1",
     type: "Tire Rotation",
-    date: "2026-07-10",
+    date: "2026-11-12",
     time: "10:00 AM",
     status: "confirmed",
     vehicleId: "v1"
@@ -58,7 +58,7 @@ const defaultBookings: ServiceBooking[] = [
   {
     id: "b2",
     type: "Battery Diagnostic",
-    date: "2026-06-28",
+    date: "2026-11-08",
     time: "02:00 PM",
     status: "in_progress",
     vehicleId: "v2"
@@ -66,7 +66,7 @@ const defaultBookings: ServiceBooking[] = [
   {
     id: "b3",
     type: "Car Wash & Detailing",
-    date: "2026-06-25",
+    date: "2026-10-30",
     time: "09:00 AM",
     status: "completed",
     vehicleId: "v1"

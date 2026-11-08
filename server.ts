@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -16,7 +18,7 @@ async function startServer() {
     try {
       const { messages } = req.body;
       const response = await ai.models.generateContent({
-        model: "gemini-3.1-flash",
+        model: "gemini-3.8-flash",
         contents: messages,
       });
       res.json({ text: response.text });
@@ -29,17 +31,19 @@ async function startServer() {
   app.post("/api/generate-image", async (req, res) => {
     try {
       const { prompt, aspectRatio } = req.body;
-      const response = await ai.models.generateImages({
-        model: "gemini-3.1-flash-image-preview",
-        prompt: prompt,
+      const response = await ai.models.generateContent({
+        model: "gemini-3.1-flash-image",
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
-          numberOfImages: 1,
-          aspectRatio: aspectRatio || "1:1",
+          responseModalities: ["IMAGE"],
+          imageConfig: { aspectRatio: aspectRatio || "1:1" },
         },
       });
-      const b64 = response.generatedImages?.[0]?.image?.imageBytes;
+      const part = response.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
+      const b64 = part?.inlineData?.data;
+      const mimeType = part?.inlineData?.mimeType || "image/png";
       if (b64) {
-        res.json({ image: `data:image/jpeg;base64,${b64}` });
+        res.json({ image: `data:${mimeType};base64,${b64}` });
       } else {
         throw new Error("No image generated");
       }
