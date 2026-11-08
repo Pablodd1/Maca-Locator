@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
+import { sendNotification, channelStatus, buildTwiml, type Channel } from "./lib/notify-server";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -59,6 +60,35 @@ async function startServer() {
   
   // Realtime Live API proxy endpoint would be complex, typically WebSockets,
   // but for now we'll just set up a basic text chat.
+
+  // Notification dispatch: GET -> channel status, POST -> send one
+  app.get("/api/notify", (_req, res) => {
+    res.json({ channels: channelStatus() });
+  });
+
+  app.post("/api/notify", async (req, res) => {
+    const { channel, to, message, lang } = req.body || {};
+    if (!channel || !message?.trim()) {
+      res.status(400).json({ error: "channel and message are required" });
+      return;
+    }
+    const result = await sendNotification({
+      channel: channel as Channel,
+      to: to || "",
+      message,
+      lang: lang === "es" ? "es" : "en",
+      origin: `http://localhost:${PORT}`,
+    });
+    res.status(result.ok ? 200 : 502).json(result);
+  });
+
+  // TwiML voice script Twilio fetches when a reminder call connects
+  app.get("/api/voice/twiml", (req, res) => {
+    const msg = (req.query.msg as string) || "Your MACALOCATOR service is scheduled.";
+    const lang = req.query.lang === "es" ? "es" : "en";
+    res.setHeader("Content-Type", "text/xml; charset=utf-8");
+    res.send(buildTwiml(msg, lang));
+  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

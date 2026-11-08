@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { MacalocatorLogo } from "./MacalocatorLogo";
+import { speakHuman } from "@/lib/voice";
 
 type MapPoint = {
   id: string;
@@ -215,6 +216,30 @@ export function Dashboard() {
     }, 800);
     return () => clearTimeout(timer);
   }, []);
+
+  // Voice + banner reminder for bookings happening in the next 24 hours.
+  // Speaks once per browser session so the demo never nags on every reload.
+  useEffect(() => {
+    const alreadyReminded = sessionStorage.getItem("maca_reminder_done");
+    if (alreadyReminded) return;
+    const now = new Date();
+    const soon = bookings.find((b) => {
+      if (b.status === "completed") return false;
+      const when = new Date(`${b.date}T00:00:00`);
+      const hours = (when.getTime() - now.getTime()) / 36e5;
+      return hours > -24 && hours < 24;
+    });
+    if (soon) {
+      sessionStorage.setItem("maca_reminder_done", "1");
+      const timer = setTimeout(() => {
+        speakHuman(
+          `A quick reminder from MACALOCATOR: your ${soon.type.toLowerCase()} is scheduled for ${soon.date} at ${soon.time}. Our technician will come straight to you.`,
+          "en"
+        );
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [bookings]);
 
   // Service Cost Estimator State
   const [selectedEstimatorVehicleId, setSelectedEstimatorVehicleId] = useState<string>("");

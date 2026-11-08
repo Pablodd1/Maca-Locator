@@ -47,8 +47,12 @@ import {
   Volume2,
   RefreshCw,
   Search,
-  BookOpen
+  BookOpen,
+  BellRing,
+  SendHorizonal
 } from "lucide-react";
+import { notify, getChannelModes, reminderMessage, staffDispatchMessage, type ChannelMode } from "../lib/notifyClient";
+import { speakHuman } from "@/lib/voice";
 
 // Pre-configured simulation models for deep operational study & training
 const mockStudyGuides = [
@@ -125,17 +129,23 @@ export function AdminView() {
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcriptionResult, setTranscriptionResult] = useState<string | null>(null);
 
-  // 3. Twilio SMS / Call states
+  // 3. Twilio SMS / Call states + Telegram + channel modes
+  const [channelModes, setChannelModes] = useState<ChannelMode>({ sms: false, voice: false, telegram: false });
   const [twilioPhoneNumber, setTwilioPhoneNumber] = useState(user?.phone || "+1 (305) 555-0123");
+  const [telegramChatId, setTelegramChatId] = useState("");
   const [twilioSmsTemplate, setTwilioSmsTemplate] = useState("MACALOCATOR VIP Alerts: Our certified Mobile Workshop is en route to your driveway. Current ETA is 11 minutes. Click to track live: https://macalocator.co/t/t1");
-  const [twilioLogs, setTwilioLogs] = useState<Array<{ id: string; type: "sms" | "call"; to: string; text: string; status: string; timestamp: string }>>([
+  const [isSendingTelegram, setIsSendingTelegram] = useState(false);
+  const [isSweeping, setIsSweeping] = useState(false);
+  const [sweepSummary, setSweepSummary] = useState<string | null>(null);
+  const [twilioLogs, setTwilioLogs] = useState<Array<{ id: string; type: "sms" | "call" | "telegram"; to: string; text: string; status: string; timestamp: string; mode: "live" | "demo" }>>([
     {
       id: "tw-1",
       type: "sms",
       to: "+1 (305) 555-0123",
       text: "Booking #b2 Battery Diagnostic is now IN PROGRESS. Our elite mobile engineer is on-site.",
       status: "Delivered",
-      timestamp: "10:02 AM"
+      timestamp: "10:02 AM",
+      mode: "demo"
     },
     {
       id: "tw-2",
@@ -143,7 +153,8 @@ export function AdminView() {
       to: "+1 (305) 555-0456",
       text: "Simulated Automated Dispatch Warning: Driver safety override check required.",
       status: "Completed",
-      timestamp: "09:41 AM"
+      timestamp: "09:41 AM",
+      mode: "demo"
     }
   ]);
   const [isSendingSms, setIsSendingSms] = useState(false);
@@ -228,41 +239,85 @@ Requested Service: Battery Diagnostic`);
     alert("Call approved! Emergency Dispatch Job generated in real-time bookings pipeline.");
   };
 
-  // Twilio Trigger SMS
-  const handleSendTwilioSms = () => {
-    if (!twilioPhoneNumber.trim()) return;
-    setIsSendingSms(true);
-    setTimeout(() => {
-      const newLog = {
-        id: "tw-" + Math.random().toString(36).substr(2, 9),
-        type: "sms" as const,
-        to: twilioPhoneNumber,
-        text: twilioSmsTemplate,
-        status: "Delivered",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setTwilioLogs(prev => [newLog, ...prev]);
-      setIsSendingSms(false);
-    }, 1000);
+  // Twilio Trigger SMS — real /api/notify call (demo mode if no credentials)
+  const logNotification = (type: "sms" | "call" | "telegram", to: string, text: string, ok: boolean, mode: "live" | "demo") => {
+    const newLog = {
+      id: "tw-" + Math.random().toString(36).substring(2, 11),
+      type,
+      to,
+      text,
+      status: ok ? (mode === "live" ? "Delivered" : "Composed (Demo)") : "Failed",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      mode
+    };
+    setTwilioLogs(prev => [newLog, ...prev]);
   };
 
-  // Twilio Trigger Call
-  const handleTriggerTwilioCall = () => {
-    if (!twilioPhoneNumber.trim()) return;
-    setIsCalling(true);
-    setTimeout(() => {
-      const newLog = {
-        id: "tw-" + Math.random().toString(36).substr(2, 9),
-        type: "call" as const,
-        to: twilioPhoneNumber,
-        text: `Automated Call dispatch to ${twilioPhoneNumber}: Emergency roadside recovery status is active. All mobile units respond.`,
-        status: "Completed",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setTwilioLogs(prev => [newLog, ...prev]);
-      setIsCalling(false);
-    }, 1400);
+  const handleSendTwilioSms = async () => {
+    if (!twilioPhoneNumber.trim() || isSendingSms) return;
+    setIsSendingSms(true);
+    const result = await notify({ channel: "sms", to: twilioPhoneNumber, message: twilioSmsTemplate });
+    logNotification("sms", twilioPhoneNumber, twilioSmsTemplate, result.ok, result.mode);
+    setIsSendingSms(false);
   };
+
+  // Twilio Trigger Call — places a real call when credentials exist
+  const handleTriggerTwilioCall = async () => {
+    if (!twilioPhoneNumber.trim() || isCalling) return;
+    setIsCalling(true);
+    const callText = "Emergency roadside recovery status is active. All mobile units respond. Your MACALOCATOR recovery team has been dispatched.";
+    const result = await notify({ channel: "voice", to: twilioPhoneNumber, message: callText });
+    logNotification("call", twilioPhoneNumber, callText, result.ok, result.mode);
+    setIsCalling(false);
+  };
+
+  // Telegram staff alert — real Bot API call when token configured
+  const handleSendTelegram = async () => {
+    if (isSendingTelegram) return;
+    setIsSendingTelegram(true);
+    const text = `🚨 MACALOCATOR Staff Broadcast — dispatch coordination required. Nearest units acknowledge.`;
+    const result = await notify({ channel: "telegram", to: telegramChatId, message: text });
+    logNotification("telegram", telegramChatId || "staff group", text, result.ok, result.mode);
+    setIsSendingTelegram(false);
+  };
+
+  // Reminder sweep — every booking in the next 24h gets a client SMS + voice
+  // option and the staff team gets a Telegram dispatch brief.
+  const handleReminderSweep = async () => {
+    if (isSweeping) return;
+    setIsSweeping(true);
+    setSweepSummary(null);
+    const now = new Date();
+    const soon = bookings.filter((b) => {
+      if (b.status === "completed") return false;
+      const when = new Date(`${b.date}T00:00:00`);
+      const hours = (when.getTime() - now.getTime()) / 36e5;
+      return hours > -24 && hours < 24;
+    });
+    let sent = 0;
+    for (const b of soon) {
+      const vehicle = vehicles.find((v) => v.id === b.vehicleId);
+      const vehicleLabel = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "client vehicle";
+      const clientMsg = `${reminderMessage(b)} Vehicle: ${vehicleLabel}.`;
+      const staffMsg = staffDispatchMessage(b, user?.name || "VIP client");
+      const [smsRes, voiceRes, tgRes] = await Promise.all([
+        notify({ channel: "sms", to: user?.phone || twilioPhoneNumber, message: clientMsg }),
+        notify({ channel: "voice", to: user?.phone || twilioPhoneNumber, message: clientMsg }),
+        notify({ channel: "telegram", to: telegramChatId, message: staffMsg }),
+      ]);
+      logNotification("sms", user?.phone || twilioPhoneNumber, clientMsg, smsRes.ok, smsRes.mode);
+      logNotification("call", user?.phone || twilioPhoneNumber, clientMsg, voiceRes.ok, voiceRes.mode);
+      logNotification("telegram", telegramChatId || "staff group", staffMsg, tgRes.ok, tgRes.mode);
+      sent += 1;
+    }
+    setSweepSummary(soon.length === 0 ? "No bookings within the next 24 hours." : `Sweep complete: ${sent} booking(s) reminded via SMS, voice call & Telegram.`);
+    setIsSweeping(false);
+  };
+
+  // Load live/demo channel status from the server once
+  useEffect(() => {
+    getChannelModes().then(setChannelModes);
+  }, []);
 
   // Text intercom send
   const handleSendChatMessage = () => {
@@ -296,12 +351,12 @@ Requested Service: Battery Diagnostic`);
   const inProgressBookings = bookings.filter(b => b.status === "in_progress").length;
   const completedBookings = bookings.filter(b => b.status === "completed").length;
 
-  // Revenue index based on dynamic bookings (averaging 420,000 COP per job)
+  // Revenue index based on dynamic bookings (avg ~$110 USD per job)
   const totalProjectedRevenue = bookings.reduce((sum, b) => {
-    if (b.type.includes("Tire")) return sum + 290000;
-    if (b.type.includes("Battery")) return sum + 620000;
-    if (b.type.includes("Wash") || b.type.includes("Detailing")) return sum + 220000;
-    return sum + 235000;
+    if (b.type.includes("Tire")) return sum + 49;
+    if (b.type.includes("Battery")) return sum + 129;
+    if (b.type.includes("Wash") || b.type.includes("Detailing")) return sum + 179;
+    return sum + 89;
   }, 0);
 
   return (
@@ -410,7 +465,7 @@ Requested Service: Battery Diagnostic`);
                     <span className="text-[10px] font-bold uppercase tracking-wider">Gross Booking Val</span>
                     <Coins className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <p className="text-lg font-black text-slate-800">${totalProjectedRevenue.toLocaleString()} COP</p>
+                  <p className="text-lg font-black text-slate-800">${totalProjectedRevenue.toLocaleString()} USD</p>
                   <span className="text-[9px] text-emerald-600 font-bold">100% Mobile Service</span>
                 </CardContent>
               </Card>
@@ -453,7 +508,7 @@ Requested Service: Battery Diagnostic`);
             <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
               <CardHeader className="pb-2 border-b">
                 <CardTitle className="text-sm font-bold text-slate-800">
-                  Estimated Dispatch Revenue by Service Class (COP)
+                  Estimated Dispatch Revenue by Service Class (USD)
                 </CardTitle>
                 <CardDescription className="text-xs">
                   Dynamic operational cost averages calculated against active and preset models.
@@ -510,7 +565,7 @@ Requested Service: Battery Diagnostic`);
 
                   <div className="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-bold uppercase">
                     <span>Low Range (Det)</span>
-                    <span className="text-slate-500">Median Rate: ~340,000 COP</span>
+                    <span className="text-slate-500">Median Rate: ~$115 USD</span>
                     <span>High Range (Batt)</span>
                   </div>
                 </div>
@@ -675,12 +730,12 @@ Requested Service: Battery Diagnostic`);
       {activeAdminTab === "visualization" && (() => {
         // Dynamic calculations
         const monthlyStats = [
-          { month: "Jan", revenue: 4500000, bookings: 8, cost: 1575000 },
-          { month: "Feb", revenue: 5200000, bookings: 11, cost: 1820000 },
-          { month: "Mar", revenue: 6100000, bookings: 14, cost: 2135000 },
-          { month: "Apr", revenue: 5800000, bookings: 12, cost: 2030000 },
-          { month: "May", revenue: 7200000, bookings: 16, cost: 2520000 },
-          { month: "Jun", revenue: 6800000, bookings: 15, cost: 2380000 },
+          { month: "Jan", revenue: 45000, bookings: 8, cost: 15750 },
+          { month: "Feb", revenue: 52000, bookings: 11, cost: 18200 },
+          { month: "Mar", revenue: 61000, bookings: 14, cost: 21350 },
+          { month: "Apr", revenue: 58000, bookings: 12, cost: 20300 },
+          { month: "May", revenue: 72000, bookings: 16, cost: 25200 },
+          { month: "Jun", revenue: 68000, bookings: 15, cost: 23800 },
           { month: "Jul", revenue: 0, bookings: 0, cost: 0 },
         ];
 
@@ -694,10 +749,10 @@ Requested Service: Battery Diagnostic`);
             const monthName = monthNames[monthNum - 1] || "Jun";
 
             // Price estimate
-            let cost = 235000;
-            if (b.type.includes("Tire")) cost = 290000;
-            else if (b.type.includes("Battery")) cost = 620000;
-            else if (b.type.includes("Wash") || b.type.includes("Detailing")) cost = 220000;
+            let cost = 89;
+            if (b.type.includes("Tire")) cost = 49;
+            else if (b.type.includes("Battery")) cost = 129;
+            else if (b.type.includes("Wash") || b.type.includes("Detailing")) cost = 179;
 
             const existingMonth = monthlyStats.find(m => m.month === monthName);
             if (existingMonth) {
@@ -720,10 +775,10 @@ Requested Service: Battery Diagnostic`);
 
         // Service metrics
         const serviceCounts: Record<string, { count: number; name: string; avgPrice: number; color: string }> = {
-          "Battery Diagnostic": { count: 4, name: "Battery Diagnostic", avgPrice: 620000, color: "#3b82f6" },
-          "Tire Rotation": { count: 6, name: "Tire Rotation", avgPrice: 290000, color: "#10b981" },
-          "Detailing Suite": { count: 3, name: "Detailing Suite", avgPrice: 220000, color: "#6366f1" },
-          "Diagnostics Scan": { count: 5, name: "Diagnostics Scan", avgPrice: 235000, color: "#f59e0b" },
+          "Battery Diagnostic": { count: 4, name: "Battery Diagnostic", avgPrice: 129, color: "#3b82f6" },
+          "Tire Rotation": { count: 6, name: "Tire Rotation", avgPrice: 49, color: "#10b981" },
+          "Detailing Suite": { count: 3, name: "Detailing Suite", avgPrice: 179, color: "#6366f1" },
+          "Diagnostics Scan": { count: 5, name: "Diagnostics Scan", avgPrice: 89, color: "#f59e0b" },
         };
 
         bookings.forEach(b => {
@@ -738,7 +793,7 @@ Requested Service: Battery Diagnostic`);
             if (serviceCounts[b.type]) {
               serviceCounts[b.type].count += 1;
             } else {
-              serviceCounts[b.type] = { count: 1, name: b.type, avgPrice: 250000, color: "#8b5cf6" };
+              serviceCounts[b.type] = { count: 1, name: b.type, avgPrice: 110, color: "#8b5cf6" };
             }
           }
         });
@@ -746,7 +801,7 @@ Requested Service: Battery Diagnostic`);
         const finalServiceData = Object.values(serviceCounts).map(s => ({
           name: s.name,
           "Completed Jobs": s.count,
-          "Revenue (k COP)": Math.floor((s.count * s.avgPrice) / 1000),
+          "Revenue (USD)": s.count * s.avgPrice,
           color: s.color
         }));
 
@@ -769,7 +824,7 @@ Requested Service: Battery Diagnostic`);
         // Overall stats
         const overallTotalRevenue = finalMonthlyData.reduce((sum, m) => sum + m.revenue, 0);
         const overallTotalBookings = finalMonthlyData.reduce((sum, m) => sum + m.bookings, 0);
-        const averageTicketSize = overallTotalBookings > 0 ? Math.floor(overallTotalRevenue / overallTotalBookings) : 340000;
+        const averageTicketSize = overallTotalBookings > 0 ? Math.floor(overallTotalRevenue / overallTotalBookings) : 110;
 
         return (
           <div className="space-y-6">
@@ -779,8 +834,8 @@ Requested Service: Battery Diagnostic`);
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Accumulated Revenue</span>
-                    <p className="text-2xl font-black text-slate-800">${overallTotalRevenue.toLocaleString()} COP</p>
-                    <p className="text-[11px] text-emerald-600 font-bold">~${Math.floor(overallTotalRevenue / 4000).toLocaleString()} USD equivalent</p>
+                    <p className="text-2xl font-black text-slate-800">${overallTotalRevenue.toLocaleString()} USD</p>
+                    
                   </div>
                   <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl border border-emerald-100">
                     <Coins className="w-5 h-5" />
@@ -792,7 +847,7 @@ Requested Service: Battery Diagnostic`);
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Average Ticket Size</span>
-                    <p className="text-2xl font-black text-slate-800">${averageTicketSize.toLocaleString()} COP</p>
+                    <p className="text-2xl font-black text-slate-800">${averageTicketSize.toLocaleString()} USD</p>
                     <p className="text-[11px] text-blue-600 font-bold">Per scheduled dispatch</p>
                   </div>
                   <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100">
@@ -822,7 +877,7 @@ Requested Service: Battery Diagnostic`);
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-base font-black text-slate-800">
-                        Monthly Revenue & Operating Costs (COP)
+                        Monthly Revenue & Operating Costs (USD)
                       </CardTitle>
                       <CardDescription className="text-xs">
                         Shows dynamic billing volumes against the baseline. Area represents total income, line is operating overhead.
@@ -866,7 +921,7 @@ Requested Service: Battery Diagnostic`);
                           tickFormatter={(v) => `$${(v / 1000000).toFixed(1)}M`}
                         />
                         <Tooltip 
-                          formatter={(value: any) => [`$${value.toLocaleString()} COP`]}
+                          formatter={(value: any) => [`$${value.toLocaleString()} USD`]}
                           contentStyle={{ backgroundColor: "#1e293b", borderColor: "#334155", borderRadius: "12px", color: "#f8fafc", fontSize: "12px" }}
                         />
                         <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />
@@ -1000,14 +1055,14 @@ Requested Service: Battery Diagnostic`);
                           tickLine={false}
                           axisLine={false}
                           tickFormatter={(v) => `$${v}K`}
-                          label={{ value: 'Revenue (k COP)', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#64748b', fontSize: '10px', fontWeight: 'bold' } }}
+                          label={{ value: 'Revenue (USD)', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#64748b', fontSize: '10px', fontWeight: 'bold' } }}
                         />
                         <Tooltip 
                           contentStyle={{ backgroundColor: "#1e293b", borderColor: "#334155", borderRadius: "12px", color: "#f8fafc", fontSize: "12px" }}
                         />
                         <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />
                         <Bar yAxisId="left" dataKey="Completed Jobs" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={45} />
-                        <Bar yAxisId="right" dataKey="Revenue (k COP)" fill="#8b5cf6" radius={[4, 4, 0, 0]} maxBarSize={45} />
+                        <Bar yAxisId="right" dataKey="Revenue (USD)" fill="#8b5cf6" radius={[4, 4, 0, 0]} maxBarSize={45} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -1051,7 +1106,7 @@ Requested Service: Battery Diagnostic`);
                             const revenueDisplay = document.getElementById("projected-boost-display");
                             if (revenueDisplay) {
                               const boosted = Math.floor(overallTotalRevenue * (val / 1.5));
-                              revenueDisplay.innerText = `$${boosted.toLocaleString()} COP`;
+                              revenueDisplay.innerText = `$${boosted.toLocaleString()} USD`;
                             }
                           }}
                         />
@@ -1066,7 +1121,7 @@ Requested Service: Battery Diagnostic`);
                       <div className="p-3 bg-slate-900 text-slate-100 rounded-xl space-y-1 border border-slate-800">
                         <span className="text-[9px] text-blue-400 font-extrabold uppercase tracking-wider">Simulation Output</span>
                         <div id="projected-boost-display" className="text-lg font-black text-white font-mono">
-                          ${overallTotalRevenue.toLocaleString()} COP
+                          ${overallTotalRevenue.toLocaleString()} USD
                         </div>
                         <p className="text-[10px] text-slate-400">Calculated across existing {bookings.length} system dispatches.</p>
                       </div>
@@ -1364,9 +1419,9 @@ Requested Service: Battery Diagnostic`);
                       onChange={(e) => {
                         const val = e.target.value;
                         if (val === "unit1") {
-                          setTwilioSmsTemplate("MACALOCATOR Alert: Mobile Workshop Unit 1 is en route to Carrera 11 for your Tire Rotation. Track live: https://macalocator.co/t/t1");
+                          setTwilioSmsTemplate("MACALOCATOR Alert: Mobile Workshop Unit 1 is en route to Brickell Bay Drive for your Tire Rotation. Track live: https://macalocator.co/t/t1");
                         } else if (val === "unit3") {
-                          setTwilioSmsTemplate("MACALOCATOR Alert: High-Voltage Specialist Unit 3 is now on-site at Usaquén for active Battery Diagnostics. OEM parts certified.");
+                          setTwilioSmsTemplate("MACALOCATOR Alert: High-Voltage Specialist Unit 3 is now on-site at South of Fifth for active Battery Diagnostics. OEM parts certified.");
                         } else {
                           setTwilioSmsTemplate("MACALOCATOR Custom Alert: General dispatch coordination updated. All systems operational.");
                         }
@@ -1376,6 +1431,33 @@ Requested Service: Battery Diagnostic`);
                       <option value="unit3">Unit 3 - High-Voltage Specialist (Battery)</option>
                       <option value="general">General Dispatch Notification</option>
                     </select>
+                  </div>
+                </div>
+
+                {/* Telegram staff channel + live/demo badges */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                      <SendHorizonal className="w-3.5 h-3.5" />
+                      Telegram Staff Chat ID
+                    </label>
+                    <Input
+                      value={telegramChatId}
+                      onChange={(e) => setTelegramChatId(e.target.value)}
+                      placeholder="e.g. -1001234567890 (staff group)"
+                      className="h-11 rounded-xl text-xs sm:text-sm border-slate-200 font-bold font-mono focus-visible:ring-sky-500"
+                    />
+                  </div>
+                  <div className="flex items-end gap-2 pb-1 flex-wrap">
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.sms ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                      SMS {channelModes.sms ? "LIVE" : "DEMO"}
+                    </span>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.voice ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                      VOICE {channelModes.voice ? "LIVE" : "DEMO"}
+                    </span>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.telegram ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                      TELEGRAM {channelModes.telegram ? "LIVE" : "DEMO"}
+                    </span>
                   </div>
                 </div>
 
@@ -1402,7 +1484,7 @@ Requested Service: Battery Diagnostic`);
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Smartphone className="w-4 h-4" />
-                    {isSendingSms ? "Transmitting SMS Payload..." : "Send Twilio Dispatch SMS"}
+                    {isSendingSms ? "Transmitting SMS Payload..." : "Send Dispatch SMS"}
                   </Button>
 
                   <Button
@@ -1412,8 +1494,42 @@ Requested Service: Battery Diagnostic`);
                     className="flex-1 bg-slate-900 hover:bg-slate-850 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <PhoneCall className="w-4 h-4" />
-                    {isCalling ? "Initiating outbound Voice Call..." : "Trigger Automated Voice Dispatch"}
+                    {isCalling ? "Initiating outbound Voice Call..." : "Trigger Automated Voice Call"}
                   </Button>
+
+                  <Button
+                    type="button"
+                    onClick={handleSendTelegram}
+                    disabled={isSendingTelegram}
+                    className="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <SendHorizonal className="w-4 h-4" />
+                    {isSendingTelegram ? "Broadcasting..." : "Telegram Staff Alert"}
+                  </Button>
+                </div>
+
+                {/* 24h Reminder Sweep */}
+                <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <BellRing className="w-4 h-4 text-amber-700" />
+                      <span className="text-xs font-bold text-amber-900">24-Hour Reminder Sweep</span>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={handleReminderSweep}
+                      disabled={isSweeping}
+                      className="h-9 text-[10px] font-extrabold bg-amber-600 hover:bg-amber-700 text-white rounded-lg px-4"
+                    >
+                      {isSweeping ? "Sweeping..." : "Run Sweep Now"}
+                    </Button>
+                  </div>
+                  <p className="text-[11px] text-amber-800 leading-relaxed">
+                    Every booking in the next 24 hours gets a client reminder (SMS + automated voice call, in the client's language) and the staff team gets a Telegram dispatch brief.
+                  </p>
+                  {sweepSummary && (
+                    <p className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">{sweepSummary}</p>
+                  )}
                 </div>
 
                 {/* Voice Call playback simulator */}
@@ -1434,9 +1550,8 @@ Requested Service: Battery Diagnostic`);
                     className="h-8 text-[10px] font-bold text-slate-700 border-slate-200 bg-white hover:bg-slate-50"
                     onClick={() => {
                       setIsPlayingCallAudio(true);
-                      const speech = new SpeechSynthesisUtterance("This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access.");
-                      speech.onend = () => setIsPlayingCallAudio(false);
-                      window.speechSynthesis.speak(speech);
+                      speakHuman("This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access.");
+                      setTimeout(() => setIsPlayingCallAudio(false), 9000);
                     }}
                     disabled={isPlayingCallAudio}
                   >
@@ -1452,25 +1567,26 @@ Requested Service: Battery Diagnostic`);
               <CardHeader className="pb-3 border-b">
                 <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                   <Terminal className="w-4 h-4 text-slate-400" />
-                  Live Twilio API transmission log
+                  Live dispatch comms log — SMS · Voice · Telegram
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="font-mono text-[10px] text-red-400 bg-slate-950 p-4 h-52 overflow-y-auto space-y-2 leading-tight select-text">
-                  <p className="text-slate-500">[System Log] Webhook connected to outbound twilio-rest api gateway.</p>
+                  <p className="text-slate-500">[System Log] /api/notify dispatch gateway online — SMS · Voice · Telegram.</p>
                   {twilioLogs.map((log) => (
                     <div key={log.id} className="border-b border-slate-900/40 pb-1.5">
                       <p className="flex justify-between items-center">
                         <span className="text-white font-bold">
-                          {log.type === "sms" ? "✉️ Outbound SMS" : "📞 Voice Call"}
+                          {log.type === "sms" ? "✉️ Outbound SMS" : log.type === "telegram" ? "📨 Telegram" : "📞 Voice Call"}
+                          <span className={`ml-2 text-[8px] px-1 py-0.5 rounded font-mono ${log.mode === "live" ? "bg-emerald-900 text-emerald-300" : "bg-slate-800 text-slate-400"}`}>{log.mode.toUpperCase()}</span>
                         </span>
                         <span className="text-slate-500">{log.timestamp}</span>
                       </p>
                       <p className="text-slate-400">To: {log.to}</p>
                       <p className="text-emerald-400">Payload: "{log.text}"</p>
                       <p className="flex justify-between text-[9px] text-blue-400">
-                        <span>API Path: POST /api/v1/twilio/{log.type}</span>
-                        <span className="text-emerald-500 font-extrabold">{log.status}</span>
+                        <span>API Path: POST /api/notify ({log.type})</span>
+                        <span className={log.status === "Failed" ? "text-red-400 font-extrabold" : "text-emerald-500 font-extrabold"}>{log.status}</span>
                       </p>
                     </div>
                   ))}
@@ -1490,15 +1606,23 @@ Requested Service: Battery Diagnostic`);
               </CardHeader>
               <CardContent className="p-4 space-y-3 text-xs text-slate-600">
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
-                  <span>Delivered successfully</span>
-                  <span className="text-emerald-600 font-extrabold">100%</span>
+                  <span>SMS channel</span>
+                  <span className={channelModes.sms ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.sms ? "LIVE (Twilio)" : "DEMO MODE"}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
-                  <span>Outbound SMS cost</span>
-                  <span>$0.0075 USD / SMS</span>
+                  <span>Voice calls</span>
+                  <span className={channelModes.voice ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.voice ? "LIVE (Twilio)" : "DEMO MODE"}</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
+                  <span>Telegram staff channel</span>
+                  <span className={channelModes.telegram ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.telegram ? "LIVE (Bot API)" : "DEMO MODE"}</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
+                  <span>Outbound SMS cost (when live)</span>
+                  <span>~$0.0079 USD / SMS</span>
                 </div>
                 <p className="text-[10px] text-slate-400 leading-relaxed mt-2">
-                  Twilio messaging uses certified route codes inside Miami-Dade to ensure immediate dispatch alert delivery to customers like <strong>Jasmel Acosta</strong>.
+                  Demo mode composes every message exactly as it will be sent. Add <strong>TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM_NUMBER</strong> and <strong>TELEGRAM_BOT_TOKEN</strong> env vars to go live instantly — no code changes.
                 </p>
               </CardContent>
             </Card>
