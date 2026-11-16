@@ -10,6 +10,18 @@ import { get, put, del } from "@vercel/blob";
 const KEY = "maca/bookings.json";
 const CLIENT_KEY = "maca/client.json";
 
+// Private blobs must be read through the SDK stream (downloadUrl is not signed).
+async function streamToJson(stream: ReadableStream<Uint8Array>): Promise<any> {
+  const chunks: Uint8Array[] = [];
+  const reader = stream.getReader();
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+  return JSON.parse(new TextDecoder().decode(Buffer.concat(chunks)));
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return res.status(503).json({
@@ -21,11 +33,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method === "GET") {
       try {
         const blob = await get(KEY, { access: "private" });
-        const bookings = await fetch(blob.blob.downloadUrl).then((r) => r.json());
+        const bookings = await streamToJson(blob.stream);
         let client: any = null;
         try {
           const cb = await get(CLIENT_KEY, { access: "private" });
-          client = await fetch(cb.blob.downloadUrl).then((r) => r.json());
+          client = await streamToJson(cb.stream);
         } catch { /* client profile optional */ }
         return res.status(200).json({ bookings, client });
       } catch (e: any) {

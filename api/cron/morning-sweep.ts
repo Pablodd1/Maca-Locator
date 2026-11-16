@@ -12,6 +12,18 @@ const KEY = "maca/bookings.json";
 const CLIENT_KEY = "maca/client.json";
 const LAST_RUN = "maca/last-sweep.json";
 
+// Private blobs must be read through the SDK stream (downloadUrl is not signed).
+async function streamToJson(stream: ReadableStream<Uint8Array>): Promise<any> {
+  const chunks: Uint8Array[] = [];
+  const reader = stream.getReader();
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+  return JSON.parse(new TextDecoder().decode(Buffer.concat(chunks)));
+}
+
 type Booking = { id: string; type: string; date: string; time: string; status: string; vehicleId?: string };
 type NotifyResult = { channel: string; mode: "live" | "demo"; ok: boolean; to: string; detail: string };
 
@@ -106,9 +118,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let client: any = { clientName: "", clientPhone: "" };
     try {
       const blob = await get(KEY, { access: "private" });
-      bookings = await fetch(blob.blob.downloadUrl).then((r) => r.json());
+      bookings = await streamToJson(blob.stream);
       const cb = await get(CLIENT_KEY, { access: "private" });
-      client = await fetch(cb.blob.downloadUrl).then((r) => r.json());
+      client = await streamToJson(cb.stream);
     } catch (e: any) {
       if (!String(e?.message || e).includes("not found") && e?.name !== "BlobNotFoundError") throw e;
     }
