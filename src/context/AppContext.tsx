@@ -47,11 +47,15 @@ const defaultVehicles: Vehicle[] = [
   }
 ];
 
+// Demo seeds are computed relative to "today" so the dashboard always shows
+// a live, current-looking schedule no matter when the demo happens.
+const isoDaysFromNow = (n: number) => new Date(Date.now() + n * 864e5).toISOString().slice(0, 10);
+
 const defaultBookings: ServiceBooking[] = [
   {
     id: "b1",
     type: "Tire Rotation",
-    date: "2026-11-12",
+    date: isoDaysFromNow(4),
     time: "10:00 AM",
     status: "confirmed",
     vehicleId: "v1"
@@ -59,7 +63,7 @@ const defaultBookings: ServiceBooking[] = [
   {
     id: "b2",
     type: "Battery Diagnostic",
-    date: "2026-11-08",
+    date: isoDaysFromNow(0),
     time: "02:00 PM",
     status: "in_progress",
     vehicleId: "v2"
@@ -67,7 +71,7 @@ const defaultBookings: ServiceBooking[] = [
   {
     id: "b3",
     type: "Car Wash & Detailing",
-    date: "2026-10-30",
+    date: isoDaysFromNow(-9),
     time: "09:00 AM",
     status: "completed",
     vehicleId: "v1"

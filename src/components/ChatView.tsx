@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldCheck, Send, User, LifeBuoy, Mic, MicOff, Volume2, VolumeX, Sparkles, MapPin } from "lucide-react";
 import { speakHuman } from "@/lib/voice";
+import { useOps, taskStatusLabel } from "../context/OpsContext";
+import { useAppState } from "../context/AppContext";
 
 type Message = {
   id: string;
@@ -13,6 +15,17 @@ type Message = {
 };
 
 export function ChatView() {
+  const { liveTask, staff, etaFor } = useOps();
+  const { user, vehicles } = useAppState();
+  const unit = liveTask ? staff.find((s) => s.id === liveTask.staffId) : undefined;
+  const eta = liveTask ? etaFor(liveTask) : null;
+  const clientContext = [
+    `CLIENT: ${user?.name || "VIP client"} · ${user?.phone || ""} · ${user?.email || ""}`,
+    `VEHICLES: ${vehicles.map((v) => `${v.year} ${v.make} ${v.model} (${v.licensePlate})`).join("; ") || "none registered"}`,
+    liveTask
+      ? `ACTIVE SERVICE: ${liveTask.type} · status: ${taskStatusLabel(liveTask.status)} · ${liveTask.address} · ${liveTask.scheduledAt}${unit ? ` · technician: ${unit.name} (${unit.role}, ${unit.specialty})` : " · technician being assigned"}${eta != null ? ` · technician ETA ~${eta} min` : ""}`
+      : "ACTIVE SERVICE: none scheduled right now",
+  ].join("\n");
   const [messages, setMessages] = useState<Message[]>([
     { 
       id: '1', 
@@ -106,6 +119,8 @@ export function ChatView() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          role: 'client',
+          context: clientContext,
           messages: messages.concat(userMsg).map(m => ({ role: m.role, parts: [{ text: m.text }] }))
         })
       });

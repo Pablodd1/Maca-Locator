@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAppState } from "../context/AppContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,115 @@ import {
 import { Link } from "react-router";
 import { MacalocatorLogo } from "./MacalocatorLogo";
 import { speakHuman } from "@/lib/voice";
+import { useOps, taskStatusLabel, STATUS_ORDER } from "../context/OpsContext";
+import { Radar } from "lucide-react";
+
+// ─── Live Service Tracker — the VIP client's zero-effort window ────────────
+function LiveServiceTracker() {
+  const { liveTask, staff, etaFor } = useOps();
+  const lastSpokenRef = useRef<string>("");
+  const unit = liveTask ? staff.find((s) => s.id === liveTask.staffId) : undefined;
+  const eta = liveTask ? etaFor(liveTask) : null;
+
+  // The client never waits wondering — every status change is announced aloud.
+  useEffect(() => {
+    if (!liveTask || liveTask.status === lastSpokenRef.current) return;
+    lastSpokenRef.current = liveTask.status;
+    const lines: Record<string, string> = {
+      assigned: "Good news — your technician is assigned and preparing to depart.",
+      en_route: `Your MACALOCATOR technician is on the way${eta != null ? `, about ${eta} minutes out` : ""}. You can watch the live map.`,
+      arrived: "Your technician has arrived and is ready to begin.",
+      in_service: "Your service is now in progress. We'll let you know the moment it's done.",
+      completed: "Your service is complete — thank you for choosing MACALOCATOR.",
+    };
+    if (lines[liveTask.status]) speakHuman(lines[liveTask.status], "en");
+    if (lines[liveTask.status]) {
+      fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channel: "sms", message: `MACALOCATOR: ${lines[liveTask.status]} / ${liveTask.type}` }),
+      }).catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [liveTask?.status]);
+
+  if (!liveTask) return null;
+  const stepIndex = STATUS_ORDER.indexOf(liveTask.status);
+
+  return (
+    <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 text-white rounded-2xl p-5 md:p-6 shadow-xl border border-blue-900/40">
+      <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+        <Radar className="w-3.5 h-3.5" /> Your service, live · Su servicio, en vivo
+      </div>
+      <div className="mt-3 grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Status + timeline */}
+        <div className="lg:col-span-2">
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <h2 className="text-xl md:text-2xl font-extrabold">{liveTask.type}</h2>
+            <span className="text-sm font-bold text-emerald-400">{taskStatusLabel(liveTask.status)}</span>
+            {eta != null && <span className="text-sm font-black text-amber-300">ETA {eta} min</span>}
+          </div>
+          <p className="text-xs text-slate-300 mt-1">{liveTask.vehicle} · {liveTask.address} · {liveTask.scheduledAt}</p>
+
+          {/* progress timeline */}
+          <div className="flex gap-1.5 mt-4">
+            {STATUS_ORDER.map((s, i) => (
+              <div key={s} className="flex-1">
+                <div className={`h-1.5 rounded-full ${i <= stepIndex ? (i === stepIndex ? "bg-amber-400 animate-pulse" : "bg-emerald-500") : "bg-slate-700"}`} />
+                <p className={`text-[8px] mt-1 font-bold uppercase tracking-wide ${i <= stepIndex ? "text-slate-200" : "text-slate-500"}`}>
+                  {s.replace("_", " ")}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 text-[11px]">
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3">
+              <p className="font-bold text-emerald-300 uppercase tracking-wider text-[9px] mb-1">This service includes · Incluye</p>
+              <ul className="text-slate-300 space-y-0.5">{liveTask.includes.map((x) => <li key={x}>✓ {x}</li>)}</ul>
+            </div>
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3">
+              <p className="font-bold text-red-300 uppercase tracking-wider text-[9px] mb-1">Not included · No incluye</p>
+              <ul className="text-slate-400 space-y-0.5">{liveTask.excludes.map((x) => <li key={x}>✗ {x}</li>)}</ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Technician + mini live map */}
+        <div className="space-y-3">
+          <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5">
+            <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Your technician · Su técnico</p>
+            {unit ? (
+              <>
+                <p className="font-extrabold mt-1">{unit.name}</p>
+                <p className="text-[11px] text-slate-300">{unit.role} · {unit.specialty}</p>
+                <p className="text-[11px] text-emerald-400 font-bold mt-1">
+                  {unit.status === "en_route" ? "Driving to you now…" : unit.status === "on_site" ? "On site with you" : "Preparing"}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-slate-400 mt-1">Assigning the best technician for your vehicle…</p>
+            )}
+          </div>
+          <div className="relative h-28 bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
+            <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+            <div className="absolute" style={{ left: `${liveTask.target.x}%`, top: `${liveTask.target.y}%`, transform: "translate(-50%,-50%)" }}>
+              <div className="w-3 h-3 rounded-full bg-amber-400 border-2 border-amber-200" />
+              <span className="absolute left-4 -top-1 text-[8px] font-mono text-amber-200 whitespace-nowrap">You</span>
+            </div>
+            {unit && (
+              <div className="absolute transition-all duration-1000" style={{ left: `${unit.pos.x}%`, top: `${unit.pos.y}%`, transform: "translate(-50%,-50%)" }}>
+                <div className={`w-3 h-3 rounded-full border-2 ${unit.status === "en_route" ? "bg-blue-500 border-blue-300 animate-pulse" : "bg-purple-500 border-purple-300"}`} />
+                <span className="absolute left-4 -top-1 text-[8px] font-mono text-blue-200 whitespace-nowrap">{unit.name.split(" ")[0]}</span>
+              </div>
+            )}
+            <span className="absolute bottom-1 right-2 text-[8px] font-mono text-slate-500">LIVE GPS · demo grid</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 type MapPoint = {
   id: string;
@@ -362,6 +471,9 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Live Service Tracker — only when there is an active service */}
+      <LiveServiceTracker />
+
       {/* Top Welcome Banner */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 text-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">

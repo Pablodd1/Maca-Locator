@@ -54,6 +54,7 @@ import {
 } from "lucide-react";
 import { notify, getChannelModes, reminderMessage, staffDispatchMessage, type ChannelMode } from "../lib/notifyClient";
 import { speakHuman } from "@/lib/voice";
+import { MissionControl } from "./MissionControl";
 
 // Pre-configured simulation models for deep operational study & training
 const mockStudyGuides = [
@@ -113,7 +114,7 @@ export function AdminView() {
   const { bookings, vehicles, user, addBooking } = useAppState();
 
   // Navigation State inside Admin
-  const [activeAdminTab, setActiveAdminTab] = useState<"analytics" | "visualization" | "ai-frontdesk" | "twilio" | "comms">("analytics");
+  const [activeAdminTab, setActiveAdminTab] = useState<"mission" | "analytics" | "visualization" | "ai-frontdesk" | "twilio" | "comms">("mission");
 
   // General Simulation states
   const [isSyncing, setIsSyncing] = useState(false);
@@ -404,6 +405,16 @@ Requested Service: Battery Diagnostic`);
         {/* Operational Tabs navigation */}
         <div className="flex border-t border-slate-800 mt-8 pt-4 overflow-x-auto whitespace-nowrap gap-1">
           <button
+            onClick={() => setActiveAdminTab("mission")}
+            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
+              activeAdminTab === "mission"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+            }`}
+          >
+            🛰 Mission Control
+          </button>
+          <button
             onClick={() => setActiveAdminTab("analytics")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "analytics" 
@@ -463,6 +474,9 @@ Requested Service: Battery Diagnostic`);
           <span className="text-xs font-bold">Auditing active state... Recalculating fleet multiplier indices, parsing Twilio metadata queue.</span>
         </div>
       )}
+
+      {/* 0. MISSION CONTROL — live operations command center */}
+      {activeAdminTab === "mission" && <MissionControl />}
 
       {/* 1. ANALYTICS & STUDY CENTER */}
       {activeAdminTab === "analytics" && (

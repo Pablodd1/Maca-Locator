@@ -5,6 +5,7 @@
 
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router";
 import { AppProvider } from "./context/AppContext";
+import { OpsProvider } from "./context/OpsContext";
 import { Dashboard } from "./components/Dashboard";
 import { EmergencyView } from "./components/EmergencyView";
 import { ChatView } from "./components/ChatView";
@@ -61,7 +62,8 @@ function Navigation() {
 export default function App() {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <OpsProvider>
+        <BrowserRouter>
         <div className="min-h-screen bg-slate-50 md:pl-64 flex flex-col">
           {/* Mobile Header */}
           <header className="bg-white border-b border-slate-200 h-16 flex items-center px-6 sticky top-0 z-10 md:hidden text-slate-800">
@@ -115,7 +117,8 @@ export default function App() {
             </Routes>
           </main>
         </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </OpsProvider>
     </AppProvider>
   );
 }

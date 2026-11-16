@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Car, Clock, Sparkles, MapPin, ShieldCheck, HelpCircle } from "lucide-react";
 import { Link } from "react-router";
+import { useOps } from "../context/OpsContext";
 
 export function BookingView() {
   const { addBooking, vehicles } = useAppState();
+  const { createTask } = useOps();
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState("");
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
-  const [selectedDate, setSelectedDate] = useState("2026-07-02");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [selectedTime, setSelectedTime] = useState("");
   const [serviceAddress, setServiceAddress] = useState("VIP Residence, 1000 Brickell Plaza, Miami, FL");
 
@@ -41,6 +43,16 @@ export function BookingView() {
       date: selectedDate,
       time: time,
       vehicleId: selectedVehicleId || undefined,
+    });
+    // Open the dispatch pipeline immediately — Mission Control sees the task
+    // and the client dashboard tracker goes live.
+    const v = vehicles.find((x) => x.id === selectedVehicleId);
+    createTask({
+      type: selectedService,
+      clientName: "VIP Client",
+      vehicle: v ? `${v.year} ${v.make} ${v.model}` : "client vehicle",
+      address: serviceAddress,
+      scheduledAt: `${selectedDate} · ${time}`,
     });
     setStep(3);
   };

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAppState } from "../context/AppContext";
+import { useOps } from "../context/OpsContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +55,15 @@ export function UserProfile() {
   const [profileName, setProfileName] = useState(user?.name || "");
   const [profileEmail, setProfileEmail] = useState(user?.email || "");
   const [profilePhone, setProfilePhone] = useState(user?.phone || "");
+  // CRM enrichment
+  const [profileAddress, setProfileAddress] = useState(user?.address || "");
+  const [insuranceCarrier, setInsuranceCarrier] = useState(user?.insuranceCarrier || "");
+  const [insurancePolicy, setInsurancePolicy] = useState(user?.insurancePolicy || "");
+  const [preferredLanguage, setPreferredLanguage] = useState(user?.preferredLanguage || "en");
+  const [marketingOptIn, setMarketingOptIn] = useState(user?.marketingOptIn ?? true);
+  const [gps, setGps] = useState<{ lat: number; lng: number } | null>(user?.gpsLat != null && user?.gpsLng != null ? { lat: user.gpsLat, lng: user.gpsLng } : null);
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const { logEvent } = useOps();
 
   // New Vehicle State
   const [isAddingVehicle, setIsAddingVehicle] = useState(false);
@@ -315,8 +325,29 @@ export function UserProfile() {
       name: profileName,
       email: profileEmail,
       phone: profilePhone,
+      address: profileAddress,
+      gpsLat: gps?.lat,
+      gpsLng: gps?.lng,
+      insuranceCarrier,
+      insurancePolicy,
+      preferredLanguage: preferredLanguage as "en" | "es" | "ht",
+      marketingOptIn,
     });
+    logEvent("crm", `Client profile updated — ${profileName} · lang ${preferredLanguage} · insurance ${insuranceCarrier || "—"} · marketing ${marketingOptIn ? "opted-in" : "opted-out"}`, "Client");
     setIsEditingProfile(false);
+  };
+
+  const captureGps = () => {
+    if (!navigator.geolocation) return;
+    setGpsLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setGps({ lat: +pos.coords.latitude.toFixed(5), lng: +pos.coords.longitude.toFixed(5) });
+        setGpsLoading(false);
+      },
+      () => setGpsLoading(false),
+      { timeout: 8000 }
+    );
   };
 
   const handleAddVehicleSubmit = (e: React.FormEvent) => {
@@ -401,6 +432,41 @@ export function UserProfile() {
                     <label className="text-xs font-semibold text-slate-500">Phone Number</label>
                     <Input value={profilePhone} onChange={(e) => setProfilePhone(e.target.value)} required />
                   </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-500">Service Address · Dirección</label>
+                    <Input value={profileAddress} onChange={(e) => setProfileAddress(e.target.value)} placeholder="Where should we come? / ¿A dónde vamos?" />
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <div className="space-y-1 flex-1">
+                      <label className="text-xs font-semibold text-slate-500">GPS Location · Ubicación</label>
+                      <Input readOnly value={gps ? `${gps.lat}, ${gps.lng}` : "Not captured"} className="font-mono text-xs" />
+                    </div>
+                    <Button type="button" size="sm" variant="outline" onClick={captureGps} disabled={gpsLoading}>
+                      {gpsLoading ? "Locating…" : gps ? "Update GPS" : "Capture GPS"}
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-500">Insurance · Seguro</label>
+                      <Input value={insuranceCarrier} onChange={(e) => setInsuranceCarrier(e.target.value)} placeholder="e.g. GEICO" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-500">Policy #</label>
+                      <Input value={insurancePolicy} onChange={(e) => setInsurancePolicy(e.target.value)} placeholder="Optional" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-500">Preferred language · Idioma</label>
+                    <select value={preferredLanguage} onChange={(e) => setPreferredLanguage(e.target.value as any)} className="w-full h-9 px-2 rounded-lg border border-slate-200 text-sm">
+                      <option value="en">English</option>
+                      <option value="es">Español</option>
+                      <option value="ht">Kreyòl</option>
+                    </select>
+                  </div>
+                  <label className="flex items-start gap-2 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-2.5 cursor-pointer">
+                    <input type="checkbox" checked={marketingOptIn} onChange={(e) => setMarketingOptIn(e.target.checked)} className="mt-0.5 accent-blue-600" />
+                    <span>Email me exclusive MACALOCATOR offers & seasonal service reminders. / Enviarme ofertas exclusivas y recordatorios de servicio.</span>
+                  </label>
                   <div className="flex gap-2 pt-2">
                     <Button type="submit" size="sm" className="flex-1">Save</Button>
                     <Button type="button" size="sm" variant="outline" onClick={() => setIsEditingProfile(false)}>Cancel</Button>
@@ -412,6 +478,15 @@ export function UserProfile() {
                     <h3 className="font-bold text-slate-800 text-lg">{user?.name || "Guest User"}</h3>
                     <p className="text-sm text-slate-500">{user?.email || "No email registered"}</p>
                     <p className="text-sm text-slate-500 mt-1">{user?.phone || "No phone registered"}</p>
+                    {user?.address && <p className="text-xs text-slate-500 mt-1.5">📍 {user.address}</p>}
+                    {user?.gpsLat != null && <p className="text-[11px] font-mono text-slate-400">GPS {user.gpsLat}, {user.gpsLng}</p>}
+                    <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                      {user?.insuranceCarrier && <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full">🛡 {user.insuranceCarrier}</span>}
+                      {user?.preferredLanguage && <span className="text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full uppercase">{user.preferredLanguage}</span>}
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${user?.marketingOptIn ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-slate-50 text-slate-400 border-slate-200"}`}>
+                        {user?.marketingOptIn ? "Offers: ON" : "Offers: OFF"}
+                      </span>
+                    </div>
                   </div>
                   <Button variant="outline" size="sm" className="w-full flex items-center gap-1" onClick={() => {
                     setProfileName(user?.name || "");
