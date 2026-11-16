@@ -128,6 +128,41 @@ async function startServer() {
     res.send(buildTwiml(msg, lang));
   });
 
+  // Local mirrors of the server store + morning cron (dev parity).
+  // Prod = api/bookings.ts + api/cron/morning-sweep.ts backed by REDIS_URL.
+  const localBookings: any[] = [];
+  let localClient: any = {};
+  app.get("/api/bookings", (_req, res) => res.json({ bookings: localBookings }));
+  app.post("/api/bookings", (req, res) => {
+    const { bookings, clientName, clientPhone } = req.body || {};
+    if (!Array.isArray(bookings)) { res.status(400).json({ error: "bookings array required" }); return; }
+    localBookings.length = 0;
+    localBookings.push(...bookings.slice(0, 500));
+    if (clientName || clientPhone) localClient = { clientName, clientPhone };
+    res.json({ ok: true, count: localBookings.length, storedAt: new Date().toISOString() });
+  });
+  app.all("/api/cron/morning-sweep", async (_req, res) => {
+    const now = Date.now();
+    const soon = localBookings.filter((b) => {
+      if (b.status === "completed") return false;
+      const hours = (new Date(`${b.date}T00:00:00`).getTime() - now) / 36e5;
+      return hours > -24 && hours < 24;
+    });
+    const clientPhone = (localClient.clientPhone || "").replace(/[^\d+]/g, "");
+    const detail: any[] = [];
+    for (const b of soon) {
+      const msg = `MACALOCATOR: Reminder — ${b.type} on ${b.date} at ${b.time}. Reply 1 to confirm or 2 to reschedule.`;
+      const staff = `📋 MACALOCATOR Morning Sweep — ${b.type} · ${b.date} ${b.time} · Client: ${localClient.clientName || "VIP client"}.`;
+      detail.push(...await Promise.all([
+        sendNotification({ channel: "sms", to: clientPhone, message: msg }),
+        sendNotification({ channel: "whatsapp", to: clientPhone, message: msg }),
+        sendNotification({ channel: "voice", to: clientPhone, message: msg, origin: `http://localhost:${PORT}` }),
+        sendNotification({ channel: "telegram", to: "", message: staff }),
+      ]));
+    }
+    res.json({ ranAt: new Date().toISOString(), bookingsScanned: localBookings.length, reminded: soon.length, detail });
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

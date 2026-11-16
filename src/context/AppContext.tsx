@@ -123,6 +123,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem("ev_notifications", JSON.stringify(notificationPrefs));
   }, [notificationPrefs]);
 
+  // Mirror bookings to the server store so reminders run even when the app
+  // is closed (the morning cron reads from there). Fire-and-forget.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookings, clientName: user?.name, clientPhone: user?.phone }),
+      }).catch(() => { /* offline demo — client-local reminders still work */ });
+    }, 900);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookings]);
+
   const setUser = (newUser: User | null) => {
     setUserState(newUser);
   };
