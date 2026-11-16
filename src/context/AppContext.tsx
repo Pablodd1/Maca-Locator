@@ -20,6 +20,7 @@ type AppContextType = {
   updateBookingStatus: (id: string, status: ServiceBooking["status"]) => void;
   notificationPrefs: NotificationPreferences;
   toggleNotificationPref: (type: keyof NotificationPreferences) => void;
+  applyPersona: (kind: "full" | "empty" | "admin") => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -192,6 +193,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }));
   };
 
+  // Demo persona switcher — powers the skip buttons on the welcome gate.
+  // "full": Jasmel Acosta, complete CRM + vehicles + a booking today.
+  // "empty": brand-new client — nothing registered, to walk the registration
+  //          workflow from scratch. "admin": JASMELADM straight to Mission
+  //          Control with the full dataset behind it.
+  const applyPersona = (kind: "full" | "empty" | "admin") => {
+    if (kind === "empty") {
+      localStorage.setItem("ev_user", JSON.stringify({ id: "u_new", name: "New Client", email: "", phone: "", role: "client" as const }));
+      localStorage.setItem("ev_vehicles", "[]");
+      localStorage.setItem("ev_bookings", "[]");
+    } else if (kind === "admin") {
+      localStorage.setItem("ev_user", JSON.stringify({
+        ...defaultUser,
+        name: "JASMELADM",
+        email: "admin@macalocator.com",
+        role: "admin" as const,
+        address: "MACALOCATOR HQ, 3950 Biscayne Blvd, Miami, FL",
+        preferredLanguage: "en" as const,
+      }));
+      localStorage.setItem("ev_vehicles", JSON.stringify(defaultVehicles));
+      localStorage.setItem("ev_bookings", JSON.stringify(defaultBookings));
+    } else {
+      localStorage.setItem("ev_user", JSON.stringify({
+        ...defaultUser,
+        address: "1000 Brickell Plaza, Apt 4202, Miami, FL",
+        gpsLat: 25.7617,
+        gpsLng: -80.1918,
+        insuranceCarrier: "GEICO",
+        insurancePolicy: "GEO-4471-882",
+        preferredLanguage: "es" as const,
+        marketingOptIn: true,
+      }));
+      localStorage.setItem("ev_vehicles", JSON.stringify(defaultVehicles));
+      localStorage.setItem("ev_bookings", JSON.stringify(defaultBookings));
+    }
+    // Reset the operations engine so each persona starts a clean day
+    ["maca_staff", "maca_tasks", "maca_inventory", "maca_ledger", "maca_reminder_done"].forEach((k) => localStorage.removeItem(k));
+    localStorage.setItem("maca_persona", kind);
+    if (kind === "admin") localStorage.setItem("maca_persona_dest", "/admin");
+    window.location.href = "/";
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -206,6 +249,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateBookingStatus,
         notificationPrefs,
         toggleNotificationPref,
+        applyPersona,
       }}
     >
       {children}

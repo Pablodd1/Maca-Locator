@@ -3,6 +3,7 @@ export type User = {
   name: string;
   email: string;
   phone: string;
+  role?: "client" | "admin";
   // CRM enrichment — luxury service needs the full picture
   address?: string;
   gpsLat?: number;

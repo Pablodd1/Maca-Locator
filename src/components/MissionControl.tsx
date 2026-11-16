@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAppState } from "../context/AppContext";
 import { useOps, taskStatusLabel, STATUS_ORDER, type TaskStatus } from "../context/OpsContext";
 import { notify } from "../lib/notifyClient";
+import { speakHuman } from "@/lib/voice";
 import {
   Radar, MapPin, Package, CalendarDays, Radio, LogIn, LogOut,
-  PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send,
+  PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send, Mic, MicOff, Volume2, VolumeX,
 } from "lucide-react";
 
 // ─── MACALOCATOR Mission Control — administrator command center ────────────
@@ -26,6 +27,30 @@ export function MissionControl() {
   const [aiLoading, setAiLoading] = useState(false);
   const [newTaskType, setNewTaskType] = useState("Full Mobile Diagnostics");
   const [newTaskAddr, setNewTaskAddr] = useState("");
+  // Mission AI voice: mic dictation + spoken readback
+  const [aiListening, setAiListening] = useState(false);
+  const [aiVoiceOn, setAiVoiceOn] = useState(true);
+  const recRef = useRef<any>(null);
+
+  useEffect(() => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) return;
+    const rec = new SR();
+    rec.continuous = false;
+    rec.lang = "en-US"; // admin-facing English-first; Spanish still understood
+    rec.interimResults = false;
+    rec.onstart = () => setAiListening(true);
+    rec.onend = () => setAiListening(false);
+    rec.onerror = () => setAiListening(false);
+    rec.onresult = (e: any) => setAiPrompt((prev) => (prev ? prev + " " : "") + e.results[0][0].transcript);
+    recRef.current = rec;
+  }, []);
+
+  const toggleAiMic = () => {
+    if (!recRef.current) return;
+    if (aiListening) recRef.current.stop();
+    else { try { recRef.current.start(); } catch { /* already running */ } }
+  };
 
   const busy = staff.filter((s) => s.status !== "idle" && s.status !== "offline").length;
   const lowStock = inventory.filter((i) => i.qty <= i.threshold);
@@ -72,7 +97,9 @@ export function MissionControl() {
         }),
       });
       const data = await res.json();
-      setAiReply(data.text || "Mission AI unavailable — check server logs.");
+      const reply = data.text || "Mission AI unavailable — check server logs.";
+      setAiReply(reply);
+      if (aiVoiceOn) speakHuman(reply);
     } catch {
       setAiReply("Mission AI unreachable (offline demo mode).");
     } finally {
@@ -375,12 +402,34 @@ export function MissionControl() {
             <CardDescription className="text-xs">Real Gemini briefing over the live ops snapshot: tasks, ETAs, staffing, inventory, CRM. Ask in English or Spanish.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <Mic className="w-3.5 h-3.5 text-blue-600" /> Speak or type your question — the answer is read back aloud.
+              </span>
+              <button
+                type="button"
+                onClick={() => setAiVoiceOn((v) => !v)}
+                className={`flex items-center gap-1.5 font-bold ${aiVoiceOn ? "text-blue-600" : "text-slate-400"}`}
+              >
+                {aiVoiceOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                Readback {aiVoiceOn ? "ON" : "OFF"}
+              </button>
+            </div>
             <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={toggleAiMic}
+                className={`shrink-0 h-10 rounded-xl ${aiListening ? "bg-red-50 text-red-600 border-red-300 animate-pulse" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
+                title={aiListening ? "Stop listening" : "Dictate question"}
+              >
+                {aiListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
               <input
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && askMissionAI()}
-                placeholder="e.g. Brief me — any unit at risk of delay? What should I restock today?"
+                placeholder={aiListening ? "Listening… (EN/ES)" : "e.g. Brief me — any unit at risk of delay? What should I restock today?"}
                 className="flex-1 h-10 px-3 rounded-xl border border-slate-200 text-sm"
                 disabled={aiLoading}
               />
