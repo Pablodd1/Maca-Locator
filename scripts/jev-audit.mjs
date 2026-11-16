@@ -68,6 +68,12 @@ function fetchUrl(targetUrl, timeoutMs = 8000) {
 }
 
 async function classifyWithJev(route, routeResult) {
+  // Known planned state, not an outage: the booking store returns 503 with
+  // guidance until its Blob store is attached in the dashboard.
+  // Deterministic — short-circuits before any classifier runs.
+  if (routeResult.status === 503 && routeResult.bodySnippet.includes('not connected')) {
+    return { source: 'planned-pending', is_operational: true, severity: 'info', should_alert: false };
+  }
   if (typeSafeClient) {
     try {
       // SDK 0.6+ API: systemOne() with state + helper-built questions
@@ -100,12 +106,6 @@ async function classifyWithJev(route, routeResult) {
   // Heuristic fallback engine
   const isOk = routeResult.status >= 200 && routeResult.status < 400;
   const isWarn = routeResult.latencyMs > 4000;
-  // Known planned state, not an outage: the booking store returns 503 with
-  // guidance until its Blob store is attached in the dashboard.
-  const plannedPending = routeResult.status === 503 && routeResult.bodySnippet.includes('not connected');
-  if (plannedPending) {
-    return { source: 'heuristic-fallback', is_operational: true, severity: 'info', should_alert: false };
-  }
   return {
     source: 'heuristic-fallback',
     is_operational: isOk,
