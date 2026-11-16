@@ -1,0 +1,27 @@
+name: Jev Monitor — MACALOCATOR route health
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  jev-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install audit dependencies
+        run: npm install @typesafe-ai/sdk@^0.6.0 --no-save
+      - name: Run Jev route audit
+        env:
+          BASE_URL: https://maca-locator.vercel.app
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: node scripts/jev-audit.mjs
