@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import Redis from "ioredis";
+import { get, put } from "@vercel/blob";
 
 // MACALOCATOR Morning Reminder Sweep — Vercel Cron endpoint.
 // Runs daily (vercel.json crons, 13:00 UTC = 8:00 AM Miami). Reads bookings
@@ -8,8 +8,9 @@ import Redis from "ioredis";
 // the notification hub. Works in demo mode (composes, marks demo) when
 // provider keys are absent. Self-contained by design (Vercel builder).
 
-const KEY = "maca:bookings";
-const LAST_RUN = "maca:last-sweep";
+const KEY = "maca/bookings.json";
+const CLIENT_KEY = "maca/client.json";
+const LAST_RUN = "maca/last-sweep.json";
 
 type Booking = { id: string; type: string; date: string; time: string; status: string; vehicleId?: string };
 type NotifyResult = { channel: string; mode: "live" | "demo"; ok: boolean; to: string; detail: string };
@@ -96,14 +97,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const r = process.env.REDIS_URL ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: 1, connectTimeout: 5000 }) : null;
-  if (!r) return res.status(503).json({ error: "REDIS_URL not configured — nothing to sweep." });
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(503).json({ error: "Blob store not connected yet — attach 'maca-bookings' to this project in the Vercel dashboard, then redeploy." });
+  }
 
   try {
-    const raw = await r.get(KEY);
-    const bookings: Booking[] = raw ? JSON.parse(raw) : [];
-    const clientRaw = await r.get("maca:client");
-    const client = clientRaw ? JSON.parse(clientRaw) : { clientName: "", clientPhone: "" };
+    let bookings: Booking[] = [];
+    let client: any = { clientName: "", clientPhone: "" };
+    try {
+      const blob = await get(KEY, { access: "private" });
+      bookings = await fetch(blob.blob.downloadUrl).then((r) => r.json());
+      const cb = await get(CLIENT_KEY, { access: "private" });
+      client = await fetch(cb.blob.downloadUrl).then((r) => r.json());
+    } catch (e: any) {
+      if (!String(e?.message || e).includes("not found") && e?.name !== "BlobNotFoundError") throw e;
+    }
     const now = Date.now();
     const soon = bookings.filter((b) => {
       if (b.status === "completed") return false;
@@ -137,11 +145,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       failed: results.filter((x) => !x.ok).length,
       detail: results,
     };
-    await r.set(LAST_RUN, JSON.stringify({ ranAt: report.ranAt, reminded: soon.length }));
+    await put(LAST_RUN, JSON.stringify({ ranAt: report.ranAt, reminded: soon.length, live: report.live, failed: report.failed }), { access: "private", allowOverwrite: true });
     return res.status(200).json(report);
   } catch (err: any) {
     return res.status(502).json({ error: `Sweep error: ${err?.message || err}` });
-  } finally {
-    try { r?.disconnect(); } catch { /* noop */ }
   }
 }
