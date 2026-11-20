@@ -154,39 +154,39 @@ export function ChatView() {
   };
 
   return (
-    <Card className="flex flex-col h-[600px] border-slate-200/80 shadow-md bg-white overflow-hidden rounded-2xl">
-      <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-slate-100/50 pb-4">
+    <Card className="flex flex-col h-[600px] border-[#4A5548]/80 shadow-md bg-[#27362C] overflow-hidden rounded-2xl">
+      <CardHeader className="border-b bg-gradient-to-r from-[#22302A] to-[#27362C]/60 pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-slate-800 font-extrabold text-base md:text-lg">
-            <LifeBuoy className="w-5 h-5 text-blue-600" />
+          <CardTitle className="font-display flex items-center gap-2 text-[#EFE9DC] font-extrabold text-base md:text-lg">
+            <LifeBuoy className="w-5 h-5 text-[#C5A06C]" />
             MACALOCATOR VIP Support Desk
           </CardTitle>
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-1 text-[10px] text-blue-800 font-bold">
-            <Sparkles className="w-3 h-3 text-blue-600 animate-pulse" /> Direct Doorstep Service
+          <div className="flex items-center gap-2 bg-[#2E3A31] border border-[#4A5548] rounded-full px-2.5 py-1 text-[10px] text-[#C5A06C] font-bold">
+            <Sparkles className="w-3 h-3 text-[#C5A06C] animate-pulse" /> Direct Doorstep Service
           </div>
         </div>
-        <CardDescription className="text-slate-500 text-xs">
+        <CardDescription className="text-[#B8C0B4] text-xs">
           Interactive chat assistant with fully responsive text & natural voice synthesis. Ask about on-site tune-ups, tire replacements, or battery calibrations.
         </CardDescription>
       </CardHeader>
 
       {/* Doorstep Alert Reminder Bar */}
-      <div className="bg-amber-50/70 border-b border-amber-100/60 px-4 py-2 flex items-center gap-2">
-        <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-        <span className="text-[11px] text-amber-900 font-medium leading-tight">
+      <div className="bg-[#33402F]/70 border-b border-[#4A5548]/60 px-4 py-2 flex items-center gap-2">
+        <MapPin className="w-3.5 h-3.5 text-[#D9A441] shrink-0" />
+        <span className="text-[11px] text-[#E5B95C] font-medium leading-tight">
           <strong>Elite Mobile Concept:</strong> Remember, we don't operate a physical waiting lounge. Our mechanics load premium toolsets and travel directly to your location!
         </span>
       </div>
       
-      <ScrollArea className="flex-1 p-4 bg-slate-50/30">
+      <ScrollArea className="flex-1 p-4 bg-[#22302A]/30">
         <div className="space-y-4">
           {messages.map((msg) => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex items-start gap-2 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 border border-slate-200 text-slate-700'}`}>
-                  {msg.role === 'user' ? <User className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4 text-blue-700" />}
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-[#B08D57] text-white shadow-sm' : 'bg-[#22302A] border border-[#4A5548] text-[#DCD8CC]'}`}>
+                  {msg.role === 'user' ? <User className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4 text-[#C5A06C]" />}
                 </div>
-                <div className={`p-3.5 rounded-2xl text-sm whitespace-pre-line ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-sm shadow-sm' : 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-sm shadow-sm'}`}>
+                <div className={`p-3.5 rounded-2xl text-sm whitespace-pre-line ${msg.role === 'user' ? 'bg-[#B08D57] text-white rounded-tr-sm shadow-sm' : 'bg-[#27362C] border border-[#4A5548]/80 text-[#EFE9DC] rounded-tl-sm shadow-sm'}`}>
                   {msg.text}
                 </div>
               </div>
@@ -195,13 +195,13 @@ export function ChatView() {
           {isLoading && (
             <div className="flex justify-start">
               <div className="flex items-start gap-2 max-w-[80%]">
-                <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-4 h-4 text-blue-700" />
+                <div className="w-8 h-8 rounded-full bg-[#22302A] border border-[#4A5548] text-[#DCD8CC] flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4 text-[#C5A06C]" />
                 </div>
-                <div className="p-3 rounded-2xl bg-white border border-slate-200/80 text-slate-800 rounded-tl-sm flex gap-1 shadow-sm">
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                <div className="p-3 rounded-2xl bg-[#27362C] border border-[#4A5548]/80 text-[#EFE9DC] rounded-tl-sm flex gap-1 shadow-sm">
+                  <div className="w-2 h-2 bg-[#8A967F] rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-[#8A967F] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-[#8A967F] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                 </div>
               </div>
             </div>
@@ -209,9 +209,9 @@ export function ChatView() {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t bg-slate-50/50 space-y-3">
+      <div className="p-4 border-t bg-[#22302A]/50 space-y-3">
         {/* Voice control toggles inside ChatView */}
-        <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+        <div className="flex items-center justify-between text-xs text-[#B8C0B4] px-1">
           <div className="flex items-center gap-2">
             <span className="inline-block h-1.5 w-1.5 bg-emerald-500 rounded-full" />
             <span>Voice Input dictation is active</span>
@@ -223,7 +223,7 @@ export function ChatView() {
               setSpeakResponses(next);
               if (next) speakText("Voice synthesis enabled.");
             }}
-            className={`flex items-center gap-1.5 font-bold transition-colors ${speakResponses ? "text-blue-600" : "text-slate-400"}`}
+            className={`flex items-center gap-1.5 font-bold transition-colors ${speakResponses ? "text-[#C5A06C]" : "text-[#A6B0A3]"}`}
           >
             {speakResponses ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
             <span>{speakResponses ? "Voice Readback: ON" : "Voice Readback: OFF"}</span>
@@ -235,21 +235,21 @@ export function ChatView() {
           <Button
             type="button"
             variant="outline"
-            className={`shrink-0 rounded-xl transition-all ${isListening ? "bg-red-50 text-red-600 border-red-300 animate-pulse" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}`}
+            className={`shrink-0 rounded-xl transition-all ${isListening ? "bg-[#3A2F2C] text-[#C96A5B] border-[#5A4A44] animate-pulse" : "bg-[#27362C] text-[#C5CBBF] border-[#4A5548] hover:bg-[#22302A]"}`}
             onClick={startListening}
             title={isListening ? "Stop listening" : "Dictate message with microphone"}
           >
-            {isListening ? <MicOff className="w-4 h-4 text-red-600" /> : <Mic className="w-4 h-4 text-slate-600" />}
+            {isListening ? <MicOff className="w-4 h-4 text-[#C96A5B]" /> : <Mic className="w-4 h-4 text-[#C5CBBF]" />}
           </Button>
 
           <Input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={isListening ? "Listening closely..." : "Ask anything — English, Español, or Kreyòl..."}
-            className="flex-1 bg-white border-slate-200 focus-visible:ring-blue-600 rounded-xl"
+            className="flex-1 bg-[#27362C] border-[#4A5548] focus-visible:ring-[#B08D57] rounded-xl"
             disabled={isLoading}
           />
-          <Button type="submit" disabled={isLoading || !input.trim()} className="bg-blue-600 hover:bg-blue-700 rounded-xl">
+          <Button type="submit" disabled={isLoading || !input.trim()} className="bg-[#B08D57] hover:bg-[#C5A06C] rounded-xl">
             <Send className="w-4 h-4" />
           </Button>
         </form>

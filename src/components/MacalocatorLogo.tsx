@@ -15,14 +15,14 @@ export function MacalocatorLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) 
       <motion.div
         whileHover={{ scale: 1.05, y: -1 }}
         whileTap={{ scale: 0.95 }}
-        className={`${current.box} rounded-lg bg-blue-50 border border-blue-200 shadow-sm flex items-center justify-center cursor-pointer`}
+        className={`${current.box} rounded-lg bg-[#2E3A31] border border-[#4A5548] shadow-sm flex items-center justify-center cursor-pointer`}
       >
         <div className="w-full h-full flex items-center justify-center">
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            className={`${current.svg} text-blue-600`}
+            className={`${current.svg} text-[#C5A06C]`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -44,8 +44,8 @@ export function MacalocatorLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) 
         </div>
       </motion.div>
       {size !== "lg" && (
-        <span className={`${current.text} font-extrabold tracking-tight text-slate-800`}>
-          MACA<span className="text-blue-600">LOCATOR</span>
+        <span className={`${current.text} font-extrabold tracking-tight text-[#EFE9DC]`}>
+          MACA<span className="text-[#C5A06C]">LOCATOR</span>
         </span>
       )}
     </div>

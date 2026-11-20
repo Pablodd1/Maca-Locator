@@ -366,19 +366,19 @@ Requested Service: Battery Diagnostic`);
   return (
     <div className="space-y-6">
       {/* Upper Brand Jumbotron Header */}
-      <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-800 text-white relative overflow-hidden shadow-xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-[#22262B] rounded-3xl p-6 sm:p-8 border border-[#4A5548] text-white relative overflow-hidden shadow-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#B08D57]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-60 h-60 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <span className="text-[10px] bg-blue-500/20 text-blue-400 font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-500/30">
+            <span className="text-[10px] bg-[#2E3A31]0/20 text-[#C5A06C] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-[#B08D57]/40">
               MACALOCATOR ADMINISTRATIVE PORTAL
             </span>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
               VIP Logistics, Analytics & AI Studio
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#A6B0A3] max-w-2xl leading-relaxed">
               Real-time dashboard for managing on-demand vehicular operations, dispatching live staff, configuring Twilio communications, and auditing deep platform analytics.
             </p>
           </div>
@@ -386,30 +386,30 @@ Requested Service: Battery Diagnostic`);
           <div className="flex gap-2 shrink-0 self-start md:self-auto">
             <Link
               to="/marketing"
-              className="inline-flex items-center gap-2 border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-white text-xs h-10 px-4 font-bold rounded-xl"
+              className="inline-flex items-center gap-2 border border-[#4A5548] bg-[#22262B]/60 hover:bg-[#2E343A] text-white text-xs h-10 px-4 font-bold rounded-xl"
             >
               Marketing Studio
             </Link>
             <Button
               variant="outline"
-              className="border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-white text-xs h-10 font-bold gap-2"
+              className="border-[#4A5548] bg-[#22262B]/60 hover:bg-[#2E343A] text-white text-xs h-10 font-bold gap-2"
               onClick={handleSyncData}
               disabled={isSyncing}
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-blue-400" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-[#C5A06C]" : ""}`} />
               {isSyncing ? "Syncing Platform Database..." : "Force Sync Platform Data"}
             </Button>
           </div>
         </div>
 
         {/* Operational Tabs navigation */}
-        <div className="flex border-t border-slate-800 mt-8 pt-4 overflow-x-auto whitespace-nowrap gap-1">
+        <div className="flex border-t border-[#4A5548] mt-8 pt-4 overflow-x-auto whitespace-nowrap gap-1">
           <button
             onClick={() => setActiveAdminTab("mission")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "mission"
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10"
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             🛰 Mission Control
@@ -418,8 +418,8 @@ Requested Service: Battery Diagnostic`);
             onClick={() => setActiveAdminTab("analytics")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "analytics" 
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10" 
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             📊 Analytics & Study Center
@@ -428,8 +428,8 @@ Requested Service: Battery Diagnostic`);
             onClick={() => setActiveAdminTab("visualization")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "visualization" 
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10" 
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             📈 Data Visualization
@@ -438,8 +438,8 @@ Requested Service: Battery Diagnostic`);
             onClick={() => setActiveAdminTab("ai-frontdesk")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "ai-frontdesk" 
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10" 
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             🤖 Front Desk AI Assistant (Simulated)
@@ -448,8 +448,8 @@ Requested Service: Battery Diagnostic`);
             onClick={() => setActiveAdminTab("twilio")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "twilio" 
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10" 
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             📞 Twilio call & SMS Gateway
@@ -458,8 +458,8 @@ Requested Service: Battery Diagnostic`);
             onClick={() => setActiveAdminTab("comms")}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
               activeAdminTab === "comms" 
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/10" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#B08D57] text-white shadow-lg shadow-blue-600/10" 
+                : "text-[#A6B0A3] hover:text-white hover:bg-[#2E343A]"
             }`}
           >
             💬 Staff & Client Intercom (Simulated)
@@ -469,8 +469,8 @@ Requested Service: Battery Diagnostic`);
 
       {/* Sync animation loader */}
       {isSyncing && (
-        <div className="p-4 bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl flex items-center gap-3 animate-pulse">
-          <RefreshCw className="w-4 h-4 animate-spin text-blue-600" />
+        <div className="p-4 bg-[#2E3A31] border border-[#4A5548] text-[#C5A06C] rounded-2xl flex items-center gap-3 animate-pulse">
+          <RefreshCw className="w-4 h-4 animate-spin text-[#C5A06C]" />
           <span className="text-xs font-bold">Auditing active state... Recalculating fleet multiplier indices, parsing Twilio metadata queue.</span>
         </div>
       )}
@@ -484,55 +484,55 @@ Requested Service: Battery Diagnostic`);
           {/* Main statistical telemetry card */}
           <div className="lg:col-span-2 space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <Card className="border-slate-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <Card className="border-[#4A5548] shadow-sm bg-[#262B30] hover:shadow-md transition-shadow">
                 <CardContent className="p-4 space-y-1">
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-[#A6B0A3]">
                     <span className="text-[10px] font-bold uppercase tracking-wider">Gross Booking Val</span>
-                    <Coins className="w-4 h-4 text-emerald-600" />
+                    <Coins className="w-4 h-4 text-[#6FAE8F]" />
                   </div>
-                  <p className="text-lg font-black text-slate-800">${totalProjectedRevenue.toLocaleString()} USD</p>
-                  <span className="text-[9px] text-emerald-600 font-bold">100% Mobile Service</span>
+                  <p className="text-lg font-black text-[#EFE9DC]">${totalProjectedRevenue.toLocaleString()} USD</p>
+                  <span className="text-[9px] text-[#6FAE8F] font-bold">100% Mobile Service</span>
                 </CardContent>
               </Card>
 
-              <Card className="border-slate-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <Card className="border-[#4A5548] shadow-sm bg-[#262B30] hover:shadow-md transition-shadow">
                 <CardContent className="p-4 space-y-1">
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-[#A6B0A3]">
                     <span className="text-[10px] font-bold uppercase tracking-wider">Active Bookings</span>
-                    <Truck className="w-4 h-4 text-blue-600" />
+                    <Truck className="w-4 h-4 text-[#C5A06C]" />
                   </div>
-                  <p className="text-lg font-black text-slate-800">{totalBookingsCount} Jobs</p>
-                  <span className="text-[9px] text-slate-500 font-medium">In system queue</span>
+                  <p className="text-lg font-black text-[#EFE9DC]">{totalBookingsCount} Jobs</p>
+                  <span className="text-[9px] text-[#B8C0B4] font-medium">In system queue</span>
                 </CardContent>
               </Card>
 
-              <Card className="border-slate-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <Card className="border-[#4A5548] shadow-sm bg-[#262B30] hover:shadow-md transition-shadow">
                 <CardContent className="p-4 space-y-1">
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-[#A6B0A3]">
                     <span className="text-[10px] font-bold uppercase tracking-wider">Fleet Registry</span>
-                    <Database className="w-4 h-4 text-blue-600" />
+                    <Database className="w-4 h-4 text-[#C5A06C]" />
                   </div>
-                  <p className="text-lg font-black text-slate-800">{totalVehiclesCount} Models</p>
-                  <span className="text-[9px] text-slate-500 font-medium">Presets + Customized</span>
+                  <p className="text-lg font-black text-[#EFE9DC]">{totalVehiclesCount} Models</p>
+                  <span className="text-[9px] text-[#B8C0B4] font-medium">Presets + Customized</span>
                 </CardContent>
               </Card>
 
-              <Card className="border-slate-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <Card className="border-[#4A5548] shadow-sm bg-[#262B30] hover:shadow-md transition-shadow">
                 <CardContent className="p-4 space-y-1">
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-[#A6B0A3]">
                     <span className="text-[10px] font-bold uppercase tracking-wider">Twilio SMS Queue</span>
-                    <Smartphone className="w-4 h-4 text-purple-600" />
+                    <Smartphone className="w-4 h-4 text-[#C5A06C]" />
                   </div>
-                  <p className="text-lg font-black text-slate-800">{twilioLogs.length} Transmissions</p>
-                  <span className="text-[9px] text-purple-600 font-bold">Gateway operational</span>
+                  <p className="text-lg font-black text-[#EFE9DC]">{twilioLogs.length} Transmissions</p>
+                  <span className="text-[9px] text-[#C5A06C] font-bold">Gateway operational</span>
                 </CardContent>
               </Card>
             </div>
 
             {/* Custom Responsive SVG Service Chart */}
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-2 border-b">
-                <CardTitle className="text-sm font-bold text-slate-800">
+                <CardTitle className="text-sm font-bold text-[#EFE9DC]">
                   Estimated Dispatch Revenue by Service Class (USD)
                 </CardTitle>
                 <CardDescription className="text-xs">
@@ -543,7 +543,7 @@ Requested Service: Battery Diagnostic`);
                 <div className="w-full h-56 flex flex-col justify-between relative select-none pt-4">
                   
                   {/* Dynamic Graphic */}
-                  <div className="flex-1 flex items-end gap-5 px-4 border-b border-slate-200 pb-2 relative">
+                  <div className="flex-1 flex items-end gap-5 px-4 border-b border-[#4A5548] pb-2 relative">
                     {/* SVG Grid lines behind */}
                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
                       <div className="border-t border-dashed w-full h-0" />
@@ -553,44 +553,44 @@ Requested Service: Battery Diagnostic`);
 
                     {/* Bar 1 */}
                     <div className="flex-1 flex flex-col items-center gap-1 group relative z-10">
-                      <div className="text-[9px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-slate-900 text-white px-1.5 py-0.5 rounded shadow">
+                      <div className="text-[9px] font-mono text-[#B8C0B4] opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-[#22262B] text-white px-1.5 py-0.5 rounded shadow">
                         $290K
                       </div>
-                      <div className="w-full bg-blue-600/80 hover:bg-blue-600 transition-colors rounded-t h-28" />
-                      <span className="text-[9px] font-bold text-slate-600 text-center truncate w-full">Tires</span>
+                      <div className="w-full bg-[#B08D57]/80 hover:bg-[#B08D57] transition-colors rounded-t h-28" />
+                      <span className="text-[9px] font-bold text-[#C5CBBF] text-center truncate w-full">Tires</span>
                     </div>
 
                     {/* Bar 2 */}
                     <div className="flex-1 flex flex-col items-center gap-1 group relative z-10">
-                      <div className="text-[9px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-slate-900 text-white px-1.5 py-0.5 rounded shadow">
+                      <div className="text-[9px] font-mono text-[#B8C0B4] opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-[#22262B] text-white px-1.5 py-0.5 rounded shadow">
                         $620K
                       </div>
                       <div className="w-full bg-emerald-600/80 hover:bg-emerald-600 transition-colors rounded-t h-44" />
-                      <span className="text-[9px] font-bold text-slate-600 text-center truncate w-full">Battery Diagnostic</span>
+                      <span className="text-[9px] font-bold text-[#C5CBBF] text-center truncate w-full">Battery Diagnostic</span>
                     </div>
 
                     {/* Bar 3 */}
                     <div className="flex-1 flex flex-col items-center gap-1 group relative z-10">
-                      <div className="text-[9px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-slate-900 text-white px-1.5 py-0.5 rounded shadow">
+                      <div className="text-[9px] font-mono text-[#B8C0B4] opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-[#22262B] text-white px-1.5 py-0.5 rounded shadow">
                         $220K
                       </div>
-                      <div className="w-full bg-indigo-600/80 hover:bg-indigo-600 transition-colors rounded-t h-20" />
-                      <span className="text-[9px] font-bold text-slate-600 text-center truncate w-full">Detailing Suite</span>
+                      <div className="w-full bg-[#B08D57]/80 hover:bg-[#B08D57] transition-colors rounded-t h-20" />
+                      <span className="text-[9px] font-bold text-[#C5CBBF] text-center truncate w-full">Detailing Suite</span>
                     </div>
 
                     {/* Bar 4 */}
                     <div className="flex-1 flex flex-col items-center gap-1 group relative z-10">
-                      <div className="text-[9px] font-mono text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-slate-900 text-white px-1.5 py-0.5 rounded shadow">
+                      <div className="text-[9px] font-mono text-[#B8C0B4] opacity-0 group-hover:opacity-100 transition-opacity absolute -top-5 bg-[#22262B] text-white px-1.5 py-0.5 rounded shadow">
                         $235K
                       </div>
-                      <div className="w-full bg-slate-600/80 hover:bg-slate-600 transition-colors rounded-t h-24" />
-                      <span className="text-[9px] font-bold text-slate-600 text-center truncate w-full">Diagnostics Scan</span>
+                      <div className="w-full bg-[#2E343A]/80 hover:bg-[#2E343A] transition-colors rounded-t h-24" />
+                      <span className="text-[9px] font-bold text-[#C5CBBF] text-center truncate w-full">Diagnostics Scan</span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-bold uppercase">
+                  <div className="flex justify-between items-center text-[10px] text-[#A6B0A3] mt-2 font-bold uppercase">
                     <span>Low Range (Det)</span>
-                    <span className="text-slate-500">Median Rate: ~$115 USD</span>
+                    <span className="text-[#B8C0B4]">Median Rate: ~$115 USD</span>
                     <span>High Range (Batt)</span>
                   </div>
                 </div>
@@ -598,19 +598,19 @@ Requested Service: Battery Diagnostic`);
             </Card>
 
             {/* Interactive Data Study & Learning Center */}
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl" id="study-lab">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl" id="study-lab">
               <CardHeader className="border-b pb-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                      <BookOpen className="w-4 h-4 text-blue-600" />
+                    <CardTitle className="text-sm font-bold text-[#EFE9DC] flex items-center gap-1.5">
+                      <BookOpen className="w-4 h-4 text-[#C5A06C]" />
                       Operational Data Study Lab & Registry
                     </CardTitle>
                     <CardDescription className="text-xs">
                       Analyze relational data and study operational workflow schemas for staff training.
                     </CardDescription>
                   </div>
-                  <span className="text-[9px] bg-emerald-50 text-emerald-700 font-extrabold uppercase px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="text-[9px] bg-emerald-50 text-[#6FAE8F] font-extrabold uppercase px-2 py-0.5 rounded border border-emerald-200">
                     LEARNING CONSOLE
                   </span>
                 </div>
@@ -623,31 +623,31 @@ Requested Service: Battery Diagnostic`);
                       onClick={() => setSelectedStudyGuide(guide)}
                       className={`p-3 border rounded-xl cursor-pointer transition-all ${
                         selectedStudyGuide?.topic === guide.topic 
-                          ? "bg-blue-50/70 border-blue-400" 
-                          : "bg-slate-50/40 hover:bg-white border-slate-200 hover:border-slate-300"
+                          ? "bg-[#2E3A31]/70 border-[#B08D57]" 
+                          : "bg-[#22302A]/40 hover:bg-[#262B30] border-[#4A5548] hover:border-[#4A5548]"
                       }`}
                     >
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-[9px] bg-slate-200 text-slate-700 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
+                        <span className="text-[9px] bg-[#2E3A31] text-[#DCD8CC] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
                           {guide.difficulty}
                         </span>
-                        <span className="text-[9px] text-slate-400 font-mono font-bold">{guide.code}</span>
+                        <span className="text-[9px] text-[#A6B0A3] font-mono font-bold">{guide.code}</span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-800 line-clamp-1">{guide.topic}</h4>
-                      <p className="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">{guide.summary}</p>
+                      <h4 className="text-xs font-bold text-[#EFE9DC] line-clamp-1">{guide.topic}</h4>
+                      <p className="text-[10px] text-[#B8C0B4] mt-1 line-clamp-2 leading-relaxed">{guide.summary}</p>
                     </div>
                   ))}
                 </div>
 
                 {selectedStudyGuide && (
-                  <div className="p-4 bg-slate-900 text-slate-200 border border-slate-800 rounded-xl space-y-2 font-mono text-xs">
-                    <div className="flex justify-between border-b border-slate-800 pb-2 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                  <div className="p-4 bg-[#22262B] text-[#DCD8CC] border border-[#4A5548] rounded-xl space-y-2 font-mono text-xs">
+                    <div className="flex justify-between border-b border-[#4A5548] pb-2 text-[10px] uppercase font-bold text-[#A6B0A3] tracking-wider">
                       <span>Technical Standard: {selectedStudyGuide.code}</span>
-                      <button onClick={() => setSelectedStudyGuide(null)} className="text-red-400 hover:text-red-300">Close</button>
+                      <button onClick={() => setSelectedStudyGuide(null)} className="text-[#C96A5B] hover:text-red-300">Close</button>
                     </div>
-                    <p className="text-blue-400 font-bold text-xs">{selectedStudyGuide.topic}</p>
-                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">{selectedStudyGuide.summary}</p>
-                    <div className="bg-black/40 rounded p-2 text-[10px] text-emerald-400">
+                    <p className="text-[#C5A06C] font-bold text-xs">{selectedStudyGuide.topic}</p>
+                    <p className="text-[11px] text-[#C5CBBF] leading-relaxed font-sans">{selectedStudyGuide.summary}</p>
+                    <div className="bg-black/40 rounded p-2 text-[10px] text-[#6FAE8F]">
                       Recommended Staff Response Action Index: Dispatch dynamic mobile diagnostic toolkit containing active sensor re-calibration modules. Est: {selectedStudyGuide.duration}.
                     </div>
                   </div>
@@ -658,10 +658,10 @@ Requested Service: Battery Diagnostic`);
 
           {/* Right Column: Schema Explorer and Study Export */}
           <div className="space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Database className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <Database className="w-4 h-4 text-[#A6B0A3]" />
                   Live Schema & study data model
                 </CardTitle>
                 <CardDescription className="text-xs">
@@ -670,7 +670,7 @@ Requested Service: Battery Diagnostic`);
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 <div className="space-y-3">
-                  <div className="p-3 bg-slate-900 rounded-xl font-mono text-[10px] text-blue-300 overflow-x-auto max-h-56 border border-slate-800">
+                  <div className="p-3 bg-[#22262B] rounded-xl font-mono text-[10px] text-[#C5A06C] overflow-x-auto max-h-56 border border-[#4A5548]">
                     <pre className="leading-tight">
 {`{
   "client": {
@@ -687,61 +687,61 @@ Requested Service: Battery Diagnostic`);
                   </div>
 
                   <Button 
-                    className="w-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 h-9 rounded-xl border border-slate-200 flex items-center justify-center gap-1.5"
+                    className="w-full text-xs font-bold bg-[#22302A] hover:bg-[#2E3A31] text-[#DCD8CC] h-9 rounded-xl border border-[#4A5548] flex items-center justify-center gap-1.5"
                     onClick={() => handleCopyStudyData(JSON.stringify({ user, vehicles, bookings }, null, 2))}
                   >
                     <Copy className="w-3.5 h-3.5" />
                     Copy JSON State
                   </Button>
                   {copiedData && (
-                    <p className="text-[10px] text-emerald-600 font-bold text-center">{copiedData}</p>
+                    <p className="text-[10px] text-[#6FAE8F] font-bold text-center">{copiedData}</p>
                   )}
                 </div>
 
-                <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-blue-900 space-y-2">
+                <div className="p-3.5 bg-[#2E3A31]/50 border border-[#4A5548] rounded-xl text-[#C5A06C] space-y-2">
                   <h4 className="text-xs font-extrabold flex items-center gap-1">
-                    <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                    <ShieldCheck className="w-4 h-4 text-[#C5A06C] shrink-0" />
                     Secure Local Storage Sync
                   </h4>
-                  <p className="text-[10px] leading-relaxed text-slate-600">
+                  <p className="text-[10px] leading-relaxed text-[#C5CBBF]">
                     All operations, mock text logs, and custom emergency roadside bookings are safely synced in the client's local storage engine to avoid training data loss.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <Users className="w-4 h-4 text-[#A6B0A3]" />
                   Staff Roster Index
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-3 text-xs">
                 <div className="flex items-center justify-between border-b pb-2">
                   <div>
-                    <p className="font-bold text-slate-800">Unit 1: Mobile Diagnostic</p>
-                    <p className="text-[10px] text-slate-500">Miami Beach - South of Fifth</p>
+                    <p className="font-bold text-[#EFE9DC]">Unit 1: Mobile Diagnostic</p>
+                    <p className="text-[10px] text-[#B8C0B4]">Miami Beach - South of Fifth</p>
                   </div>
-                  <span className="text-[9px] bg-blue-50 text-blue-700 font-extrabold px-1.5 py-0.5 rounded border border-blue-200">
+                  <span className="text-[9px] bg-[#2E3A31] text-[#C5A06C] font-extrabold px-1.5 py-0.5 rounded border border-[#4A5548]">
                     Active
                   </span>
                 </div>
                 <div className="flex items-center justify-between border-b pb-2">
                   <div>
-                    <p className="font-bold text-slate-800">Unit 2: Rapid Response Flatbed</p>
-                    <p className="text-[10px] text-slate-500">Downtown Miami - Brickell</p>
+                    <p className="font-bold text-[#EFE9DC]">Unit 2: Rapid Response Flatbed</p>
+                    <p className="text-[10px] text-[#B8C0B4]">Downtown Miami - Brickell</p>
                   </div>
-                  <span className="text-[9px] bg-emerald-50 text-emerald-700 font-extrabold px-1.5 py-0.5 rounded border border-emerald-200">
+                  <span className="text-[9px] bg-emerald-50 text-[#6FAE8F] font-extrabold px-1.5 py-0.5 rounded border border-emerald-200">
                     On-Call
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-bold text-slate-800">Unit 3: High-Voltage Tech</p>
-                    <p className="text-[10px] text-slate-500">Coral Gables - Miracle Mile</p>
+                    <p className="font-bold text-[#EFE9DC]">Unit 3: High-Voltage Tech</p>
+                    <p className="text-[10px] text-[#B8C0B4]">Coral Gables - Miracle Mile</p>
                   </div>
-                  <span className="text-[9px] bg-blue-50 text-blue-700 font-extrabold px-1.5 py-0.5 rounded border border-blue-200">
+                  <span className="text-[9px] bg-[#2E3A31] text-[#C5A06C] font-extrabold px-1.5 py-0.5 rounded border border-[#4A5548]">
                     Active
                   </span>
                 </div>
@@ -855,40 +855,40 @@ Requested Service: Battery Diagnostic`);
           <div className="space-y-6">
             {/* Upper stats summary strip */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Card className="shadow-sm border-slate-200/80 bg-white rounded-2xl">
+              <Card className="shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl">
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Accumulated Revenue</span>
-                    <p className="text-2xl font-black text-slate-800">${overallTotalRevenue.toLocaleString()} USD</p>
+                    <span className="text-[10px] font-bold text-[#A6B0A3] uppercase tracking-wider block">Total Accumulated Revenue</span>
+                    <p className="text-2xl font-black text-[#EFE9DC]">${overallTotalRevenue.toLocaleString()} USD</p>
                     
                   </div>
-                  <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl border border-emerald-100">
+                  <div className="p-3 bg-emerald-50 text-[#6FAE8F] rounded-2xl border border-emerald-100">
                     <Coins className="w-5 h-5" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="shadow-sm border-slate-200/80 bg-white rounded-2xl">
+              <Card className="shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl">
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Average Ticket Size</span>
-                    <p className="text-2xl font-black text-slate-800">${averageTicketSize.toLocaleString()} USD</p>
-                    <p className="text-[11px] text-blue-600 font-bold">Per scheduled dispatch</p>
+                    <span className="text-[10px] font-bold text-[#A6B0A3] uppercase tracking-wider block">Average Ticket Size</span>
+                    <p className="text-2xl font-black text-[#EFE9DC]">${averageTicketSize.toLocaleString()} USD</p>
+                    <p className="text-[11px] text-[#C5A06C] font-bold">Per scheduled dispatch</p>
                   </div>
-                  <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100">
+                  <div className="p-3 bg-[#2E3A31] text-[#C5A06C] rounded-2xl border border-[#4A5548]">
                     <TrendingUp className="w-5 h-5" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="shadow-sm border-slate-200/80 bg-white rounded-2xl">
+              <Card className="shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl">
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Tracked Workloads</span>
-                    <p className="text-2xl font-black text-slate-800">{overallTotalBookings} Registered Jobs</p>
-                    <p className="text-[11px] text-indigo-600 font-bold">Active + Historic Sandbox</p>
+                    <span className="text-[10px] font-bold text-[#A6B0A3] uppercase tracking-wider block">Total Tracked Workloads</span>
+                    <p className="text-2xl font-black text-[#EFE9DC]">{overallTotalBookings} Registered Jobs</p>
+                    <p className="text-[11px] text-[#C5A06C] font-bold">Active + Historic Sandbox</p>
                   </div>
-                  <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100">
+                  <div className="p-3 bg-[#2E3A31] text-[#C5A06C] rounded-2xl border border-[#3A4046]">
                     <Layers className="w-5 h-5" />
                   </div>
                 </CardContent>
@@ -897,18 +897,18 @@ Requested Service: Battery Diagnostic`);
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Chart 1: Monthly Revenue Trend */}
-              <Card className="lg:col-span-2 shadow-sm border-slate-200/80 bg-white rounded-2xl">
+              <Card className="lg:col-span-2 shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl">
                 <CardHeader className="border-b pb-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-base font-black text-slate-800">
+                      <CardTitle className="text-base font-black text-[#EFE9DC]">
                         Monthly Revenue & Operating Costs (USD)
                       </CardTitle>
                       <CardDescription className="text-xs">
                         Shows dynamic billing volumes against the baseline. Area represents total income, line is operating overhead.
                       </CardDescription>
                     </div>
-                    <span className="text-[9px] bg-blue-50 text-blue-700 font-extrabold uppercase px-2 py-1 rounded border border-blue-200">
+                    <span className="text-[9px] bg-[#2E3A31] text-[#C5A06C] font-extrabold uppercase px-2 py-1 rounded border border-[#4A5548]">
                       LIVE STREAM
                     </span>
                   </div>
@@ -976,9 +976,9 @@ Requested Service: Battery Diagnostic`);
               </Card>
 
               {/* Chart 3: Active Booking Status Distribution */}
-              <Card className="shadow-sm border-slate-200/80 bg-white rounded-2xl flex flex-col justify-between">
+              <Card className="shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl flex flex-col justify-between">
                 <CardHeader className="border-b pb-4">
-                  <CardTitle className="text-base font-black text-slate-800">
+                  <CardTitle className="text-base font-black text-[#EFE9DC]">
                     Dispatch Workload Distribution
                   </CardTitle>
                   <CardDescription className="text-xs">
@@ -1011,8 +1011,8 @@ Requested Service: Battery Diagnostic`);
 
                     {/* Absolute label in middle of donut */}
                     <div className="absolute text-center">
-                      <p className="text-2xl font-black text-slate-800">{bookings.length}</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Total Active</p>
+                      <p className="text-2xl font-black text-[#EFE9DC]">{bookings.length}</p>
+                      <p className="text-[9px] text-[#A6B0A3] font-bold uppercase tracking-wider">Total Active</p>
                     </div>
                   </div>
 
@@ -1025,9 +1025,9 @@ Requested Service: Battery Diagnostic`);
                         <div key={i} className="flex items-center justify-between text-xs">
                           <div className="flex items-center gap-2">
                             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: d.color }} />
-                            <span className="font-semibold text-slate-600">{d.name}</span>
+                            <span className="font-semibold text-[#C5CBBF]">{d.name}</span>
                           </div>
-                          <span className="font-mono font-bold text-slate-800">{d.value} ({percent}%)</span>
+                          <span className="font-mono font-bold text-[#EFE9DC]">{d.value} ({percent}%)</span>
                         </div>
                       );
                     })}
@@ -1036,11 +1036,11 @@ Requested Service: Battery Diagnostic`);
               </Card>
 
               {/* Chart 2: Service Usage Trends */}
-              <Card className="lg:col-span-2 shadow-sm border-slate-200/80 bg-white rounded-2xl">
+              <Card className="lg:col-span-2 shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl">
                 <CardHeader className="border-b pb-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-base font-black text-slate-800">
+                      <CardTitle className="text-base font-black text-[#EFE9DC]">
                         Service Frequency & Revenue Capture
                       </CardTitle>
                       <CardDescription className="text-xs">
@@ -1095,11 +1095,11 @@ Requested Service: Battery Diagnostic`);
               </Card>
 
               {/* Sidebar Playful What-If Calculator (Study & Learn!) */}
-              <Card className="shadow-sm border-slate-200/80 bg-white rounded-2xl flex flex-col justify-between">
+              <Card className="shadow-sm border-[#4A5548]/80 bg-[#262B30] rounded-2xl flex flex-col justify-between">
                 <CardHeader className="border-b pb-4">
                   <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-purple-600 animate-pulse" />
-                    <CardTitle className="text-base font-black text-slate-800">
+                    <Sparkles className="w-4 h-4 text-[#C5A06C] animate-pulse" />
+                    <CardTitle className="text-base font-black text-[#EFE9DC]">
                       What-If Operations Simulator
                     </CardTitle>
                   </div>
@@ -1110,7 +1110,7 @@ Requested Service: Battery Diagnostic`);
                 <CardContent className="p-6 space-y-4 flex-1">
                   <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
+                      <label className="text-[11px] font-black text-[#B8C0B4] uppercase tracking-wider">
                         Hypothetical Premium Fee Multiplier
                       </label>
                       <div className="flex items-center gap-2">
@@ -1121,7 +1121,7 @@ Requested Service: Battery Diagnostic`);
                           step="0.1" 
                           defaultValue="1.5" 
                           id="hypothetical-multiplier"
-                          className="w-full accent-blue-600 h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer"
+                          className="w-full accent-blue-600 h-1.5 bg-[#22302A] rounded-lg appearance-none cursor-pointer"
                           onChange={(e) => {
                             const val = parseFloat(e.target.value);
                             const element = document.getElementById("multiplier-value-display");
@@ -1135,29 +1135,29 @@ Requested Service: Battery Diagnostic`);
                             }
                           }}
                         />
-                        <span id="multiplier-value-display" className="text-xs font-mono font-bold bg-slate-100 text-slate-800 px-2 py-1 rounded shrink-0">1.5x rate</span>
+                        <span id="multiplier-value-display" className="text-xs font-mono font-bold bg-[#22302A] text-[#EFE9DC] px-2 py-1 rounded shrink-0">1.5x rate</span>
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
+                      <label className="text-[11px] font-black text-[#B8C0B4] uppercase tracking-wider">
                         Projected Scaled Yield
                       </label>
-                      <div className="p-3 bg-slate-900 text-slate-100 rounded-xl space-y-1 border border-slate-800">
-                        <span className="text-[9px] text-blue-400 font-extrabold uppercase tracking-wider">Simulation Output</span>
+                      <div className="p-3 bg-[#22262B] text-[#EFE9DC] rounded-xl space-y-1 border border-[#4A5548]">
+                        <span className="text-[9px] text-[#C5A06C] font-extrabold uppercase tracking-wider">Simulation Output</span>
                         <div id="projected-boost-display" className="text-lg font-black text-white font-mono">
                           ${overallTotalRevenue.toLocaleString()} USD
                         </div>
-                        <p className="text-[10px] text-slate-400">Calculated across existing {bookings.length} system dispatches.</p>
+                        <p className="text-[10px] text-[#A6B0A3]">Calculated across existing {bookings.length} system dispatches.</p>
                       </div>
                     </div>
 
-                    <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-blue-900 space-y-1.5">
+                    <div className="p-3.5 bg-[#2E3A31]/50 border border-[#4A5548] rounded-xl text-[#C5A06C] space-y-1.5">
                       <h4 className="text-[11px] font-extrabold flex items-center gap-1">
-                        <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                        <BookOpen className="w-3.5 h-3.5 text-[#C5A06C]" />
                         Operational Training Lesson
                       </h4>
-                      <p className="text-[10px] leading-relaxed text-slate-600">
+                      <p className="text-[10px] leading-relaxed text-[#C5CBBF]">
                         Electric vehicles carry a <strong>1.4x - 1.6x average rate index modifier</strong> due to advanced auxiliary calibration sequences. Transitioning a fleet to 100% EV dispatches raises the median ticket size by 42%.
                       </p>
                     </div>
@@ -1175,10 +1175,10 @@ Requested Service: Battery Diagnostic`);
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main AI Operator Panel */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-blue-600" />
+                <CardTitle className="text-sm font-bold text-[#EFE9DC] flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-[#C5A06C]" />
                   VIP AI Receptionist Console
                 </CardTitle>
                 <CardDescription className="text-xs">
@@ -1190,7 +1190,7 @@ Requested Service: Battery Diagnostic`);
                 {/* Simulated prompt form */}
                 <form onSubmit={handleAskFrontDeskAI} className="space-y-3">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <label className="text-xs font-bold text-[#B8C0B4] uppercase tracking-wider">
                       Ask AI Assistant / Generate Dispatch Instructions
                     </label>
                     <div className="flex gap-2">
@@ -1198,11 +1198,11 @@ Requested Service: Battery Diagnostic`);
                         value={promptInput}
                         onChange={(e) => setPromptInput(e.target.value)}
                         placeholder="e.g., 'Draft pre-dispatch email for Jasmel' or 'Analyze 12V failure guidelines'..."
-                        className="h-11 rounded-xl text-xs sm:text-sm border-slate-200 focus-visible:ring-blue-500"
+                        className="h-11 rounded-xl text-xs sm:text-sm border-[#4A5548] focus-visible:ring-[#B08D57]"
                       />
                       <Button 
                         type="submit" 
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-5 rounded-xl text-xs uppercase tracking-wider cursor-pointer"
+                        className="bg-[#B08D57] hover:bg-[#C5A06C] text-white font-extrabold px-5 rounded-xl text-xs uppercase tracking-wider cursor-pointer"
                         disabled={isAiLoading}
                       >
                         {isAiLoading ? "Analyzing..." : "Execute"}
@@ -1213,17 +1213,17 @@ Requested Service: Battery Diagnostic`);
 
                 {/* AI response card */}
                 {aiResponseText ? (
-                  <div className="p-4 bg-slate-900 text-slate-100 rounded-xl border border-slate-800 space-y-3 font-mono text-xs relative">
-                    <div className="flex justify-between text-[9px] uppercase tracking-wider text-blue-400 font-extrabold border-b border-slate-800 pb-2">
+                  <div className="p-4 bg-[#22262B] text-[#EFE9DC] rounded-xl border border-[#4A5548] space-y-3 font-mono text-xs relative">
+                    <div className="flex justify-between text-[9px] uppercase tracking-wider text-[#C5A06C] font-extrabold border-b border-[#4A5548] pb-2">
                       <span>Generated response</span>
-                      <button onClick={() => setAiResponseText("")} className="text-slate-400 hover:text-white">Clear</button>
+                      <button onClick={() => setAiResponseText("")} className="text-[#A6B0A3] hover:text-white">Clear</button>
                     </div>
-                    <p className="leading-relaxed whitespace-pre-line text-slate-200">{aiResponseText}</p>
+                    <p className="leading-relaxed whitespace-pre-line text-[#DCD8CC]">{aiResponseText}</p>
                     <div className="flex gap-2 pt-2">
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        className="h-7 text-[10px] font-bold text-slate-200 border-slate-700 hover:bg-slate-800"
+                        className="h-7 text-[10px] font-bold text-[#DCD8CC] border-[#3A4046] hover:bg-[#2E343A]"
                         onClick={() => {
                           navigator.clipboard.writeText(aiResponseText);
                           alert("Response copied to dashboard clipboard!");
@@ -1234,7 +1234,7 @@ Requested Service: Battery Diagnostic`);
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        className="h-7 text-[10px] font-bold text-blue-400 border-blue-900 bg-blue-950/20 hover:bg-blue-950/50"
+                        className="h-7 text-[10px] font-bold text-[#C5A06C] border-[#3A4046] bg-[#181C20]/30 hover:bg-[#181C20]/60"
                         onClick={() => {
                           setTwilioSmsTemplate(aiResponseText.substring(0, 160));
                           alert("Transferred template to Twilio text console!");
@@ -1246,10 +1246,10 @@ Requested Service: Battery Diagnostic`);
                     </div>
                   </div>
                 ) : (
-                  <div className="p-12 border border-dashed rounded-xl text-center text-slate-400 space-y-2 bg-slate-50/50">
-                    <Sparkles className="w-8 h-8 text-slate-300 mx-auto animate-pulse" />
-                    <p className="text-xs font-bold text-slate-500">AI Assistant Idle</p>
-                    <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+                  <div className="p-12 border border-dashed rounded-xl text-center text-[#A6B0A3] space-y-2 bg-[#22302A]/50">
+                    <Sparkles className="w-8 h-8 text-[#C5CBBF] mx-auto animate-pulse" />
+                    <p className="text-xs font-bold text-[#B8C0B4]">AI Assistant Idle</p>
+                    <p className="text-[11px] text-[#A6B0A3] max-w-sm mx-auto">
                       Submit operational requests or use quick templates to generate diagnostic summaries instantly.
                     </p>
                   </div>
@@ -1257,12 +1257,12 @@ Requested Service: Battery Diagnostic`);
 
                 {/* Quick AI Action Buttons */}
                 <div className="space-y-2 pt-2">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Quick Templates:</span>
+                  <span className="text-[10px] uppercase font-bold text-[#A6B0A3] tracking-wider">Quick Templates:</span>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <Button 
                       type="button" 
                       variant="outline" 
-                      className="h-9 text-[10px] font-bold text-slate-700 border-slate-200 hover:bg-slate-50/50"
+                      className="h-9 text-[10px] font-bold text-[#DCD8CC] border-[#4A5548] hover:bg-[#22302A]/50"
                       onClick={() => {
                         setPromptInput("Draft a friendly service completion notification for Jasmel's Model 3.");
                       }}
@@ -1272,7 +1272,7 @@ Requested Service: Battery Diagnostic`);
                     <Button 
                       type="button" 
                       variant="outline" 
-                      className="h-9 text-[10px] font-bold text-slate-700 border-slate-200 hover:bg-slate-50/50"
+                      className="h-9 text-[10px] font-bold text-[#DCD8CC] border-[#4A5548] hover:bg-[#22302A]/50"
                       onClick={() => {
                         setPromptInput("Explain the high-voltage battery insulation guidelines for model analysis.");
                       }}
@@ -1282,7 +1282,7 @@ Requested Service: Battery Diagnostic`);
                     <Button 
                       type="button" 
                       variant="outline" 
-                      className="h-9 text-[10px] font-bold text-slate-700 border-slate-200 hover:bg-slate-50/50"
+                      className="h-9 text-[10px] font-bold text-[#DCD8CC] border-[#4A5548] hover:bg-[#22302A]/50"
                       onClick={() => {
                         setPromptInput("Generate automated roadside SMS text for towing lockout.");
                       }}
@@ -1292,7 +1292,7 @@ Requested Service: Battery Diagnostic`);
                     <Button 
                       type="button" 
                       variant="outline" 
-                      className="h-9 text-[10px] font-bold text-slate-700 border-slate-200 hover:bg-slate-50/50"
+                      className="h-9 text-[10px] font-bold text-[#DCD8CC] border-[#4A5548] hover:bg-[#22302A]/50"
                       onClick={() => {
                         setPromptInput("Create standard training questionnaire regarding tire replacement safety.");
                       }}
@@ -1306,10 +1306,10 @@ Requested Service: Battery Diagnostic`);
             </Card>
 
             {/* Smart Emergency Roadside Call Transcriber */}
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                  <PhoneCall className="w-4 h-4 text-red-500 animate-bounce" />
+                <CardTitle className="text-sm font-bold text-[#EFE9DC] flex items-center gap-1.5">
+                  <PhoneCall className="w-4 h-4 text-[#C96A5B] animate-bounce" />
                   Roadside Call Transcriber & Dispatcher
                 </CardTitle>
                 <CardDescription className="text-xs">
@@ -1319,12 +1319,12 @@ Requested Service: Battery Diagnostic`);
               <CardContent className="p-6 space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                   <div className="space-y-1 text-center sm:text-left">
-                    <p className="text-xs font-bold text-slate-700">Simulate Stranded Customer Phone Call</p>
-                    <p className="text-[11px] text-slate-400">Trigger simulated audio transcript of road incident</p>
+                    <p className="text-xs font-bold text-[#DCD8CC]">Simulate Stranded Customer Phone Call</p>
+                    <p className="text-[11px] text-[#A6B0A3]">Trigger simulated audio transcript of road incident</p>
                   </div>
                   <Button
                     type="button"
-                    className="bg-red-50 border border-red-200 text-red-600 hover:bg-red-100 font-extrabold text-xs h-10 px-4 rounded-xl shrink-0 cursor-pointer"
+                    className="bg-[#3A2F2C] border border-[#5A4A44] text-[#C96A5B] hover:bg-[#3A2F2C] font-extrabold text-xs h-10 px-4 rounded-xl shrink-0 cursor-pointer"
                     onClick={triggerSimulateCallTranscript}
                     disabled={isTranscribing}
                   >
@@ -1333,12 +1333,12 @@ Requested Service: Battery Diagnostic`);
                 </div>
 
                 {transcriptionResult && (
-                  <div className="p-4 bg-red-50/50 border border-red-200 rounded-xl space-y-3">
-                    <div className="flex justify-between items-center text-[10px] uppercase font-bold text-red-800">
+                  <div className="p-4 bg-[#3A2F2C]/50 border border-[#5A4A44] rounded-xl space-y-3">
+                    <div className="flex justify-between items-center text-[10px] uppercase font-bold text-[#C96A5B]">
                       <span>Transcribed via AI Front Desk</span>
-                      <span className="text-slate-400">Ready for dispatch</span>
+                      <span className="text-[#A6B0A3]">Ready for dispatch</span>
                     </div>
-                    <p className="font-mono text-xs text-slate-800 leading-relaxed whitespace-pre-line bg-white p-3 border rounded-lg">
+                    <p className="font-mono text-xs text-[#EFE9DC] leading-relaxed whitespace-pre-line bg-[#262B30] p-3 border rounded-lg">
                       {transcriptionResult}
                     </p>
                     <div className="flex gap-2">
@@ -1352,7 +1352,7 @@ Requested Service: Battery Diagnostic`);
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-8 text-[11px] font-bold text-slate-500 hover:text-slate-700"
+                        className="h-8 text-[11px] font-bold text-[#B8C0B4] hover:text-[#DCD8CC]"
                         onClick={() => setTranscriptionResult(null)}
                       >
                         Discard
@@ -1366,20 +1366,20 @@ Requested Service: Battery Diagnostic`);
 
           {/* AI Info Sidebar */}
           <div className="space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#A6B0A3]" />
                   Operator Guidelines
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4 space-y-3 text-xs leading-relaxed text-slate-600">
+              <CardContent className="p-4 space-y-3 text-xs leading-relaxed text-[#C5CBBF]">
                 <p>
                   As an administrative operator, you represent the elite standard of automotive recovery. Always cross-reference high-voltage incidents against the <strong>ISO-6469-3 Safety Standard</strong>.
                 </p>
-                <div className="bg-slate-50 border rounded-xl p-3 space-y-1.5">
-                  <p className="font-bold text-slate-800 text-[11px]">Primary Dispatch Sequence:</p>
-                  <ul className="list-decimal pl-4 text-[10px] space-y-1 text-slate-500">
+                <div className="bg-[#22302A] border rounded-xl p-3 space-y-1.5">
+                  <p className="font-bold text-[#EFE9DC] text-[11px]">Primary Dispatch Sequence:</p>
+                  <ul className="list-decimal pl-4 text-[10px] space-y-1 text-[#B8C0B4]">
                     <li>Analyze cell fatigue via OBD telemetry.</li>
                     <li>Verify mobile tool inventory in Unit 1.</li>
                     <li>Broadcast Twilio dispatch alert coordinates.</li>
@@ -1396,15 +1396,15 @@ Requested Service: Battery Diagnostic`);
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Twilio Configuration */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-red-50 text-red-600 rounded-lg border border-red-100">
+                    <div className="p-1.5 bg-[#3A2F2C] text-[#C96A5B] rounded-lg border border-[#5A4A44]">
                       <Smartphone className="w-5 h-5" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg font-black text-slate-800">
+                      <CardTitle className="text-lg font-black text-[#EFE9DC]">
                         Twilio Interactive Sandbox
                       </CardTitle>
                       <CardDescription className="text-xs">
@@ -1412,7 +1412,7 @@ Requested Service: Battery Diagnostic`);
                       </CardDescription>
                     </div>
                   </div>
-                  <span className="text-[10px] bg-red-100 text-red-800 font-extrabold px-2 py-0.5 rounded border border-red-200 font-mono">
+                  <span className="text-[10px] bg-[#3A2F2C] text-[#C96A5B] font-extrabold px-2 py-0.5 rounded border border-[#5A4A44] font-mono">
                     API ON
                   </span>
                 </div>
@@ -1421,7 +1421,7 @@ Requested Service: Battery Diagnostic`);
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Phone input */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                    <label className="text-xs font-bold text-[#B8C0B4] uppercase tracking-wider flex items-center gap-1">
                       <Users className="w-3.5 h-3.5" />
                       Outbound Phone Number
                     </label>
@@ -1429,18 +1429,18 @@ Requested Service: Battery Diagnostic`);
                       value={twilioPhoneNumber}
                       onChange={(e) => setTwilioPhoneNumber(e.target.value)}
                       placeholder="+1 (305) 555-0123"
-                      className="h-11 rounded-xl text-xs sm:text-sm border-slate-200 font-bold font-mono focus-visible:ring-red-500"
+                      className="h-11 rounded-xl text-xs sm:text-sm border-[#4A5548] font-bold font-mono focus-visible:ring-red-500"
                     />
                   </div>
 
                   {/* Dispatch target selection */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                    <label className="text-xs font-bold text-[#B8C0B4] uppercase tracking-wider flex items-center gap-1">
                       <Truck className="w-3.5 h-3.5" />
                       Select Dispatch Unit Reference
                     </label>
                     <select
-                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm font-bold focus:outline-none cursor-pointer"
+                      className="w-full h-11 px-3.5 rounded-xl border border-[#4A5548] bg-[#262B30] text-[#EFE9DC] text-xs sm:text-sm font-bold focus:outline-none cursor-pointer"
                       onChange={(e) => {
                         const val = e.target.value;
                         if (val === "unit1") {
@@ -1462,7 +1462,7 @@ Requested Service: Battery Diagnostic`);
                 {/* Telegram staff channel + live/demo badges */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                    <label className="text-xs font-bold text-[#B8C0B4] uppercase tracking-wider flex items-center gap-1">
                       <SendHorizonal className="w-3.5 h-3.5" />
                       Telegram Staff Chat ID
                     </label>
@@ -1470,23 +1470,23 @@ Requested Service: Battery Diagnostic`);
                       value={telegramChatId}
                       onChange={(e) => setTelegramChatId(e.target.value)}
                       placeholder="e.g. -1001234567890 (staff group)"
-                      className="h-11 rounded-xl text-xs sm:text-sm border-slate-200 font-bold font-mono focus-visible:ring-sky-500"
+                      className="h-11 rounded-xl text-xs sm:text-sm border-[#4A5548] font-bold font-mono focus-visible:ring-[#B08D57]"
                     />
                   </div>
                   <div className="flex items-end gap-2 pb-1 flex-wrap">
-                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.sms ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.sms ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-[#22302A] text-[#B8C0B4] border-[#4A5548]"}`}>
                       SMS {channelModes.sms ? "LIVE" : "DEMO"}
                     </span>
-                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.whatsapp ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.whatsapp ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-[#22302A] text-[#B8C0B4] border-[#4A5548]"}`}>
                       WHATSAPP {channelModes.whatsapp ? "LIVE" : "DEMO"}
                     </span>
-                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.voice ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.voice ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-[#22302A] text-[#B8C0B4] border-[#4A5548]"}`}>
                       VOICE {channelModes.voice ? "LIVE" : "DEMO"}
                     </span>
-                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.telegram ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.telegram ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-[#22302A] text-[#B8C0B4] border-[#4A5548]"}`}>
                       TELEGRAM {channelModes.telegram ? "LIVE" : "DEMO"}
                     </span>
-                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.email ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-slate-100 text-slate-500 border-slate-300"}`}>
+                    <span className={`text-[10px] font-extrabold px-2 py-1 rounded border font-mono ${channelModes.email ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-[#22302A] text-[#B8C0B4] border-[#4A5548]"}`}>
                       EMAIL {channelModes.email ? "LIVE" : "DEMO"}
                     </span>
                   </div>
@@ -1495,14 +1495,14 @@ Requested Service: Battery Diagnostic`);
                 {/* SMS Template */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">SMS Alert Payload Template</label>
-                    <span className="text-[10px] font-mono text-slate-400">{twilioSmsTemplate.length} / 160 chars</span>
+                    <label className="text-xs font-bold text-[#B8C0B4] uppercase tracking-wider">SMS Alert Payload Template</label>
+                    <span className="text-[10px] font-mono text-[#A6B0A3]">{twilioSmsTemplate.length} / 160 chars</span>
                   </div>
                   <textarea
                     value={twilioSmsTemplate}
                     onChange={(e) => setTwilioSmsTemplate(e.target.value)}
                     rows={3}
-                    className="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm"
+                    className="w-full p-3.5 rounded-xl border border-[#4A5548] bg-[#262B30] text-[#EFE9DC] text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm"
                   />
                 </div>
 
@@ -1512,7 +1512,7 @@ Requested Service: Battery Diagnostic`);
                     type="button"
                     onClick={handleSendTwilioSms}
                     disabled={isSendingSms || !twilioPhoneNumber.trim()}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 bg-[#C96A5B] hover:bg-[#D57F70] text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Smartphone className="w-4 h-4" />
                     {isSendingSms ? "Transmitting SMS Payload..." : "Send Dispatch SMS"}
@@ -1522,7 +1522,7 @@ Requested Service: Battery Diagnostic`);
                     type="button"
                     onClick={handleTriggerTwilioCall}
                     disabled={isCalling || !twilioPhoneNumber.trim()}
-                    className="flex-1 bg-slate-900 hover:bg-slate-850 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 bg-[#22262B] hover:bg-[#2E343A] text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <PhoneCall className="w-4 h-4" />
                     {isCalling ? "Initiating outbound Voice Call..." : "Trigger Automated Voice Call"}
@@ -1532,7 +1532,7 @@ Requested Service: Battery Diagnostic`);
                     type="button"
                     onClick={handleSendTelegram}
                     disabled={isSendingTelegram}
-                    className="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 bg-[#B08D57] hover:bg-[#C5A06C] text-white font-extrabold h-11 text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <SendHorizonal className="w-4 h-4" />
                     {isSendingTelegram ? "Broadcasting..." : "Telegram Staff Alert"}
@@ -1540,11 +1540,11 @@ Requested Service: Battery Diagnostic`);
                 </div>
 
                 {/* 24h Reminder Sweep */}
-                <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+                <div className="p-4 bg-[#33402F]/70 border border-[#4A5548] rounded-xl space-y-2">
                   <div className="flex items-center justify-between gap-3 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <BellRing className="w-4 h-4 text-amber-700" />
-                      <span className="text-xs font-bold text-amber-900">24-Hour Reminder Sweep</span>
+                      <BellRing className="w-4 h-4 text-[#D9A441]" />
+                      <span className="text-xs font-bold text-[#E5B95C]">24-Hour Reminder Sweep</span>
                     </div>
                     <Button
                       type="button"
@@ -1555,30 +1555,30 @@ Requested Service: Battery Diagnostic`);
                       {isSweeping ? "Sweeping..." : "Run Sweep Now"}
                     </Button>
                   </div>
-                  <p className="text-[11px] text-amber-800 leading-relaxed">
+                  <p className="text-[11px] text-[#D9A441] leading-relaxed">
                     Every booking in the next 24 hours gets a client reminder (SMS + WhatsApp + automated voice call, in the client's language) and the staff team gets a Telegram dispatch brief.
                   </p>
                   {sweepSummary && (
-                    <p className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">{sweepSummary}</p>
+                    <p className="text-[11px] font-bold text-[#6FAE8F] bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">{sweepSummary}</p>
                   )}
                 </div>
 
                 {/* Voice Call playback simulator */}
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+                <div className="p-4 bg-[#22302A] border border-[#4A5548] rounded-xl space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Volume2 className="w-4 h-4 text-slate-500" />
-                      <span className="text-xs font-bold text-slate-700">Simulate Outbound Voice Warning Call</span>
+                      <Volume2 className="w-4 h-4 text-[#B8C0B4]" />
+                      <span className="text-xs font-bold text-[#DCD8CC]">Simulate Outbound Voice Warning Call</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-mono">TTS Audio engine</span>
+                    <span className="text-[10px] text-[#A6B0A3] font-mono">TTS Audio engine</span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed italic">
+                  <p className="text-[11px] text-[#C5CBBF] leading-relaxed italic">
                     "This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access."
                   </p>
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-8 text-[10px] font-bold text-slate-700 border-slate-200 bg-white hover:bg-slate-50"
+                    className="h-8 text-[10px] font-bold text-[#DCD8CC] border-[#4A5548] bg-[#262B30] hover:bg-[#22302A]"
                     onClick={() => {
                       setIsPlayingCallAudio(true);
                       speakHuman("This is an automated priority coordination warning from MACALOCATOR. Our certified Mobile Recovery Unit has been dispatched to your coordinates in Miami. Please ensure safe vehicle access.");
@@ -1594,30 +1594,30 @@ Requested Service: Battery Diagnostic`);
             </Card>
 
             {/* Twilio SMS Logs Terminal */}
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Terminal className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <Terminal className="w-4 h-4 text-[#A6B0A3]" />
                   Live dispatch comms log — SMS · Voice · Telegram
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="font-mono text-[10px] text-red-400 bg-slate-950 p-4 h-52 overflow-y-auto space-y-2 leading-tight select-text">
-                  <p className="text-slate-500">[System Log] /api/notify dispatch gateway online — SMS · Voice · Telegram.</p>
+                <div className="font-mono text-[10px] text-[#C96A5B] bg-[#181C20] p-4 h-52 overflow-y-auto space-y-2 leading-tight select-text">
+                  <p className="text-[#B8C0B4]">[System Log] /api/notify dispatch gateway online — SMS · Voice · Telegram.</p>
                   {twilioLogs.map((log) => (
-                    <div key={log.id} className="border-b border-slate-900/40 pb-1.5">
+                    <div key={log.id} className="border-b border-[#3A4046] pb-1.5">
                       <p className="flex justify-between items-center">
                         <span className="text-white font-bold">
                           {log.type === "sms" ? "✉️ Outbound SMS" : log.type === "whatsapp" ? "🟢 WhatsApp" : log.type === "telegram" ? "📨 Telegram" : log.type === "email" ? "📧 Email" : "📞 Voice Call"}
-                          <span className={`ml-2 text-[8px] px-1 py-0.5 rounded font-mono ${log.mode === "live" ? "bg-emerald-900 text-emerald-300" : "bg-slate-800 text-slate-400"}`}>{log.mode.toUpperCase()}</span>
+                          <span className={`ml-2 text-[8px] px-1 py-0.5 rounded font-mono ${log.mode === "live" ? "bg-emerald-900 text-[#8FC7AA]" : "bg-[#2E343A] text-[#A6B0A3]"}`}>{log.mode.toUpperCase()}</span>
                         </span>
-                        <span className="text-slate-500">{log.timestamp}</span>
+                        <span className="text-[#B8C0B4]">{log.timestamp}</span>
                       </p>
-                      <p className="text-slate-400">To: {log.to}</p>
-                      <p className="text-emerald-400">Payload: "{log.text}"</p>
-                      <p className="flex justify-between text-[9px] text-blue-400">
+                      <p className="text-[#A6B0A3]">To: {log.to}</p>
+                      <p className="text-[#6FAE8F]">Payload: "{log.text}"</p>
+                      <p className="flex justify-between text-[9px] text-[#C5A06C]">
                         <span>API Path: POST /api/notify ({log.type})</span>
-                        <span className={log.status === "Failed" ? "text-red-400 font-extrabold" : "text-emerald-500 font-extrabold"}>{log.status}</span>
+                        <span className={log.status === "Failed" ? "text-[#C96A5B] font-extrabold" : "text-[#6FAE8F] font-extrabold"}>{log.status}</span>
                       </p>
                     </div>
                   ))}
@@ -1628,31 +1628,31 @@ Requested Service: Battery Diagnostic`);
 
           {/* Twilio Analytics Info */}
           <div className="space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#A6B0A3]" />
                   Outbound Deliverability Index
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4 space-y-3 text-xs text-slate-600">
+              <CardContent className="p-4 space-y-3 text-xs text-[#C5CBBF]">
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
                   <span>SMS channel</span>
-                  <span className={channelModes.sms ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.sms ? "LIVE (Twilio)" : "DEMO MODE"}</span>
+                  <span className={channelModes.sms ? "text-[#6FAE8F] font-extrabold" : "text-[#A6B0A3] font-extrabold"}>{channelModes.sms ? "LIVE (Twilio)" : "DEMO MODE"}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
                   <span>Voice calls</span>
-                  <span className={channelModes.voice ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.voice ? "LIVE (Twilio)" : "DEMO MODE"}</span>
+                  <span className={channelModes.voice ? "text-[#6FAE8F] font-extrabold" : "text-[#A6B0A3] font-extrabold"}>{channelModes.voice ? "LIVE (Twilio)" : "DEMO MODE"}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
                   <span>Telegram staff channel</span>
-                  <span className={channelModes.telegram ? "text-emerald-600 font-extrabold" : "text-slate-400 font-extrabold"}>{channelModes.telegram ? "LIVE (Bot API)" : "DEMO MODE"}</span>
+                  <span className={channelModes.telegram ? "text-[#6FAE8F] font-extrabold" : "text-[#A6B0A3] font-extrabold"}>{channelModes.telegram ? "LIVE (Bot API)" : "DEMO MODE"}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px] font-bold border-b pb-1">
                   <span>Outbound SMS cost (when live)</span>
                   <span>~$0.0079 USD / SMS</span>
                 </div>
-                <p className="text-[10px] text-slate-400 leading-relaxed mt-2">
+                <p className="text-[10px] text-[#A6B0A3] leading-relaxed mt-2">
                   Demo mode composes every message exactly as it will be sent. Add <strong>TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM_NUMBER</strong> and <strong>TELEGRAM_BOT_TOKEN</strong> env vars to go live instantly — no code changes.
                 </p>
               </CardContent>
@@ -1666,15 +1666,15 @@ Requested Service: Battery Diagnostic`);
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Messaging Hub */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl overflow-hidden flex flex-col h-[520px]">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl overflow-hidden flex flex-col h-[520px]">
               
               {/* Channel Selector Header */}
-              <div className="bg-slate-50 border-b p-3 flex items-center justify-between">
-                <div className="flex bg-slate-200/80 p-1 rounded-xl text-[11px] font-bold">
+              <div className="bg-[#22302A] border-b p-3 flex items-center justify-between">
+                <div className="flex bg-[#2E3A31]/80 p-1 rounded-xl text-[11px] font-bold">
                   <button
                     onClick={() => setActiveChatChannel("staff")}
                     className={`px-3 py-1.5 rounded-lg transition-all ${
-                      activeChatChannel === "staff" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-800"
+                      activeChatChannel === "staff" ? "bg-[#262B30] text-[#EFE9DC] shadow-sm" : "text-[#B8C0B4] hover:text-[#EFE9DC]"
                     }`}
                   >
                     👷 Dispatch Internal (#staff-dispatch)
@@ -1682,32 +1682,32 @@ Requested Service: Battery Diagnostic`);
                   <button
                     onClick={() => setActiveChatChannel("client")}
                     className={`px-3 py-1.5 rounded-lg transition-all ${
-                      activeChatChannel === "client" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-800"
+                      activeChatChannel === "client" ? "bg-[#262B30] text-[#EFE9DC] shadow-sm" : "text-[#B8C0B4] hover:text-[#EFE9DC]"
                     }`}
                   >
                     💬 Direct Client Channel
                   </button>
                 </div>
 
-                <span className="text-[9px] bg-blue-100 text-blue-800 font-extrabold uppercase px-2 py-0.5 rounded border border-blue-200">
+                <span className="text-[9px] bg-[#2E3A31] text-[#C5A06C] font-extrabold uppercase px-2 py-0.5 rounded border border-[#4A5548]">
                   Live Dispatch
                 </span>
               </div>
 
               {/* Chat Thread Container */}
-              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50">
+              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#22302A]/50">
                 {activeChatChannel === "staff" ? (
                   staffMessages.map((msg) => {
                     const isMe = msg.sender.includes("You");
                     return (
                       <div key={msg.id} className={`flex flex-col max-w-[80%] ${isMe ? "ml-auto items-end" : "items-start"}`}>
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 mb-0.5 uppercase tracking-wide">
+                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#A6B0A3] mb-0.5 uppercase tracking-wide">
                           <span>{msg.sender}</span>
                           <span>•</span>
                           <span>{msg.time}</span>
                         </div>
                         <div className={`p-3 rounded-2xl text-xs font-semibold ${
-                          isMe ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border text-slate-800 rounded-tl-none shadow-sm"
+                          isMe ? "bg-[#B08D57] text-white rounded-tr-none" : "bg-[#262B30] border text-[#EFE9DC] rounded-tl-none shadow-sm"
                         }`}>
                           {msg.text}
                         </div>
@@ -1719,13 +1719,13 @@ Requested Service: Battery Diagnostic`);
                     const isMe = msg.sender.includes("You") || msg.sender.includes("AI");
                     return (
                       <div key={msg.id} className={`flex flex-col max-w-[80%] ${isMe ? "ml-auto items-end" : "items-start"}`}>
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 mb-0.5 uppercase tracking-wide">
+                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#A6B0A3] mb-0.5 uppercase tracking-wide">
                           <span>{msg.sender}</span>
                           <span>•</span>
                           <span>{msg.time}</span>
                         </div>
                         <div className={`p-3 rounded-2xl text-xs font-semibold ${
-                          isMe ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border text-slate-800 rounded-tl-none shadow-sm"
+                          isMe ? "bg-[#B08D57] text-white rounded-tr-none" : "bg-[#262B30] border text-[#EFE9DC] rounded-tl-none shadow-sm"
                         }`}>
                           {msg.text}
                         </div>
@@ -1736,18 +1736,18 @@ Requested Service: Battery Diagnostic`);
               </div>
 
               {/* Chat Send Input */}
-              <div className="p-3 bg-white border-t flex gap-2">
+              <div className="p-3 bg-[#262B30] border-t flex gap-2">
                 <Input
                   value={chatMessageInput}
                   onChange={(e) => setChatMessageInput(e.target.value)}
                   placeholder={activeChatChannel === "staff" ? "Instruct Unit 1 or Unit 3 dispatch staff..." : "Draft message to client..."}
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 focus-visible:ring-blue-500"
+                  className="h-10 text-xs sm:text-sm rounded-xl border-[#4A5548] focus-visible:ring-[#B08D57]"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSendChatMessage();
                   }}
                 />
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl px-4 text-xs uppercase tracking-wider cursor-pointer h-10"
+                  className="bg-[#B08D57] hover:bg-[#C5A06C] text-white font-extrabold rounded-xl px-4 text-xs uppercase tracking-wider cursor-pointer h-10"
                   onClick={handleSendChatMessage}
                 >
                   <Send className="w-4 h-4" />
@@ -1759,10 +1759,10 @@ Requested Service: Battery Diagnostic`);
 
           {/* Saved Chat History & Consultation Analytics */}
           <div className="space-y-6">
-            <Card className="border-slate-200 shadow-sm bg-white rounded-2xl">
+            <Card className="border-[#4A5548] shadow-sm bg-[#262B30] rounded-2xl">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Database className="w-4 h-4 text-slate-400" />
+                <CardTitle className="text-xs font-bold text-[#EFE9DC] uppercase tracking-wider flex items-center gap-1.5">
+                  <Database className="w-4 h-4 text-[#A6B0A3]" />
                   Saved Diagnostic Consultations
                 </CardTitle>
                 <CardDescription className="text-xs">
@@ -1774,26 +1774,26 @@ Requested Service: Battery Diagnostic`);
                   <div
                     key={chat.id}
                     onClick={() => setSelectedPastChat(chat)}
-                    className="p-3 border rounded-xl hover:border-blue-300 hover:bg-blue-50/20 cursor-pointer transition-all space-y-1"
+                    className="p-3 border rounded-xl hover:border-[#3A4046] hover:bg-[#2E3A31]/20 cursor-pointer transition-all space-y-1"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-slate-800 text-xs">{chat.client}</span>
-                      <span className="text-[9px] font-mono text-slate-400 font-bold">{chat.date}</span>
+                      <span className="font-bold text-[#EFE9DC] text-xs">{chat.client}</span>
+                      <span className="text-[9px] font-mono text-[#A6B0A3] font-bold">{chat.date}</span>
                     </div>
-                    <p className="text-[10px] text-slate-500 leading-relaxed line-clamp-1">Car: {chat.vehicle}</p>
-                    <p className="text-[10px] text-slate-600 italic line-clamp-2 leading-relaxed">"{chat.problem}"</p>
+                    <p className="text-[10px] text-[#B8C0B4] leading-relaxed line-clamp-1">Car: {chat.vehicle}</p>
+                    <p className="text-[10px] text-[#C5CBBF] italic line-clamp-2 leading-relaxed">"{chat.problem}"</p>
                   </div>
                 ))}
 
                 {selectedPastChat && (
-                  <div className="p-3 bg-slate-900 text-slate-200 rounded-xl space-y-1.5 font-mono text-[10px] leading-relaxed">
-                    <div className="flex justify-between items-center text-[9px] text-blue-400 border-b border-slate-800 pb-1 uppercase font-bold">
+                  <div className="p-3 bg-[#22262B] text-[#DCD8CC] rounded-xl space-y-1.5 font-mono text-[10px] leading-relaxed">
+                    <div className="flex justify-between items-center text-[9px] text-[#C5A06C] border-b border-[#4A5548] pb-1 uppercase font-bold">
                       <span>Chat Record {selectedPastChat.id}</span>
-                      <button onClick={() => setSelectedPastChat(null)} className="text-slate-400 hover:text-white">Close</button>
+                      <button onClick={() => setSelectedPastChat(null)} className="text-[#A6B0A3] hover:text-white">Close</button>
                     </div>
-                    <p><strong className="text-slate-400">Client:</strong> {selectedPastChat.client}</p>
-                    <p><strong className="text-slate-400">Incident:</strong> {selectedPastChat.problem}</p>
-                    <p><strong className="text-emerald-400">Resolution Memo:</strong> {selectedPastChat.summary}</p>
+                    <p><strong className="text-[#A6B0A3]">Client:</strong> {selectedPastChat.client}</p>
+                    <p><strong className="text-[#A6B0A3]">Incident:</strong> {selectedPastChat.problem}</p>
+                    <p><strong className="text-[#6FAE8F]">Resolution Memo:</strong> {selectedPastChat.summary}</p>
                   </div>
                 )}
               </CardContent>

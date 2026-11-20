@@ -15,13 +15,13 @@ export function EmergencyView() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card className="border-red-200 shadow-md">
-        <CardHeader className="bg-red-50 rounded-t-xl border-b border-red-100 pb-6">
+      <Card className="border-[#5A4A44] shadow-md">
+        <CardHeader className="bg-[#3A2F2C] rounded-t-xl border-b border-[#5A4A44] pb-6">
           <div className="flex items-center space-x-2">
-            <AlertTriangle className="w-6 h-6 text-red-600" />
-            <CardTitle className="text-red-700 text-2xl">Emergency Assistance</CardTitle>
+            <AlertTriangle className="w-6 h-6 text-[#C96A5B]" />
+            <CardTitle className="text-[#C96A5B] text-2xl">Emergency Assistance</CardTitle>
           </div>
-          <CardDescription className="text-red-600/80 text-base mt-2">
+          <CardDescription className="text-[#C96A5B]/80 text-base mt-2">
             24/7 Fast response for towing, lockouts, jump starts, and more.
           </CardDescription>
         </CardHeader>
@@ -29,20 +29,20 @@ export function EmergencyView() {
         <CardContent className="pt-8 space-y-8">
           {status === 'idle' && (
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="h-24 flex flex-col gap-2 border-slate-200 hover:border-red-300 hover:bg-red-50">
-                <Truck className="w-8 h-8 text-slate-600" />
+              <Button variant="outline" className="h-24 flex flex-col gap-2 border-[#4A5548] hover:border-[#5A4A44] hover:bg-[#3A2F2C]">
+                <Truck className="w-8 h-8 text-[#C5CBBF]" />
                 <span>Tow Truck</span>
               </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-2 border-slate-200 hover:border-red-300 hover:bg-red-50">
-                <ShieldAlert className="w-8 h-8 text-slate-600" />
+              <Button variant="outline" className="h-24 flex flex-col gap-2 border-[#4A5548] hover:border-[#5A4A44] hover:bg-[#3A2F2C]">
+                <ShieldAlert className="w-8 h-8 text-[#C5CBBF]" />
                 <span>Accident Help</span>
               </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-2 border-slate-200 hover:border-red-300 hover:bg-red-50">
-                <AlertTriangle className="w-8 h-8 text-slate-600" />
+              <Button variant="outline" className="h-24 flex flex-col gap-2 border-[#4A5548] hover:border-[#5A4A44] hover:bg-[#3A2F2C]">
+                <AlertTriangle className="w-8 h-8 text-[#C5CBBF]" />
                 <span>Jump Start</span>
               </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-2 border-slate-200 hover:border-red-300 hover:bg-red-50">
-                <MapPin className="w-8 h-8 text-slate-600" />
+              <Button variant="outline" className="h-24 flex flex-col gap-2 border-[#4A5548] hover:border-[#5A4A44] hover:bg-[#3A2F2C]">
+                <MapPin className="w-8 h-8 text-[#C5CBBF]" />
                 <span>Other (Share Location)</span>
               </Button>
             </div>
@@ -50,8 +50,8 @@ export function EmergencyView() {
 
           {status === 'requesting' && (
             <div className="flex flex-col items-center justify-center py-12 space-y-4">
-              <div className="w-16 h-16 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
-              <p className="text-lg font-medium text-slate-700">Locating nearest unit...</p>
+              <div className="w-16 h-16 border-4 border-[#5A4A44] border-t-red-600 rounded-full animate-spin"></div>
+              <p className="text-lg font-medium text-[#DCD8CC]">Locating nearest unit...</p>
             </div>
           )}
 
@@ -73,8 +73,8 @@ export function EmergencyView() {
         </CardContent>
         
         {status === 'idle' && (
-          <CardFooter className="bg-slate-50 pt-6 rounded-b-xl">
-            <Button size="lg" className="w-full bg-red-600 hover:bg-red-700 text-lg py-6" onClick={handleRequest}>
+          <CardFooter className="bg-[#22302A] pt-6 rounded-b-xl">
+            <Button size="lg" className="w-full bg-[#C96A5B] hover:bg-[#D57F70] text-lg py-6" onClick={handleRequest}>
               <AlertTriangle className="w-5 h-5 mr-2" />
               Request Immediate Help
             </Button>

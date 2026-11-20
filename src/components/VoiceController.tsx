@@ -128,20 +128,20 @@ export function VoiceController() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-4 md:p-5 shadow-xl border border-blue-900/40 relative overflow-hidden">
+    <div className="bg-gradient-to-r from-[#22302A] via-[#1F2B24] to-[#22302A] text-white rounded-2xl p-4 md:p-5 shadow-xl border border-[#4A5548] relative overflow-hidden">
       {/* Premium Decorative VIP Background Lines */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-b from-blue-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-b from-[#B08D57]/10 to-transparent rounded-full blur-2xl pointer-events-none" />
       <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
 
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div className="space-y-1.5 max-w-xl">
           <div className="flex items-center gap-2">
             <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+            <span className="text-[10px] font-bold tracking-widest text-[#6FAE8F] uppercase">
               White-Glove Doorstep Service
             </span>
-            <span className="text-xs text-slate-400">|</span>
-            <div className="flex items-center gap-1 text-[10px] text-amber-300 font-bold">
+            <span className="text-xs text-[#A6B0A3]">|</span>
+            <div className="flex items-center gap-1 text-[10px] text-[#D9A441] font-bold">
               <Sparkles className="w-3 h-3" /> VIP Executive Assistant
             </div>
           </div>
@@ -150,19 +150,19 @@ export function VoiceController() {
             MACALOCATOR At-Your-Door Voice Control
           </h2>
           
-          <p className="text-xs text-slate-300 leading-relaxed">
-            At MACALOCATOR, we provide <span className="text-blue-300 font-semibold">100% door-to-door, at-home, or at-work services</span> across Miami & Miami Beach. Our expert mechanics travel straight to you with premium tools. Command this system with your voice — English or Spanish!
+          <p className="text-xs text-[#C5CBBF] leading-relaxed">
+            At MACALOCATOR, we provide <span className="text-[#C5A06C] font-semibold">100% door-to-door, at-home, or at-work services</span> across Miami & Miami Beach. Our expert mechanics travel straight to you with premium tools. Command this system with your voice — English or Spanish!
           </p>
         </div>
 
         {/* Voice control layout */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Helper feedback screen */}
-          <div className="bg-slate-950/80 backdrop-blur-sm border border-slate-800 rounded-xl px-3 py-2 text-left min-w-[200px] max-w-[280px]">
-            <p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Assistant Feedback</p>
-            <p className="text-xs font-semibold text-slate-200 truncate">{voiceFeedback}</p>
+          <div className="bg-[#1B2620]/80 backdrop-blur-sm border border-[#4A5548] rounded-xl px-3 py-2 text-left min-w-[200px] max-w-[280px]">
+            <p className="text-[9px] uppercase font-bold text-[#B8C0B4] tracking-wider">Assistant Feedback</p>
+            <p className="text-xs font-semibold text-[#DCD8CC] truncate">{voiceFeedback}</p>
             {transcript && (
-              <p className="text-[10px] text-emerald-400 font-mono mt-0.5 truncate">
+              <p className="text-[10px] text-[#6FAE8F] font-mono mt-0.5 truncate">
                 ❝ {transcript} ❞
               </p>
             )}
@@ -173,7 +173,7 @@ export function VoiceController() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-10 h-10 rounded-full border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-300"
+              className="w-10 h-10 rounded-full border border-[#4A5548] bg-[#22302A]/60 hover:bg-[#2E3A31] text-[#C5CBBF]"
               onClick={() => setShowHelp(!showHelp)}
               title="Show Voice Commands Help"
             >
@@ -184,7 +184,7 @@ export function VoiceController() {
             <Button
               variant="ghost"
               size="icon"
-              className={`w-10 h-10 rounded-full border border-slate-800 bg-slate-900/60 hover:bg-slate-800 ${soundEnabled ? "text-blue-400" : "text-slate-500"}`}
+              className={`w-10 h-10 rounded-full border border-[#4A5548] bg-[#22302A]/60 hover:bg-[#2E3A31] ${soundEnabled ? "text-[#C5A06C]" : "text-[#B8C0B4]"}`}
               onClick={() => {
                 const newSound = !soundEnabled;
                 setSoundEnabled(newSound);
@@ -205,8 +205,8 @@ export function VoiceController() {
               onClick={toggleListening}
               className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all duration-300 ${
                 isListening
-                  ? "bg-red-600 hover:bg-red-700 text-white animate-pulse shadow-red-500/20"
-                  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-500/15"
+                  ? "bg-[#C96A5B] hover:bg-[#D57F70] text-white animate-pulse shadow-red-500/20"
+                  : "bg-gradient-to-r from-[#B08D57] to-[#C5A06C] hover:from-[#B08D57] hover:to-[#C5A06C] text-white shadow-blue-500/15"
               }`}
             >
               {isListening ? (
@@ -216,7 +216,7 @@ export function VoiceController() {
                 </>
               ) : (
                 <>
-                  <Mic className="w-4 h-4 text-emerald-300" />
+                  <Mic className="w-4 h-4 text-[#8FC7AA]" />
                   <span>Speak to Concierge</span>
                 </>
               )}
@@ -231,37 +231,37 @@ export function VoiceController() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="mt-4 pt-4 border-t border-slate-800/80 overflow-hidden"
+            className="mt-4 pt-4 border-t border-[#4A5548]/80 overflow-hidden"
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
-                <p className="font-bold text-blue-400">"Go Home"</p>
-                <p className="text-[10px] text-slate-400">Navigates to primary overview dashboard</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#4A5548]/60">
+                <p className="font-bold text-[#C5A06C]">"Go Home"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Navigates to primary overview dashboard</p>
               </div>
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
-                <p className="font-bold text-blue-400">"Book Service"</p>
-                <p className="text-[10px] text-slate-400">Dispatch repair mechanics straight to you</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#4A5548]/60">
+                <p className="font-bold text-[#C5A06C]">"Book Service"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Dispatch repair mechanics straight to you</p>
               </div>
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
-                <p className="font-bold text-blue-400">"Support Desk"</p>
-                <p className="text-[10px] text-slate-400">Text & Voice AI vehicle diagnostics</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#4A5548]/60">
+                <p className="font-bold text-[#C5A06C]">"Support Desk"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Text & Voice AI vehicle diagnostics</p>
               </div>
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
-                <p className="font-bold text-blue-400">"Garage Profile"</p>
-                <p className="text-[10px] text-slate-400">Manage cars & Google Workspace sync</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#4A5548]/60">
+                <p className="font-bold text-[#C5A06C]">"Garage Profile"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Manage cars & Google Workspace sync</p>
               </div>
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
-                <p className="font-bold text-blue-400">"Marketing Studio"</p>
-                <p className="text-[10px] text-slate-400">Generate creative vehicle assets</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#4A5548]/60">
+                <p className="font-bold text-[#C5A06C]">"Marketing Studio"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Generate creative vehicle assets</p>
               </div>
-              <div className="bg-slate-950/40 p-2.5 rounded-lg border border-red-900/60 bg-red-950/10">
-                <p className="font-bold text-red-400">"Emergency SOS"</p>
-                <p className="text-[10px] text-slate-400">Triggers roadside dispatcher broadcast</p>
+              <div className="bg-[#1B2620]/40 p-2.5 rounded-lg border border-[#5A4A44] bg-[#3A2F2C]/40">
+                <p className="font-bold text-[#C96A5B]">"Emergency SOS"</p>
+                <p className="text-[10px] text-[#A6B0A3]">Triggers roadside dispatcher broadcast</p>
               </div>
             </div>
 
-            <div className="mt-3 text-[11px] bg-blue-500/10 text-blue-300 p-2.5 rounded-lg border border-blue-500/20 flex items-start gap-2">
-              <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="mt-3 text-[11px] bg-[#2E3A31]0/10 text-[#C5A06C] p-2.5 rounded-lg border border-[#B08D57]/30 flex items-start gap-2">
+              <MapPin className="w-4 h-4 text-[#6FAE8F] shrink-0 mt-0.5" />
               <p>
                 <strong>Habla Español / English / Kreyòl:</strong> Voice commands work in English and Spanish — say "Book Service" or "Reservar cita". The concierge chat answers in all three languages of our Miami & Miami Beach clientele.
                 <br /><br />

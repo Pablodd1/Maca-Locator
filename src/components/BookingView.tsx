@@ -60,22 +60,22 @@ export function BookingView() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Informational VIP Concept Banner */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-950 text-white rounded-2xl p-5 border border-blue-800 shadow-md flex items-start gap-4">
-        <div className="bg-white/10 p-2.5 rounded-xl border border-white/10 shrink-0">
-          <Sparkles className="w-5 h-5 text-amber-300" />
+      <div className="bg-gradient-to-r from-[#2E2A24] to-[#1F2B24] text-white rounded-2xl p-5 border border-[#4A5548] shadow-md flex items-start gap-4">
+        <div className="bg-[#27362C]/10 p-2.5 rounded-xl border border-white/10 shrink-0">
+          <Sparkles className="w-5 h-5 text-[#D9A441]" />
         </div>
         <div className="space-y-1">
-          <h3 className="font-bold text-sm tracking-wide text-amber-300 uppercase">MACALOCATOR At-Your-Door Service Model</h3>
-          <p className="text-xs text-slate-200 leading-relaxed">
+          <h3 className="font-display font-bold text-sm tracking-wide text-[#D9A441] uppercase">MACALOCATOR At-Your-Door Service Model</h3>
+          <p className="text-xs text-[#DCD8CC] leading-relaxed">
             Forget driving to a greasy service center. MACALOCATOR operates 100% on-demand. Our certified elite mechanics transport specialized diagnostic equipment and high-end tools straight to your home, secure workplace, or hotel parking. Select a service below to dispatch a technician!
           </p>
         </div>
       </div>
 
-      <Card className="shadow-md border-slate-200/80 rounded-2xl bg-white overflow-hidden">
-        <CardHeader className="bg-slate-50/50 border-b pb-4">
-          <CardTitle className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-blue-600" />
+      <Card className="shadow-md border-[#4A5548]/80 rounded-2xl bg-[#27362C] overflow-hidden">
+        <CardHeader className="bg-[#22302A]/50 border-b pb-4">
+          <CardTitle className="text-lg font-extrabold text-[#EFE9DC] flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-[#C5A06C]" />
             Executive Service Scheduler
           </CardTitle>
           <CardDescription className="text-xs">Schedule professional automotive maintenance delivered directly to your doorstep in Miami & Miami Beach.</CardDescription>
@@ -84,8 +84,8 @@ export function BookingView() {
           {/* Step 1: Select Service */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="font-bold text-slate-700 text-sm border-b pb-2 flex items-center gap-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600 text-[10px] font-bold">1</span>
+              <h3 className="font-bold text-[#DCD8CC] text-sm border-b pb-2 flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2E3A31] text-[#C5A06C] text-[10px] font-bold">1</span>
                 Select Mobile VIP Service Type
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -93,14 +93,14 @@ export function BookingView() {
                   <Button 
                     key={service.name} 
                     variant="outline" 
-                    className="h-28 flex flex-col items-start p-4 hover:border-blue-600 hover:bg-blue-50/40 justify-center text-left rounded-xl transition-all border-slate-200" 
+                    className="h-28 flex flex-col items-start p-4 hover:border-[#B08D57] hover:bg-[#2E3A31]/40 justify-center text-left rounded-xl transition-all border-[#4A5548]" 
                     onClick={() => handleSelectService(service.name)}
                   >
-                    <span className="font-extrabold text-slate-800 text-sm flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 bg-blue-600 rounded-full" />
+                    <span className="font-extrabold text-[#EFE9DC] text-sm flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 bg-[#B08D57] rounded-full" />
                       {service.name}
                     </span>
-                    <span className="text-xs text-slate-500 font-normal mt-1.5 leading-relaxed">{service.desc}</span>
+                    <span className="text-xs text-[#B8C0B4] font-normal mt-1.5 leading-relaxed">{service.desc}</span>
                   </Button>
                 ))}
               </div>
@@ -110,8 +110,8 @@ export function BookingView() {
           {/* Step 2: Select Vehicle, Date, Time & Delivery Address */}
           {step === 2 && (
             <div className="space-y-6">
-              <h3 className="font-bold text-slate-700 text-sm border-b pb-2 flex items-center gap-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600 text-[10px] font-bold">2</span>
+              <h3 className="font-bold text-[#DCD8CC] text-sm border-b pb-2 flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2E3A31] text-[#C5A06C] text-[10px] font-bold">2</span>
                 Appointment, Vehicle & Doorstep Delivery Address
               </h3>
               
@@ -119,13 +119,13 @@ export function BookingView() {
                 <div className="space-y-4">
                   {/* Vehicle Selector */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500">Selected Vehicle</label>
+                    <label className="text-xs font-bold text-[#B8C0B4]">Selected Vehicle</label>
                     {vehicles.length === 0 ? (
-                      <div className="p-3 border border-amber-200 bg-amber-50 rounded-lg text-xs text-amber-800 space-y-1.5">
+                      <div className="p-3 border border-[#4A5548] bg-[#33402F] rounded-lg text-xs text-[#D9A441] space-y-1.5">
                         <p className="font-medium">No vehicles registered</p>
                         <p>Register your vehicle in the profile tab to get smart alerts and accurate booking history.</p>
                         <Link to="/profile">
-                          <Button size="sm" variant="outline" className="h-7 text-[10px] mt-1 bg-white border-amber-300">
+                          <Button size="sm" variant="outline" className="h-7 text-[10px] mt-1 bg-[#27362C] border-[#4A5548]">
                             Register Car
                           </Button>
                         </Link>
@@ -136,13 +136,13 @@ export function BookingView() {
                           <div 
                             key={v.id} 
                             onClick={() => setSelectedVehicleId(v.id)}
-                            className={`p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all ${selectedVehicleId === v.id ? 'border-blue-500 bg-blue-50/50 ring-1 ring-blue-500' : 'hover:bg-slate-50 border-slate-200'}`}
+                            className={`p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all ${selectedVehicleId === v.id ? 'border-[#B08D57] bg-[#2E3A31]/50 ring-1 ring-[#B08D57]' : 'hover:bg-[#22302A] border-[#4A5548]'}`}
                           >
                             <div className="flex items-center gap-2">
-                              <Car className="w-4 h-4 text-blue-600" />
-                              <span className="text-xs font-extrabold text-slate-800">{v.year} {v.make} {v.model}</span>
+                              <Car className="w-4 h-4 text-[#C5A06C]" />
+                              <span className="text-xs font-extrabold text-[#EFE9DC]">{v.year} {v.make} {v.model}</span>
                             </div>
-                            <span className="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600 uppercase">{v.licensePlate}</span>
+                            <span className="text-[10px] font-mono bg-[#22302A] px-2 py-0.5 rounded text-[#C5CBBF] uppercase">{v.licensePlate}</span>
                           </div>
                         ))}
                       </div>
@@ -151,8 +151,8 @@ export function BookingView() {
 
                   {/* Destination Address of Service */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-red-500" />
+                    <label className="text-xs font-bold text-[#B8C0B4] flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-[#C96A5B]" />
                       Technician Dispatch Destination Address
                     </label>
                     <Input 
@@ -160,14 +160,14 @@ export function BookingView() {
                       value={serviceAddress} 
                       onChange={(e) => setServiceAddress(e.target.value)}
                       placeholder="Enter home or office address in Miami or Miami Beach"
-                      className="bg-white border-slate-200 rounded-lg focus-visible:ring-blue-600 text-xs h-9"
+                      className="bg-[#27362C] border-[#4A5548] rounded-lg focus-visible:ring-[#B08D57] text-xs h-9"
                     />
-                    <p className="text-[10px] text-slate-400">Our VIP mobile workshop team travels straight to this exact address.</p>
+                    <p className="text-[10px] text-[#A6B0A3]">Our VIP mobile workshop team travels straight to this exact address.</p>
                   </div>
 
                   {/* Date Input */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500">Choose Appointment Date</label>
+                    <label className="text-xs font-bold text-[#B8C0B4]">Choose Appointment Date</label>
                     <div className="relative">
                       <Input 
                         type="date" 
@@ -175,31 +175,31 @@ export function BookingView() {
                         onChange={(e) => setSelectedDate(e.target.value)}
                         className="pl-9 h-9 text-xs"
                       />
-                      <Calendar className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                      <Calendar className="w-4 h-4 text-[#A6B0A3] absolute left-3 top-2.5" />
                     </div>
                   </div>
                 </div>
 
                 {/* Time selector */}
                 <div className="space-y-3">
-                  <span className="text-xs font-bold text-slate-500 block">Select Available Dispatch Hour</span>
+                  <span className="text-xs font-bold text-[#B8C0B4] block">Select Available Dispatch Hour</span>
                   <div className="grid grid-cols-2 gap-2">
                     {times.map(time => (
                       <Button 
                         key={time} 
                         variant="outline" 
-                        className="h-11 hover:border-blue-600 hover:bg-blue-50/30 text-xs font-medium text-slate-700 rounded-lg transition-all"
+                        className="h-11 hover:border-[#B08D57] hover:bg-[#2E3A31]/30 text-xs font-medium text-[#DCD8CC] rounded-lg transition-all"
                         onClick={() => handleConfirmBooking(time)}
                       >
-                        <Clock className="w-3.5 h-3.5 mr-1.5 text-blue-600 opacity-80" /> {time}
+                        <Clock className="w-3.5 h-3.5 mr-1.5 text-[#C5A06C] opacity-80" /> {time}
                       </Button>
                     ))}
                   </div>
-                  <div className="p-3 bg-blue-50/50 rounded-xl border border-blue-100/60 text-[11px] text-blue-800 space-y-1">
+                  <div className="p-3 bg-[#2E3A31]/50 rounded-xl border border-[#4A5548]/60 text-[11px] text-[#C5A06C] space-y-1">
                     <p className="font-extrabold flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Professional Guarantee
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#C5A06C]" /> Professional Guarantee
                     </p>
-                    <p className="text-slate-500 leading-relaxed">Your technician will arrive within a tight 30-minute window of the selected time, equipped with genuine parts and mobile diagnostic scanners.</p>
+                    <p className="text-[#B8C0B4] leading-relaxed">Your technician will arrive within a tight 30-minute window of the selected time, equipped with genuine parts and mobile diagnostic scanners.</p>
                   </div>
                 </div>
               </div>
@@ -213,33 +213,33 @@ export function BookingView() {
           {/* Step 3: Confirmation Success */}
           {step === 3 && (
             <div className="space-y-5 text-center py-10">
-              <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+              <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-[#6FAE8F] rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
                 <Sparkles className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight text-slate-900">Doorstep Booking Confirmed! 🎉</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">Our elite technician team is preparing dispatch instructions. We will travel straight to you.</p>
+              <h3 className="text-2xl font-black tracking-tight text-[#EFE9DC]">Doorstep Booking Confirmed! 🎉</h3>
+              <p className="text-xs text-[#B8C0B4] max-w-sm mx-auto">Our elite technician team is preparing dispatch instructions. We will travel straight to you.</p>
               
-              <div className="max-w-md mx-auto bg-slate-50 border rounded-2xl p-5 text-left space-y-2.5 text-sm text-slate-600">
-                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-slate-200">
-                  <span className="font-bold text-slate-500 uppercase">Service Type</span> 
-                  <span className="font-extrabold text-slate-800">{selectedService}</span>
+              <div className="max-w-md mx-auto bg-[#22302A] border rounded-2xl p-5 text-left space-y-2.5 text-sm text-[#C5CBBF]">
+                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-[#4A5548]">
+                  <span className="font-bold text-[#B8C0B4] uppercase">Service Type</span> 
+                  <span className="font-extrabold text-[#EFE9DC]">{selectedService}</span>
                 </p>
-                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-slate-200">
-                  <span className="font-bold text-slate-500 uppercase">Scheduled Date</span> 
-                  <span className="font-mono text-slate-800">{selectedDate}</span>
+                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-[#4A5548]">
+                  <span className="font-bold text-[#B8C0B4] uppercase">Scheduled Date</span> 
+                  <span className="font-mono text-[#EFE9DC]">{selectedDate}</span>
                 </p>
-                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-slate-200">
-                  <span className="font-bold text-slate-500 uppercase">Dispatch Time</span> 
-                  <span className="font-mono text-slate-800">{selectedTime}</span>
+                <p className="flex justify-between items-center text-xs pb-1.5 border-b border-[#4A5548]">
+                  <span className="font-bold text-[#B8C0B4] uppercase">Dispatch Time</span> 
+                  <span className="font-mono text-[#EFE9DC]">{selectedTime}</span>
                 </p>
-                <p className="flex justify-between items-start text-xs pb-1.5 border-b border-slate-200">
-                  <span className="font-bold text-slate-500 uppercase shrink-0">Service Address</span> 
-                  <span className="font-semibold text-slate-800 text-right max-w-[200px] leading-tight">{serviceAddress}</span>
+                <p className="flex justify-between items-start text-xs pb-1.5 border-b border-[#4A5548]">
+                  <span className="font-bold text-[#B8C0B4] uppercase shrink-0">Service Address</span> 
+                  <span className="font-semibold text-[#EFE9DC] text-right max-w-[200px] leading-tight">{serviceAddress}</span>
                 </p>
                 {selectedVehicleId && (
                   <p className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-slate-500 uppercase">Vehicle Info</span> 
-                    <span className="font-extrabold text-slate-800">
+                    <span className="font-bold text-[#B8C0B4] uppercase">Vehicle Info</span> 
+                    <span className="font-extrabold text-[#EFE9DC]">
                       {vehicles.find(v => v.id === selectedVehicleId)?.make} {vehicles.find(v => v.id === selectedVehicleId)?.model}
                     </span>
                   </p>
@@ -250,7 +250,7 @@ export function BookingView() {
                 <Link to="/">
                   <Button variant="outline" className="rounded-lg text-xs font-bold">Go to Dashboard</Button>
                 </Link>
-                <Button onClick={() => setStep(1)} className="bg-blue-600 hover:bg-blue-700 rounded-lg text-xs font-bold">Book Another Service</Button>
+                <Button onClick={() => setStep(1)} className="bg-[#B08D57] hover:bg-[#C5A06C] rounded-lg text-xs font-bold">Book Another Service</Button>
               </div>
             </div>
           )}

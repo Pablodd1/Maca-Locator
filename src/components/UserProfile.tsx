@@ -401,8 +401,8 @@ export function UserProfile() {
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Profile & Vehicles</h1>
-        <p className="text-slate-500 mt-1">Manage your customer profile, registered vehicles, and service alerts.</p>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-[#EFE9DC]">Profile & Vehicles</h1>
+        <p className="text-[#B8C0B4] mt-1">Manage your customer profile, registered vehicles, and service alerts.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -412,7 +412,7 @@ export function UserProfile() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg flex items-center gap-2">
-                <User className="w-5 h-5 text-blue-600" />
+                <User className="w-5 h-5 text-[#C5A06C]" />
                 Personal Details
               </CardTitle>
               <CardDescription>Your contact details for service updates.</CardDescription>
@@ -421,24 +421,24 @@ export function UserProfile() {
               {isEditingProfile ? (
                 <form onSubmit={handleSaveProfile} className="space-y-4">
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-500">Full Name</label>
+                    <label className="text-xs font-semibold text-[#B8C0B4]">Full Name</label>
                     <Input value={profileName} onChange={(e) => setProfileName(e.target.value)} required />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-500">Email Address</label>
+                    <label className="text-xs font-semibold text-[#B8C0B4]">Email Address</label>
                     <Input type="email" value={profileEmail} onChange={(e) => setProfileEmail(e.target.value)} required />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-500">Phone Number</label>
+                    <label className="text-xs font-semibold text-[#B8C0B4]">Phone Number</label>
                     <Input value={profilePhone} onChange={(e) => setProfilePhone(e.target.value)} required />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-500">Service Address · Dirección</label>
+                    <label className="text-xs font-semibold text-[#B8C0B4]">Service Address · Dirección</label>
                     <Input value={profileAddress} onChange={(e) => setProfileAddress(e.target.value)} placeholder="Where should we come? / ¿A dónde vamos?" />
                   </div>
                   <div className="flex items-end gap-2">
                     <div className="space-y-1 flex-1">
-                      <label className="text-xs font-semibold text-slate-500">GPS Location · Ubicación</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">GPS Location · Ubicación</label>
                       <Input readOnly value={gps ? `${gps.lat}, ${gps.lng}` : "Not captured"} className="font-mono text-xs" />
                     </div>
                     <Button type="button" size="sm" variant="outline" onClick={captureGps} disabled={gpsLoading}>
@@ -447,23 +447,23 @@ export function UserProfile() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Insurance · Seguro</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Insurance · Seguro</label>
                       <Input value={insuranceCarrier} onChange={(e) => setInsuranceCarrier(e.target.value)} placeholder="e.g. GEICO" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Policy #</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Policy #</label>
                       <Input value={insurancePolicy} onChange={(e) => setInsurancePolicy(e.target.value)} placeholder="Optional" />
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-500">Preferred language · Idioma</label>
-                    <select value={preferredLanguage} onChange={(e) => setPreferredLanguage(e.target.value as any)} className="w-full h-9 px-2 rounded-lg border border-slate-200 text-sm">
+                    <label className="text-xs font-semibold text-[#B8C0B4]">Preferred language · Idioma</label>
+                    <select value={preferredLanguage} onChange={(e) => setPreferredLanguage(e.target.value as any)} className="w-full h-9 px-2 rounded-lg border border-[#4A5548] text-sm">
                       <option value="en">English</option>
                       <option value="es">Español</option>
                       <option value="ht">Kreyòl</option>
                     </select>
                   </div>
-                  <label className="flex items-start gap-2 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-2.5 cursor-pointer">
+                  <label className="flex items-start gap-2 text-xs text-[#C5CBBF] bg-[#22302A] border border-[#4A5548] rounded-lg p-2.5 cursor-pointer">
                     <input type="checkbox" checked={marketingOptIn} onChange={(e) => setMarketingOptIn(e.target.checked)} className="mt-0.5 accent-blue-600" />
                     <span>Email me exclusive MACALOCATOR offers & seasonal service reminders. / Enviarme ofertas exclusivas y recordatorios de servicio.</span>
                   </label>
@@ -475,15 +475,15 @@ export function UserProfile() {
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-bold text-slate-800 text-lg">{user?.name || "Guest User"}</h3>
-                    <p className="text-sm text-slate-500">{user?.email || "No email registered"}</p>
-                    <p className="text-sm text-slate-500 mt-1">{user?.phone || "No phone registered"}</p>
-                    {user?.address && <p className="text-xs text-slate-500 mt-1.5">📍 {user.address}</p>}
-                    {user?.gpsLat != null && <p className="text-[11px] font-mono text-slate-400">GPS {user.gpsLat}, {user.gpsLng}</p>}
+                    <h3 className="font-bold text-[#EFE9DC] text-lg">{user?.name || "Guest User"}</h3>
+                    <p className="text-sm text-[#B8C0B4]">{user?.email || "No email registered"}</p>
+                    <p className="text-sm text-[#B8C0B4] mt-1">{user?.phone || "No phone registered"}</p>
+                    {user?.address && <p className="text-xs text-[#B8C0B4] mt-1.5">📍 {user.address}</p>}
+                    {user?.gpsLat != null && <p className="text-[11px] font-mono text-[#A6B0A3]">GPS {user.gpsLat}, {user.gpsLng}</p>}
                     <div className="flex gap-1.5 mt-1.5 flex-wrap">
-                      {user?.insuranceCarrier && <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full">🛡 {user.insuranceCarrier}</span>}
-                      {user?.preferredLanguage && <span className="text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full uppercase">{user.preferredLanguage}</span>}
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${user?.marketingOptIn ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-slate-50 text-slate-400 border-slate-200"}`}>
+                      {user?.insuranceCarrier && <span className="text-[10px] font-bold bg-[#2E3A31] text-[#C5A06C] border border-[#4A5548] px-2 py-0.5 rounded-full">🛡 {user.insuranceCarrier}</span>}
+                      {user?.preferredLanguage && <span className="text-[10px] font-bold bg-[#22302A] text-[#C5CBBF] border border-[#4A5548] px-2 py-0.5 rounded-full uppercase">{user.preferredLanguage}</span>}
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${user?.marketingOptIn ? "bg-emerald-50 text-[#6FAE8F] border-emerald-100" : "bg-[#22302A] text-[#A6B0A3] border-[#4A5548]"}`}>
                         {user?.marketingOptIn ? "Offers: ON" : "Offers: OFF"}
                       </span>
                     </div>
@@ -506,35 +506,35 @@ export function UserProfile() {
           <Card className="shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Bell className="w-5 h-5 text-blue-600" />
+                <Bell className="w-5 h-5 text-[#C5A06C]" />
                 Service Reminders
               </CardTitle>
               <CardDescription>Enable notifications for maintenance intervals.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border">
+              <div className="flex items-center justify-between p-3 bg-[#22302A] rounded-lg border">
                 <div>
-                  <p className="font-medium text-sm text-slate-800">Oil Change Alerts</p>
-                  <p className="text-xs text-slate-500">Every 5,000 miles (combustion cars)</p>
+                  <p className="font-medium text-sm text-[#EFE9DC]">Oil Change Alerts</p>
+                  <p className="text-xs text-[#B8C0B4]">Every 5,000 miles (combustion cars)</p>
                 </div>
                 <button
                   onClick={() => toggleNotificationPref("oilChange")}
-                  className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none ${notificationPrefs.oilChange ? "bg-blue-600" : "bg-slate-300"}`}
+                  className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none ${notificationPrefs.oilChange ? "bg-[#B08D57]" : "bg-[#6E7A6A]"}`}
                 >
-                  <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${notificationPrefs.oilChange ? "translate-x-5" : ""}`} />
+                  <span className={`absolute top-1 left-1 bg-[#27362C] w-4 h-4 rounded-full transition-transform ${notificationPrefs.oilChange ? "translate-x-5" : ""}`} />
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border">
+              <div className="flex items-center justify-between p-3 bg-[#22302A] rounded-lg border">
                 <div>
-                  <p className="font-medium text-sm text-slate-800">Tire Rotation Alerts</p>
-                  <p className="text-xs text-slate-500">Every 7,500 miles (all vehicles)</p>
+                  <p className="font-medium text-sm text-[#EFE9DC]">Tire Rotation Alerts</p>
+                  <p className="text-xs text-[#B8C0B4]">Every 7,500 miles (all vehicles)</p>
                 </div>
                 <button
                   onClick={() => toggleNotificationPref("tireRotation")}
-                  className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none ${notificationPrefs.tireRotation ? "bg-blue-600" : "bg-slate-300"}`}
+                  className={`w-11 h-6 rounded-full transition-colors relative focus:outline-none ${notificationPrefs.tireRotation ? "bg-[#B08D57]" : "bg-[#6E7A6A]"}`}
                 >
-                  <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${notificationPrefs.tireRotation ? "translate-x-5" : ""}`} />
+                  <span className={`absolute top-1 left-1 bg-[#27362C] w-4 h-4 rounded-full transition-transform ${notificationPrefs.tireRotation ? "translate-x-5" : ""}`} />
                 </button>
               </div>
             </CardContent>
@@ -545,10 +545,10 @@ export function UserProfile() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <RefreshCw className={`w-5 h-5 text-emerald-600 ${workspaceLoading ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`w-5 h-5 text-[#6FAE8F] ${workspaceLoading ? "animate-spin" : ""}`} />
                   Google Workspace
                 </CardTitle>
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                <Badge variant="outline" className="bg-emerald-50 text-[#6FAE8F] border-emerald-200">
                   Calendar & Chat
                 </Badge>
               </div>
@@ -561,7 +561,7 @@ export function UserProfile() {
                 <div className={`p-3 rounded-lg text-xs font-medium border ${
                   syncStatusMsg.includes("Simulated") || syncStatusMsg.includes("Success")
                     ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                    : "bg-amber-50 text-amber-800 border-amber-200"
+                    : "bg-[#33402F] text-[#D9A441] border-[#4A5548]"
                 }`}>
                   {syncStatusMsg}
                 </div>
@@ -569,18 +569,18 @@ export function UserProfile() {
 
               {!isGConnected ? (
                 <div className="space-y-4">
-                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-3">
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                  <div className="p-4 bg-[#22302A] rounded-lg border border-[#3E4B42] space-y-3">
+                    <p className="text-xs text-[#C5CBBF] leading-relaxed">
                       Syncing your account enables auto-creating Google Calendar events for maintenance bookings, and sending emergency dispatcher responses to your team's Google Chat spaces.
                     </p>
                     
                     <div className="space-y-1.5 pt-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Custom Google Client ID (Optional)</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#A6B0A3]">Custom Google Client ID (Optional)</label>
                       <Input 
                         placeholder="Paste your client ID from Google Console" 
                         value={customClientId} 
                         onChange={(e) => setCustomClientId(e.target.value)}
-                        className="h-8 text-xs bg-white"
+                        className="h-8 text-xs bg-[#27362C]"
                       />
                     </div>
                   </div>
@@ -589,7 +589,7 @@ export function UserProfile() {
                     {/* Official-looking Sign In with Google Button */}
                     <button 
                       onClick={handleGoogleConnect}
-                      className="w-full flex items-center justify-center gap-3 bg-white border border-slate-300 rounded-lg py-2 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none"
+                      className="w-full flex items-center justify-center gap-3 bg-[#27362C] border border-[#4A5548] rounded-lg py-2 px-4 text-sm font-semibold text-[#DCD8CC] hover:bg-[#22302A] transition-colors shadow-sm focus:outline-none"
                     >
                       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5 block">
                         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
@@ -614,18 +614,18 @@ export function UserProfile() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg border border-emerald-100">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="w-5 h-5 text-[#6FAE8F] shrink-0" />
                       <div>
                         <p className="text-xs font-bold text-emerald-950">
                           {getGoogleAccessToken()?.startsWith("sandbox_") ? "Active (Sandbox Mode)" : "Active (Google Authorized)"}
                         </p>
-                        <p className="text-[10px] text-emerald-700">Sync is live and responsive</p>
+                        <p className="text-[10px] text-[#6FAE8F]">Sync is live and responsive</p>
                       </div>
                     </div>
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50/50" 
+                      className="h-8 w-8 text-[#A6B0A3] hover:text-[#C96A5B] hover:bg-[#3A2F2C]/50" 
                       onClick={handleDisconnectGoogle}
                       title="Disconnect Account"
                     >
@@ -635,12 +635,12 @@ export function UserProfile() {
 
                   {/* Calendar Sync Display */}
                   <div className="space-y-2 border-t pt-3">
-                    <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-blue-500" />
+                    <h4 className="text-xs font-bold text-[#DCD8CC] flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-[#C5A06C]" />
                       Google Calendar Bookings
                     </h4>
                     {calendarEvents.length === 0 ? (
-                      <p className="text-[11px] text-slate-400 italic pl-5">No calendar events detected or loaded.</p>
+                      <p className="text-[11px] text-[#A6B0A3] italic pl-5">No calendar events detected or loaded.</p>
                     ) : (
                       <div className="space-y-1.5 pl-5">
                         {calendarEvents.map(ev => {
@@ -651,9 +651,9 @@ export function UserProfile() {
                             minute: "2-digit"
                           });
                           return (
-                            <div key={ev.id} className="text-xs p-2 bg-slate-50 border rounded hover:border-slate-300 transition-colors">
-                              <p className="font-semibold text-slate-800 truncate">{ev.summary}</p>
-                              <p className="text-[10px] text-slate-500 font-mono mt-0.5">{eventTime}</p>
+                            <div key={ev.id} className="text-xs p-2 bg-[#22302A] border rounded hover:border-[#4A5548] transition-colors">
+                              <p className="font-semibold text-[#EFE9DC] truncate">{ev.summary}</p>
+                              <p className="text-[10px] text-[#B8C0B4] font-mono mt-0.5">{eventTime}</p>
                             </div>
                           );
                         })}
@@ -663,18 +663,18 @@ export function UserProfile() {
 
                   {/* Chat Broadcast Display */}
                   <div className="space-y-2 border-t pt-3">
-                    <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <MessageSquare className="w-4 h-4 text-emerald-500" />
+                    <h4 className="text-xs font-bold text-[#DCD8CC] flex items-center gap-1.5">
+                      <MessageSquare className="w-4 h-4 text-[#6FAE8F]" />
                       Google Chat Alert Broadcaster
                     </h4>
                     {chatSpaces.length === 0 ? (
-                      <p className="text-[11px] text-slate-400 italic pl-5">No active Google Chat spaces found.</p>
+                      <p className="text-[11px] text-[#A6B0A3] italic pl-5">No active Google Chat spaces found.</p>
                     ) : (
                       <form onSubmit={handleSendTestMessage} className="space-y-2 pl-5">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-semibold text-slate-500">Select Destination Space</label>
+                          <label className="text-[10px] font-semibold text-[#B8C0B4]">Select Destination Space</label>
                           <select 
-                            className="w-full text-xs h-8 border rounded-md px-2 bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                            className="w-full text-xs h-8 border rounded-md px-2 bg-[#27362C] focus:outline-none focus:ring-1 focus:ring-emerald-500"
                             value={selectedSpace}
                             onChange={(e) => setSelectedSpace(e.target.value)}
                           >
@@ -687,7 +687,7 @@ export function UserProfile() {
                         </div>
 
                         <div className="space-y-1">
-                          <label className="text-[10px] font-semibold text-slate-500">Roadside Diagnostic Alert Message</label>
+                          <label className="text-[10px] font-semibold text-[#B8C0B4]">Roadside Diagnostic Alert Message</label>
                           <div className="flex gap-1">
                             <Input 
                               placeholder="e.g., Tesla Model 3 Flat Tire at Highway 50" 
@@ -706,7 +706,7 @@ export function UserProfile() {
                         </div>
 
                         {sendResult && (
-                          <p className={`text-[11px] font-medium ${sendResult.includes("✓") ? "text-emerald-700" : "text-amber-700"}`}>
+                          <p className={`text-[11px] font-medium ${sendResult.includes("✓") ? "text-[#6FAE8F]" : "text-[#D9A441]"}`}>
                             {sendResult}
                           </p>
                         )}
@@ -741,13 +741,13 @@ export function UserProfile() {
                 if (!showOilAlert && !showRotationAlert) return null;
 
                 return (
-                  <div key={`alert-${v.id}`} className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3 items-start shadow-sm">
-                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <div key={`alert-${v.id}`} className="bg-[#33402F] border border-[#4A5548] rounded-lg p-4 flex gap-3 items-start shadow-sm">
+                    <AlertCircle className="w-5 h-5 text-[#D9A441] shrink-0 mt-0.5" />
                     <div className="space-y-1">
-                      <p className="font-semibold text-amber-900 text-sm">
+                      <p className="font-semibold text-[#E5B95C] text-sm">
                         Maintenance Alert: {v.make} {v.model} ({v.licensePlate})
                       </p>
-                      <ul className="text-xs text-amber-800 list-disc pl-4 space-y-1">
+                      <ul className="text-xs text-[#D9A441] list-disc pl-4 space-y-1">
                         {showOilAlert && (
                           <li>
                             Oil change is recommended! It has been <span className="font-bold">{milesSinceOil.toLocaleString()} miles</span> since your last change.
@@ -771,7 +771,7 @@ export function UserProfile() {
             <CardHeader className="flex flex-row items-center justify-between pb-4">
               <div>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Car className="w-5 h-5 text-blue-600" />
+                  <Car className="w-5 h-5 text-[#C5A06C]" />
                   My Registered Vehicles
                 </CardTitle>
                 <CardDescription>Manage and view maintenance intervals for your garage.</CardDescription>
@@ -783,15 +783,15 @@ export function UserProfile() {
             <CardContent className="space-y-6">
               {/* Add Vehicle Form */}
               {isAddingVehicle && (
-                <form onSubmit={handleAddVehicleSubmit} className="bg-slate-50 border rounded-lg p-4 space-y-4">
+                <form onSubmit={handleAddVehicleSubmit} className="bg-[#22302A] border rounded-lg p-4 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b">
-                    <h3 className="font-bold text-sm text-slate-700">Register New Vehicle</h3>
+                    <h3 className="font-bold text-sm text-[#DCD8CC]">Register New Vehicle</h3>
                     {!isScanningVin ? (
                       <Button 
                         type="button" 
                         size="sm" 
                         variant="outline" 
-                        className="text-xs h-8 text-blue-600 hover:text-blue-700 bg-blue-50/50 hover:bg-blue-50 border-blue-200"
+                        className="text-xs h-8 text-[#C5A06C] hover:text-[#C5A06C] bg-[#2E3A31]/50 hover:bg-[#2E3A31] border-[#4A5548]"
                         onClick={startVinScan}
                       >
                         <Camera className="w-3.5 h-3.5 mr-1.5" />
@@ -802,7 +802,7 @@ export function UserProfile() {
                         type="button" 
                         size="sm" 
                         variant="ghost" 
-                        className="text-xs h-8 text-red-500 hover:text-red-600"
+                        className="text-xs h-8 text-[#C96A5B] hover:text-[#C96A5B]"
                         onClick={stopVinScan}
                       >
                         Cancel Scan
@@ -812,13 +812,13 @@ export function UserProfile() {
 
                   {/* Camera Scanner Viewfinder */}
                   {isScanningVin && (
-                    <div className="bg-slate-900 rounded-xl p-4 border border-slate-800 space-y-4">
-                      <div className="relative w-full h-52 bg-black rounded-lg overflow-hidden border border-slate-700 flex items-center justify-center">
-                        <div className="absolute inset-0 border-[3px] border-slate-800/40 pointer-events-none" />
+                    <div className="bg-[#22302A] rounded-xl p-4 border border-[#4A5548] space-y-4">
+                      <div className="relative w-full h-52 bg-black rounded-lg overflow-hidden border border-[#4A5548] flex items-center justify-center">
+                        <div className="absolute inset-0 border-[3px] border-[#4A5548]/40 pointer-events-none" />
                         
-                        <div className="absolute w-[80%] h-14 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center animate-pulse z-20">
-                          <div className="absolute left-0 right-0 h-0.5 bg-red-500 shadow-[0_0_10px_#ef4444] animate-bounce" style={{ animationDuration: '2.5s' }} />
-                          <span className="text-[9px] text-blue-300 font-bold bg-black/80 px-2 py-0.5 rounded tracking-widest absolute -top-3">ALIGN VIN CODE</span>
+                        <div className="absolute w-[80%] h-14 border-2 border-dashed border-[#B08D57] rounded-lg flex items-center justify-center animate-pulse z-20">
+                          <div className="absolute left-0 right-0 h-0.5 bg-[#3A2F2C]0 shadow-[0_0_10px_#ef4444] animate-bounce" style={{ animationDuration: '2.5s' }} />
+                          <span className="text-[9px] text-[#C5A06C] font-bold bg-black/80 px-2 py-0.5 rounded tracking-widest absolute -top-3">ALIGN VIN CODE</span>
                         </div>
 
                         <video 
@@ -831,38 +831,38 @@ export function UserProfile() {
                         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:12px_12px] pointer-events-none" />
                         
                         {vinScannerStatus === "accessing" && (
-                          <div className="absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
-                            <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-                            <p className="text-xs text-slate-300 font-bold">Connecting Secure Camera Feed...</p>
-                            <p className="text-[10px] text-slate-500">Checking device permissions</p>
+                          <div className="absolute inset-0 bg-[#1B2620]/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
+                            <Loader2 className="w-8 h-8 text-[#C5A06C] animate-spin" />
+                            <p className="text-xs text-[#C5CBBF] font-bold">Connecting Secure Camera Feed...</p>
+                            <p className="text-[10px] text-[#B8C0B4]">Checking device permissions</p>
                           </div>
                         )}
 
                         {vinScannerStatus === "decoding" && (
-                          <div className="absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
-                            <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
-                            <p className="text-xs text-slate-300 font-bold">Decoding VIN Sequence...</p>
-                            <p className="text-[10px] text-amber-400 font-mono">Verifying checksum values</p>
+                          <div className="absolute inset-0 bg-[#1B2620]/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
+                            <Loader2 className="w-8 h-8 text-[#D9A441] animate-spin" />
+                            <p className="text-xs text-[#C5CBBF] font-bold">Decoding VIN Sequence...</p>
+                            <p className="text-[10px] text-[#D9A441] font-mono">Verifying checksum values</p>
                           </div>
                         )}
 
                         {vinScannerStatus === "success" && (
-                          <div className="absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
-                            <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-                            <p className="text-xs text-emerald-400 font-bold">VIN Decode Completed!</p>
-                            <p className="text-[10px] text-slate-400 font-mono">{scannedVinResult}</p>
+                          <div className="absolute inset-0 bg-[#1B2620]/90 flex flex-col items-center justify-center text-center space-y-2 z-10">
+                            <CheckCircle2 className="w-8 h-8 text-[#6FAE8F]" />
+                            <p className="text-xs text-[#6FAE8F] font-bold">VIN Decode Completed!</p>
+                            <p className="text-[10px] text-[#A6B0A3] font-mono">{scannedVinResult}</p>
                           </div>
                         )}
 
-                        <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-blue-500" />
-                        <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-blue-500" />
-                        <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-blue-500" />
-                        <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-blue-500" />
+                        <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-[#B08D57]" />
+                        <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-[#B08D57]" />
+                        <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-[#B08D57]" />
+                        <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-[#B08D57]" />
                       </div>
 
                       <div className="space-y-3">
                         <div className="flex flex-col gap-1.5">
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#A6B0A3]">
                             Select VIP vehicle to simulate scan:
                           </span>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -870,7 +870,7 @@ export function UserProfile() {
                               type="button"
                               variant="outline"
                               size="sm"
-                              className="h-9 text-[11px] font-bold border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
+                              className="h-9 text-[11px] font-bold border-[#4A5548] text-[#DCD8CC] hover:bg-[#2E3A31] hover:text-white"
                               onClick={() => handleSimulateScan("audi")}
                               disabled={vinScannerStatus === "decoding"}
                             >
@@ -880,7 +880,7 @@ export function UserProfile() {
                               type="button"
                               variant="outline"
                               size="sm"
-                              className="h-9 text-[11px] font-bold border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
+                              className="h-9 text-[11px] font-bold border-[#4A5548] text-[#DCD8CC] hover:bg-[#2E3A31] hover:text-white"
                               onClick={() => handleSimulateScan("bmw")}
                               disabled={vinScannerStatus === "decoding"}
                             >
@@ -890,7 +890,7 @@ export function UserProfile() {
                               type="button"
                               variant="outline"
                               size="sm"
-                              className="h-9 text-[11px] font-bold border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
+                              className="h-9 text-[11px] font-bold border-[#4A5548] text-[#DCD8CC] hover:bg-[#2E3A31] hover:text-white"
                               onClick={() => handleSimulateScan("porsche")}
                               disabled={vinScannerStatus === "decoding"}
                             >
@@ -900,7 +900,7 @@ export function UserProfile() {
                               type="button"
                               variant="outline"
                               size="sm"
-                              className="h-9 text-[11px] font-bold border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
+                              className="h-9 text-[11px] font-bold border-[#4A5548] text-[#DCD8CC] hover:bg-[#2E3A31] hover:text-white"
                               onClick={() => handleSimulateScan("byd")}
                               disabled={vinScannerStatus === "decoding"}
                             >
@@ -909,7 +909,7 @@ export function UserProfile() {
                           </div>
                         </div>
 
-                        <div className="bg-black/40 rounded-lg p-2.5 border border-slate-800 h-24 overflow-y-auto font-mono text-[9px] text-blue-400 space-y-1">
+                        <div className="bg-black/40 rounded-lg p-2.5 border border-[#4A5548] h-24 overflow-y-auto font-mono text-[9px] text-[#C5A06C] space-y-1">
                           {vinScanLogs.map((log, i) => (
                             <p key={i} className="leading-tight">{log}</p>
                           ))}
@@ -920,11 +920,11 @@ export function UserProfile() {
 
                   {scannedVinResult && !isScanningVin && (
                     <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2.5 text-emerald-800">
-                      <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <Sparkles className="w-4 h-4 text-[#6FAE8F] shrink-0 mt-0.5" />
                       <div className="space-y-0.5">
                         <p className="text-xs font-bold">Camera Autofill Success!</p>
-                        <p className="text-[10px] text-slate-500 leading-relaxed">
-                          Successfully scanned and decrypted VIN <span className="font-mono bg-white px-1.5 py-0.5 border rounded">{scannedVinResult}</span>. Custom specifications applied.
+                        <p className="text-[10px] text-[#B8C0B4] leading-relaxed">
+                          Successfully scanned and decrypted VIN <span className="font-mono bg-[#27362C] px-1.5 py-0.5 border rounded">{scannedVinResult}</span>. Custom specifications applied.
                         </p>
                       </div>
                     </div>
@@ -932,30 +932,30 @@ export function UserProfile() {
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Make</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Make</label>
                       <Input placeholder="Chevrolet" value={make} onChange={(e) => setMake(e.target.value)} required />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Model</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Model</label>
                       <Input placeholder="Bolt EV" value={model} onChange={(e) => setModel(e.target.value)} required />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Year</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Year</label>
                       <Input type="number" min="1990" max="2027" value={year} onChange={(e) => setYear(Number(e.target.value))} required />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">License Plate</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">License Plate</label>
                       <Input placeholder="EV-123-FL" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} required />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Current Mileage (mi)</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Current Mileage (mi)</label>
                       <Input type="number" value={currentMilage} onChange={(e) => setCurrentMilage(Number(e.target.value))} required />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Last Oil Change (mi)</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Last Oil Change (mi)</label>
                       <Input 
                         type="number" 
                         value={lastOilChange} 
@@ -965,7 +965,7 @@ export function UserProfile() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-500">Last Tire Rotation (mi)</label>
+                      <label className="text-xs font-semibold text-[#B8C0B4]">Last Tire Rotation (mi)</label>
                       <Input type="number" value={lastTireRotation} onChange={(e) => setLastTireRotation(Number(e.target.value))} required />
                     </div>
                   </div>
@@ -979,7 +979,7 @@ export function UserProfile() {
 
               {/* Vehicles List */}
               {vehicles.length === 0 ? (
-                <div className="text-center py-8 text-slate-400">
+                <div className="text-center py-8 text-[#A6B0A3]">
                   <Car className="w-12 h-12 mx-auto mb-2 opacity-30" />
                   <p>No vehicles registered. Add a car to customize service bookings.</p>
                 </div>
@@ -990,29 +990,29 @@ export function UserProfile() {
                     const isEditingThisMileage = editingMileageVehicleId === v.id;
 
                     return (
-                      <div key={v.id} className="border rounded-lg p-4 space-y-4 bg-white hover:border-slate-300 transition-colors">
+                      <div key={v.id} className="border rounded-lg p-4 space-y-4 bg-[#27362C] hover:border-[#4A5548] transition-colors">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600">
+                            <div className="w-10 h-10 bg-[#22302A] rounded-full flex items-center justify-center text-[#C5CBBF]">
                               <Car className="w-6 h-6" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <h4 className="font-bold text-slate-800">{v.year} {v.make} {v.model}</h4>
-                                {electric && <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-200">Electric ⚡</Badge>}
+                                <h4 className="font-bold text-[#EFE9DC]">{v.year} {v.make} {v.model}</h4>
+                                {electric && <Badge variant="secondary" className="bg-emerald-50 text-[#6FAE8F] border-emerald-200">Electric ⚡</Badge>}
                               </div>
-                              <p className="text-xs font-mono text-slate-500 uppercase mt-0.5">Plate: {v.licensePlate}</p>
+                              <p className="text-xs font-mono text-[#B8C0B4] uppercase mt-0.5">Plate: {v.licensePlate}</p>
                             </div>
                           </div>
-                          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-500" onClick={() => removeVehicle(v.id)}>
+                          <Button variant="ghost" size="icon" className="text-[#A6B0A3] hover:text-[#C96A5B]" onClick={() => removeVehicle(v.id)}>
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
 
                         {/* Mileage and service status display */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-100 text-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-[#3E4B42] text-sm">
                           <div className="space-y-1">
-                            <span className="text-xs font-semibold text-slate-400 block">Current Mileage</span>
+                            <span className="text-xs font-semibold text-[#A6B0A3] block">Current Mileage</span>
                             {isEditingThisMileage ? (
                               <div className="flex gap-1.5 items-center">
                                 <Input 
@@ -1027,8 +1027,8 @@ export function UserProfile() {
                               </div>
                             ) : (
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-slate-700">{(v.currentMilage || 0).toLocaleString()} mi</span>
-                                <Button variant="ghost" size="icon" className="h-5 w-5 text-slate-400 hover:text-slate-600" onClick={() => startEditMileage(v.id, v.currentMilage)}>
+                                <span className="font-bold text-[#DCD8CC]">{(v.currentMilage || 0).toLocaleString()} mi</span>
+                                <Button variant="ghost" size="icon" className="h-5 w-5 text-[#A6B0A3] hover:text-[#C5CBBF]" onClick={() => startEditMileage(v.id, v.currentMilage)}>
                                   <Edit2 className="w-3 h-3" />
                                 </Button>
                               </div>
@@ -1036,19 +1036,19 @@ export function UserProfile() {
                           </div>
 
                           <div className="space-y-1">
-                            <span className="text-xs font-semibold text-slate-400 block">Oil Change Status</span>
+                            <span className="text-xs font-semibold text-[#A6B0A3] block">Oil Change Status</span>
                             {electric ? (
-                              <span className="text-xs text-slate-400 italic">No oil required</span>
+                              <span className="text-xs text-[#A6B0A3] italic">No oil required</span>
                             ) : (
                               <div>
-                                <span className="font-medium text-slate-700">
+                                <span className="font-medium text-[#DCD8CC]">
                                   Last: {(v.lastOilChangeMilage || 0).toLocaleString()} mi
                                 </span>
-                                <div className="text-xs text-slate-500 mt-0.5">
+                                <div className="text-xs text-[#B8C0B4] mt-0.5">
                                   {((v.currentMilage || 0) - (v.lastOilChangeMilage || 0) >= 4500) ? (
-                                    <span className="text-amber-600 font-medium">⚠️ Due soon / past due</span>
+                                    <span className="text-[#D9A441] font-medium">⚠️ Due soon / past due</span>
                                   ) : (
-                                    <span className="text-emerald-600 font-medium">✓ Up to date</span>
+                                    <span className="text-[#6FAE8F] font-medium">✓ Up to date</span>
                                   )}
                                 </div>
                               </div>
@@ -1056,16 +1056,16 @@ export function UserProfile() {
                           </div>
 
                           <div className="space-y-1">
-                            <span className="text-xs font-semibold text-slate-400 block">Tire Rotation Status</span>
+                            <span className="text-xs font-semibold text-[#A6B0A3] block">Tire Rotation Status</span>
                             <div>
-                              <span className="font-medium text-slate-700">
+                              <span className="font-medium text-[#DCD8CC]">
                                 Last: {(v.lastTireRotationMilage || 0).toLocaleString()} mi
                               </span>
-                              <div className="text-xs text-slate-500 mt-0.5">
+                              <div className="text-xs text-[#B8C0B4] mt-0.5">
                                 {((v.currentMilage || 0) - (v.lastTireRotationMilage || 0) >= 7000) ? (
-                                  <span className="text-amber-600 font-medium">⚠️ Due soon / past due</span>
+                                  <span className="text-[#D9A441] font-medium">⚠️ Due soon / past due</span>
                                 ) : (
-                                  <span className="text-emerald-600 font-medium">✓ Up to date</span>
+                                  <span className="text-[#6FAE8F] font-medium">✓ Up to date</span>
                                 )}
                               </div>
                             </div>
