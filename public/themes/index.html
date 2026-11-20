@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0A0B">
+<title>MACALOCATOR — Luxury UI/UX Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #0A0A0B; color: #F5F1E8; font-family: Inter, system-ui, sans-serif; min-height: 100vh; }
+  header { text-align: center; padding: 72px 24px 40px; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(34px, 5vw, 56px); font-weight: 700; text-wrap: balance; }
+  header h1 span { color: #C8A96A; }
+  header p { color: #97917F; max-width: 640px; margin: 14px auto 0; font-size: 15px; line-height: 1.6; text-wrap: pretty; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; max-width: 1200px; margin: 32px auto 80px; padding: 0 24px; }
+  a.card { display: block; text-decoration: none; border: 1px solid rgba(200,169,106,.25); border-radius: 18px; overflow: hidden; background: #141417; transition: transform .25s ease, border-color .25s ease; }
+  a.card:hover, a.card:focus-visible { transform: translateY(-4px); border-color: #C8A96A; outline: none; box-shadow: 0 0 0 2px rgba(200,169,106,.5); }
+  .swatch { height: 150px; display: flex; align-items: stretch; }
+  .swatch div { flex: 1; }
+  .meta { padding: 18px 20px 20px; }
+  .meta .n { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #C8A96A; font-weight: 600; }
+  .meta h2 { font-family: "Cormorant Garamond", serif; font-size: 26px; margin-top: 6px; color: #F5F1E8; }
+  .meta p { font-size: 13px; color: #97917F; margin-top: 6px; line-height: 1.5; }
+  footer { text-align: center; color: #97917F; font-size: 12px; padding: 0 24px 56px; }
+  footer a { color: #C8A96A; }
+  @media (prefers-reduced-motion: reduce) { a.card { transition: none; } a.card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>MACALOCATOR <span>— five faces of luxury</span></h1>
+  <p>Five complete UI/UX directions. Every concept shows <strong>both postures</strong>: the VIP client experience and the staff Mission Control experience — same brand, two worlds. Open one and scroll.</p>
+</header>
+<main class="grid">
+  <a class="card" href="/themes/noir-eclat.html">
+    <div class="swatch" aria-hidden="true"><div style="background:#0A0A0B"></div><div style="background:#141417"></div><div style="background:#C8A96A"></div><div style="background:#F5F1E8"></div></div>
+    <div class="meta"><div class="n">Concept 1</div><h2>Noir Éclat</h2><p>Haute-couture black &amp; champagne gold. Rolls-Royce atelier calm.</p></div>
+  </a>
+  <a class="card" href="/themes/ocean-deco.html">
+    <div class="swatch" aria-hidden="true"><div style="background:#FAF5EA"></div><div style="background:#E2725B"></div><div style="background:#2A9D8F"></div><div style="background:#152229"></div></div>
+    <div class="meta"><div class="n">Concept 2</div><h2>Ocean Drive Deco</h2><p>Miami Art Deco — cream, coral &amp; teal with sunburst geometry.</p></div>
+  </a>
+  <a class="card" href="/themes/bianco-sereno.html">
+    <div class="swatch" aria-hidden="true"><div style="background:#FFFFFF"></div><div style="background:#F7F5F2"></div><div style="background:#8A7A66"></div><div style="background:#17181A"></div></div>
+    <div class="meta"><div class="n">Concept 3</div><h2>Bianco Sereno</h2><p>Gallery-white minimalism. Aesop calm, typography-led.</p></div>
+  </a>
+  <a class="card" href="/themes/mayfair-club.html">
+    <div class="swatch" aria-hidden="true"><div style="background:#1F2B24"></div><div style="background:#2E2A24"></div><div style="background:#B08D57"></div><div style="background:#EFE9DC"></div></div>
+    <div class="meta"><div class="n">Concept 4</div><h2>Mayfair Club</h2><p>Private members’ club — racing green, brass &amp; ivory. Bentley cabin.</p></div>
+  </a>
+  <a class="card" href="/themes/neon-nocturne.html">
+    <div class="swatch" aria-hidden="true"><div style="background:#0A0E1A"></div><div style="background:linear-gradient(135deg,#22D3EE,#A78BFA)"></div><div style="background:#0D1420"></div><div style="background:#E8ECF4"></div></div>
+    <div class="meta"><div class="n">Concept 5</div><h2>Neon Nocturne</h2><p>Cyber-luxury glass — midnight Miami, cyan→violet gradient.</p></div>
+  </a>
+</main>
+<footer>Live app: <a href="https://maca-locator.vercel.app">maca-locator.vercel.app</a> · English · Español · Kreyòl</footer>
+</body>
+</html>

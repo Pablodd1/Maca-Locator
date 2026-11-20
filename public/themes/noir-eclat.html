@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="robots" content="noindex">
+<title>MACALOCATOR · Concept 1 — Noir Éclat</title>
+<meta name="description" content="Noir Éclat — a haute-couture black and champagne-gold concept for MACALOCATOR: a calm VIP client view paired with a dense Mission Control staff view.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================= tokens ================= */
+:root{
+  --bg:#0A0A0B;
+  --surface:#141417;
+  --surface-2:#1B1B1F;
+  --gold:#C8A96A;
+  --gold-hover:#D9BC82;
+  --ink:#F5F1E8;
+  --muted:#97917F;
+  --hairline:rgba(200,169,106,.25);
+  --hairline-soft:rgba(200,169,106,.13);
+  --row-line:rgba(200,169,106,.09);
+  --ok:#3FB68B;
+  --warn:#D9A441;
+  --crit:#D25B4E;
+  --crit-soft:#D68875;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+/* ================= base ================= */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 480px at 50% -140px, rgba(200,169,106,.045), transparent 70%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+h1,h2,h3,p,ul,ol{margin:0}
+h1,h2,h3{text-wrap:balance}
+ul,ol{list-style:none;padding:0}
+button{font:inherit;color:inherit}
+::selection{background:rgba(200,169,106,.3);color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+/* ================= utilities ================= */
+.wrap{max-width:1360px;margin-inline:auto;padding-inline:clamp(20px,4vw,56px)}
+.mn{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.dia{color:var(--gold);font-size:.62em;vertical-align:.18em;margin-left:.4em}
+
+/* dots + pulse (motion limited to transform/opacity) */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.dot--sm{width:7px;height:7px}
+.dot--gold{background:var(--gold);color:var(--gold)}
+.dot--ok{background:var(--ok);color:var(--ok)}
+.dot--warn{background:var(--warn);color:var(--warn)}
+.pulse{position:relative}
+.pulse::after{
+  content:"";position:absolute;inset:-3px;border-radius:50%;
+  border:1px solid currentColor;opacity:0;
+  animation:ring 2.6s cubic-bezier(.2,.55,.35,1) infinite;
+}
+@keyframes ring{
+  0%{transform:scale(.55);opacity:.85}
+  70%{transform:scale(2);opacity:0}
+  100%{transform:scale(2);opacity:0}
+}
+
+/* ================= buttons ================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  min-height:48px;padding:0 1.9rem;border-radius:3px;border:1px solid transparent;
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform .16s ease,opacity .16s ease;
+}
+.btn:active{transform:translateY(0)}
+.btn--sm{min-height:40px;padding:0 1.2rem;font-size:11px}
+.btn--primary{background:var(--gold);border-color:var(--gold);color:#141417}
+.btn--primary:hover{background:var(--gold-hover);border-color:var(--gold-hover);transform:translateY(-1px)}
+.btn--ghost{background:transparent;border-color:var(--hairline);color:rgba(245,241,232,.88)}
+.btn--ghost:hover{border-color:rgba(200,169,106,.55);color:var(--gold-hover);transform:translateY(-1px)}
+.btn--danger{background:rgba(210,91,78,.07);border-color:rgba(210,91,78,.45);color:var(--crit-soft)}
+.btn--danger:hover{border-color:rgba(210,91,78,.8);background:rgba(210,91,78,.13);transform:translateY(-1px)}
+.btn-icon{
+  width:48px;min-height:48px;padding:0;display:grid;place-items:center;flex:none;
+  background:transparent;border:1px solid var(--hairline);border-radius:3px;color:var(--gold);
+  cursor:pointer;transition:transform .16s ease,opacity .16s ease;
+}
+.btn-icon:hover{color:var(--gold-hover);border-color:rgba(200,169,106,.55);transform:translateY(-1px)}
+.btn-icon:active{transform:translateY(0)}
+
+/* ================= concept bar ================= */
+.concept-bar{background:#0D0D0F;border-bottom:1px solid var(--hairline-soft)}
+.concept-bar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:.8rem}
+.concept-bar__label{font-size:10.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.concept-bar__label em{
+  font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:13.5px;letter-spacing:.04em;text-transform:none;color:var(--gold);
+}
+.concept-bar__back{font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.concept-bar__back:hover{color:var(--gold-hover)}
+
+/* ================= section A · client ================= */
+.client__header{border-bottom:1px solid var(--hairline-soft)}
+.client__bar{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;padding-block:2.4rem 2rem}
+.wordmark{font-size:15px;font-weight:600;letter-spacing:.42em;color:var(--gold)}
+.nav ul{display:flex;gap:clamp(1.1rem,2.5vw,2.4rem);flex-wrap:wrap}
+.nav a{
+  position:relative;display:inline-block;padding-block:.35rem;
+  font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(245,241,232,.78);text-decoration:none;
+}
+.nav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:left;transition:transform .22s ease;
+}
+.nav a:hover,.nav a:focus-visible{color:var(--ink)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1)}
+.nav a[aria-current]{color:var(--gold)}
+.nav a[aria-current]::after{transform:scaleX(1)}
+.nav__emergency{color:var(--crit-soft)}
+.nav__emergency:hover,.nav__emergency:focus-visible{color:#E9A795}
+
+.client__main{display:grid;gap:1.75rem;padding-block:.5rem 2.75rem}
+
+/* card shell */
+.card{background:var(--surface);border:1px solid var(--hairline-soft);border-radius:4px}
+
+/* hero */
+.hero{padding:clamp(1.9rem,3.5vw,3.25rem);border-top-color:rgba(200,169,106,.45)}
+.hero__head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2.5rem}
+.eyebrow{display:flex;align-items:center;gap:.6rem;font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.hero__title{font-family:var(--serif);font-weight:600;font-size:clamp(2.3rem,3.6vw,3.25rem);line-height:1.05;letter-spacing:.01em;margin:.7rem 0 .95rem}
+.status{display:flex;align-items:center;gap:.6rem;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,241,232,.85)}
+.tech{display:flex;align-items:center;gap:1rem;margin-top:1.9rem;max-width:430px;background:var(--surface-2);border:1px solid var(--hairline-soft);border-radius:4px;padding:.85rem 1.1rem}
+.tech__avatar{
+  display:grid;place-items:center;width:46px;height:46px;flex:none;border-radius:50%;
+  border:1px solid var(--hairline);font-family:var(--serif);font-weight:600;font-size:16px;letter-spacing:.08em;color:var(--gold);
+}
+.tech__name{font-size:14.5px;font-weight:600}
+.tech__role{font-size:12px;color:var(--muted);margin-top:.1rem}
+.hero__eta{align-self:center;text-align:right}
+.hero__eta-label{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.eta__fig{font-family:var(--serif);font-weight:600;color:var(--gold);font-size:clamp(4.25rem,7.5vw,6.75rem);line-height:.85;white-space:nowrap;margin-top:.9rem}
+.eta__n{font-variant-numeric:tabular-nums}
+.eta__unit{font-size:.3em;font-style:italic;letter-spacing:.04em;margin-left:.2em}
+
+/* timeline */
+.steps{display:flex;margin-top:2.6rem;border-top:1px solid var(--hairline-soft);padding-top:2.4rem}
+.step{flex:1;position:relative;text-align:center}
+.step__dot{
+  display:block;width:9px;height:9px;border-radius:50%;margin:0 auto .7rem;
+  border:1px solid rgba(151,145,127,.4);background:transparent;
+}
+.step__label{font-size:10.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;line-height:1.45;color:rgba(151,145,127,.55)}
+.step::after{
+  content:"";position:absolute;top:4px;left:calc(50% + 13px);right:calc(-50% + 13px);
+  height:1px;background:var(--hairline-soft);
+}
+.step:last-child::after{display:none}
+.is-done .step__dot{background:var(--gold);border-color:var(--gold)}
+.is-done .step__label{color:var(--muted)}
+.is-done::after{background:rgba(200,169,106,.4)}
+.is-active .step__dot{width:11px;height:11px;margin-top:-1px;margin-bottom:.6rem;background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 4px rgba(200,169,106,.16)}
+.is-active .step__label{color:var(--gold);font-weight:600}
+
+/* includes / excludes */
+.hero__lists{display:grid;grid-template-columns:1fr 1fr;gap:0 2.75rem;border-top:1px solid var(--hairline-soft);margin-top:2.4rem;padding-top:2.2rem}
+.hero__lists > div + div{border-left:1px solid var(--hairline-soft);padding-left:2.75rem}
+.list-title{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.95rem}
+.incl,.excl{display:grid;gap:.65rem}
+.incl li,.excl li{position:relative;padding-left:1.3rem;font-size:14px;color:rgba(245,241,232,.88)}
+.incl li::before{content:"";position:absolute;left:2px;top:.55em;width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+.excl li{color:var(--muted)}
+.excl li::before{content:"";position:absolute;left:2px;top:.55em;width:5px;height:5px;border:1px solid rgba(151,145,127,.6);transform:rotate(45deg)}
+
+/* concierge chat */
+.chat__head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--hairline-soft)}
+.chat__title{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,232,.85)}
+.chat__status{display:flex;align-items:center;gap:.5rem;font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.chat__log{display:grid;gap:.85rem;padding:1.4rem 1.5rem}
+.bubble{max-width:72%;padding:.85rem 1.15rem;font-size:14.5px;line-height:1.55;border:1px solid}
+.bubble--user{justify-self:end;background:var(--surface-2);border-color:rgba(245,241,232,.08);border-radius:12px 12px 3px 12px;color:rgba(245,241,232,.92)}
+.bubble--concierge{justify-self:start;background:rgba(200,169,106,.06);border-color:var(--hairline-soft);border-radius:12px 12px 12px 3px;color:var(--ink)}
+.chat__form{display:flex;gap:.65rem;padding:0 1.5rem 1.4rem}
+.chat__input{
+  flex:1;min-width:0;min-height:48px;appearance:none;
+  background:var(--bg);border:1px solid var(--hairline-soft);border-radius:3px;
+  color:var(--ink);font:inherit;font-size:14px;padding:0 1rem;
+}
+.chat__input::placeholder{color:rgba(151,145,127,.75)}
+.chat__input:hover{border-color:var(--hairline)}
+.chat__input:focus-visible{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,169,106,.16)}
+
+/* quick actions + client footer */
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.client__footer{border-top:1px solid var(--hairline-soft)}
+.lang{padding:2rem 0 3rem;text-align:center;font-size:10.5px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.lang__sep{color:var(--gold);margin-inline:.9rem}
+
+/* ================= distinction banner ================= */
+.banner{border-block:1px solid var(--hairline);background:rgba(200,169,106,.03)}
+.banner__text{
+  font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:clamp(1.35rem,2.4vw,1.7rem);letter-spacing:.01em;
+  color:rgba(245,241,232,.88);text-align:center;text-wrap:balance;
+  padding:2.35rem clamp(1.25rem,5vw,4rem);
+}
+.banner__lux{color:var(--gold)}
+.banner__ops{color:var(--ink)}
+.banner__dia{font-style:normal;color:var(--gold);font-size:.5em;vertical-align:.24em;margin-inline:1.1rem;opacity:.85}
+
+/* ================= section B · staff ================= */
+.staff{padding-bottom:4.5rem}
+.staff__header{display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem;flex-wrap:wrap;padding-block:1.9rem 1.25rem;border-bottom:1px solid var(--hairline-soft);margin-bottom:14px}
+.staff__title{font-size:14.5px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--ink)}
+.staff__scope{margin-left:.9rem;font-size:11px;font-weight:500;letter-spacing:.22em;color:var(--muted)}
+.live{display:inline-flex;align-items:center;gap:.55rem;font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--ok)}
+
+.staff__main{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+
+/* stat chips */
+.stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat{display:grid;gap:.2rem;background:var(--surface);border:1px solid var(--hairline-soft);border-radius:3px;padding:.8rem 1rem}
+.stat__v{font-family:var(--mono);font-weight:600;font-size:22px;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat__v--warn{color:var(--warn)}
+.stat__l{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* panels */
+.panel{background:var(--surface);border:1px solid var(--hairline-soft);border-radius:3px}
+.panel__head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1rem;border-bottom:1px solid var(--row-line)}
+.panel__title{font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,241,232,.75)}
+.panel__meta{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.panel__flag{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--warn);font-variant-numeric:tabular-nums}
+.panel--units{grid-column:span 7}
+.panel--radio{grid-column:span 5}
+
+/* units */
+.urow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:1.25rem;padding:.68rem 1rem;border-bottom:1px solid var(--row-line)}
+.urow:last-child{border-bottom:0}
+.urow__name{font-size:13px;font-weight:500;color:rgba(245,241,232,.92)}
+.urow__status{display:inline-flex;align-items:center;gap:.5rem;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.urow__status--warn{color:var(--warn)}
+.urow__status--ok{color:var(--ok)}
+.urow__detail{justify-self:end;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* task row */
+.task{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:1rem 1.5rem;flex-wrap:wrap;padding:.95rem 1rem}
+.task__title{font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--ink)}
+.task__meta{font-size:12px;color:var(--muted);margin-top:.15rem;font-variant-numeric:tabular-nums}
+.task__actions{display:flex;gap:.6rem}
+
+/* radio */
+.radio__body{padding:1rem}
+.radio__msg{font-size:13.5px;line-height:1.55;color:rgba(245,241,232,.9);margin-bottom:1rem}
+
+/* inventory */
+.panel--inv{grid-column:1/-1}
+.irow{display:grid;grid-template-columns:minmax(0,1fr) 180px 120px;align-items:center;gap:1.25rem;padding:.7rem 1rem;border-bottom:1px solid var(--row-line)}
+.irow:last-child{border-bottom:0}
+.irow__name{font-size:13px;color:rgba(245,241,232,.92)}
+.bar{display:block;height:3px;border-radius:2px;background:rgba(245,241,232,.09);overflow:hidden}
+.bar__fill{display:block;height:100%;border-radius:2px;background:var(--ok)}
+.bar__fill--warn{background:var(--warn)}
+.irow__qty{justify-self:end;font-size:12px;color:rgba(245,241,232,.85);white-space:nowrap;font-variant-numeric:tabular-nums}
+.irow__qty .low{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--warn);margin-left:.45rem}
+
+/* ================= responsive ================= */
+@media (max-width:1060px){
+  .hero__head{grid-template-columns:1fr}
+  .hero__eta{text-align:left;border-top:1px solid var(--hairline-soft);padding-top:1.75rem}
+  .eta__fig{margin-top:.6rem}
+  .panel--units,.panel--radio{grid-column:1/-1}
+}
+@media (max-width:820px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .actions{grid-template-columns:1fr}
+  .hero__lists{grid-template-columns:1fr}
+  .hero__lists > div + div{border-left:0;border-top:1px solid var(--hairline-soft);padding-left:0;padding-top:1.75rem}
+  .task{align-items:flex-start;flex-direction:column}
+  .irow{grid-template-columns:minmax(0,1fr) auto;row-gap:.55rem}
+  .irow .bar{grid-column:1/-1}
+  .urow{grid-template-columns:minmax(0,1fr) auto;row-gap:.2rem}
+  .urow__detail{grid-column:1/-1;justify-self:start}
+  .banner__dia{margin-inline:.6rem}
+}
+@media (max-width:680px){
+  .steps{flex-wrap:wrap;gap:1.1rem 0}
+  .step{flex:1 1 33.33%}
+  .step::after{display:none}
+  .bubble{max-width:88%}
+}
+
+/* ================= reduced motion ================= */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="concept-bar">
+  <div class="wrap concept-bar__inner">
+    <p class="concept-bar__label">MACALOCATOR · Concept 1 — <em>Noir Éclat</em></p>
+    <a class="concept-bar__back" href="/themes/">← All concepts</a>
+  </div>
+</div>
+
+<main>
+  <h1 class="sr-only">MACALOCATOR — Concept 1, Noir Éclat</h1>
+
+  <!-- ============ SECTION A · CLIENT (VIP) ============ -->
+  <section class="client" aria-label="Client view — VIP">
+    <header class="client__header">
+      <div class="wrap client__bar">
+        <p class="wordmark">MACALOCATOR</p>
+        <nav class="nav" aria-label="Client primary">
+          <ul>
+            <li><a href="#" aria-current="page">Dashboard</a></li>
+            <li><a href="#">Book Service</a></li>
+            <li><a href="#">Concierge</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a class="nav__emergency" href="#">Emergency</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="wrap client__main">
+
+      <!-- Live Service Tracker -->
+      <article class="card hero" aria-labelledby="svc-title">
+        <div class="hero__head">
+          <div>
+            <p class="eyebrow"><span class="dot dot--gold pulse" aria-hidden="true"></span>Live Service Tracker</p>
+            <h2 class="hero__title" id="svc-title">Battery Diagnostic</h2>
+            <p class="status"><span class="dot dot--gold" aria-hidden="true"></span>Technician en route</p>
+            <div class="tech">
+              <p class="tech__avatar" aria-hidden="true">MD</p>
+              <div>
+                <p class="tech__name">Marco Díaz</p>
+                <p class="tech__role">Lead Technician · EV &amp; Diagnostics</p>
+              </div>
+            </div>
+          </div>
+          <div class="hero__eta">
+            <p class="hero__eta-label">Estimated arrival</p>
+            <p class="eta__fig"><span class="eta__n">12</span><span class="eta__unit">min</span></p>
+          </div>
+        </div>
+
+        <ol class="steps" aria-label="Service progress">
+          <li class="step is-done"><span class="step__dot" aria-hidden="true"></span><span class="step__label">Unassigned</span></li>
+          <li class="step is-done"><span class="step__dot" aria-hidden="true"></span><span class="step__label">Assigned</span></li>
+          <li class="step is-active" aria-current="step"><span class="step__dot" aria-hidden="true"></span><span class="step__label">En route</span></li>
+          <li class="step"><span class="step__dot" aria-hidden="true"></span><span class="step__label">Arrived</span></li>
+          <li class="step"><span class="step__dot" aria-hidden="true"></span><span class="step__label">In service</span></li>
+          <li class="step"><span class="step__dot" aria-hidden="true"></span><span class="step__label">Completed</span></li>
+        </ol>
+
+        <div class="hero__lists">
+          <div>
+            <h3 class="list-title">This service includes</h3>
+            <ul class="incl">
+              <li>12V &amp; high-voltage health scan</li>
+              <li>Charging system test</li>
+              <li>Replacement quote if failing</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="list-title">Not included</h3>
+            <ul class="excl">
+              <li>Battery replacement without approval</li>
+              <li>Traction pack opening</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Concierge chat -->
+      <article class="card chat" aria-labelledby="chat-title">
+        <div class="chat__head">
+          <h2 class="chat__title" id="chat-title">Concierge</h2>
+          <p class="chat__status"><span class="dot dot--gold dot--sm" aria-hidden="true"></span>Online</p>
+        </div>
+        <div class="chat__log">
+          <p class="bubble bubble--user" lang="es">¿Dónde está mi técnico?</p>
+          <p class="bubble bubble--concierge" lang="es">Su técnico Marco está en camino — llega en aproximadamente <span class="tnum">12</span> minutos. Le avisaremos al llegar.<span class="dia" aria-hidden="true">◆</span></p>
+        </div>
+        <div class="chat__form">
+          <label class="sr-only" for="chat-input">Message the concierge</label>
+          <input class="chat__input" id="chat-input" type="text" placeholder="Ask the concierge…" autocomplete="off">
+          <button class="btn-icon" type="button" aria-label="Send message to concierge">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M8 13V3.5M8 3.5 3.5 8M8 3.5 12.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Quick actions -->
+      <div class="actions" role="group" aria-labelledby="qa-title">
+        <h2 class="sr-only" id="qa-title">Quick actions</h2>
+        <button class="btn btn--primary" type="button">Book Service</button>
+        <button class="btn btn--danger" type="button">Emergency Help</button>
+        <button class="btn btn--ghost" type="button">Ask Concierge</button>
+      </div>
+
+    </div>
+
+    <footer class="client__footer">
+      <div class="wrap">
+        <p class="lang">English<span class="lang__sep" aria-hidden="true">·</span><span lang="es">Español</span><span class="lang__sep" aria-hidden="true">·</span><span lang="ht">Kreyòl</span></p>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ============ distinction banner ============ -->
+  <aside class="banner" aria-label="Design note">
+    <p class="banner__text"><span class="banner__dia" aria-hidden="true">◆</span>Same brand — two postures. Client: <span class="banner__lux">calm luxury</span>. Staff: <span class="banner__ops">operational clarity</span>.<span class="banner__dia" aria-hidden="true">◆</span></p>
+  </aside>
+
+  <!-- ============ SECTION B · STAFF / MISSION CONTROL ============ -->
+  <section class="staff" aria-label="Staff view — Mission Control">
+    <header class="wrap staff__header">
+      <h2 class="staff__title">Mission Control<span class="staff__scope">— MACALOCATOR Operations</span></h2>
+      <p class="live"><span class="dot dot--sm dot--ok pulse" aria-hidden="true"></span>Live</p>
+    </header>
+
+    <div class="wrap staff__main">
+
+      <!-- stat chips -->
+      <ul class="stats" aria-label="Operations stats">
+        <li class="stat"><p class="stat__v">3</p><p class="stat__l">Active tasks</p></li>
+        <li class="stat"><p class="stat__v">1/3</p><p class="stat__l">Units busy</p></li>
+        <li class="stat"><p class="stat__v stat__v--warn">2</p><p class="stat__l">Low stock</p></li>
+        <li class="stat"><p class="stat__v">47</p><p class="stat__l">Events logged</p></li>
+      </ul>
+
+      <!-- units -->
+      <section class="panel panel--units" aria-labelledby="units-title">
+        <header class="panel__head">
+          <h3 class="panel__title" id="units-title">Units</h3>
+          <span class="panel__meta">3 units</span>
+        </header>
+        <ul>
+          <li class="urow">
+            <span class="urow__name">Marco Díaz</span>
+            <span class="urow__status urow__status--warn"><span class="dot dot--sm dot--warn" aria-hidden="true"></span>en_route</span>
+            <span class="urow__detail">→ client · ETA <span class="mn">12m</span></span>
+          </li>
+          <li class="urow">
+            <span class="urow__name">Ana Villalba</span>
+            <span class="urow__status urow__status--ok"><span class="dot dot--sm dot--ok" aria-hidden="true"></span>idle</span>
+            <span class="urow__detail">Brickell</span>
+          </li>
+          <li class="urow">
+            <span class="urow__name">James Wright</span>
+            <span class="urow__status urow__status--ok"><span class="dot dot--sm dot--ok" aria-hidden="true"></span>idle</span>
+            <span class="urow__detail">Downtown</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- radio -->
+      <section class="panel panel--radio" aria-labelledby="radio-title">
+        <header class="panel__head">
+          <h3 class="panel__title" id="radio-title">Radio</h3>
+          <span class="dot dot--sm dot--warn" aria-hidden="true"></span>
+        </header>
+        <div class="radio__body">
+          <p class="radio__msg">All units: storm cell over the Beach — confirm shelter status.</p>
+          <button class="btn btn--primary btn--sm" type="button">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="1.6" fill="currentColor"/><path d="M4.9 4.9a4.4 4.4 0 0 0 0 6.2M11.1 11.1a4.4 4.4 0 0 0 0-6.2M2.8 2.8a7.4 7.4 0 0 0 0 10.4M13.2 13.2a7.4 7.4 0 0 0 0-10.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Broadcast
+          </button>
+        </div>
+      </section>
+
+      <!-- active task -->
+      <section class="panel task" aria-labelledby="task-title">
+        <div>
+          <h3 class="task__title" id="task-title">Battery Diagnostic</h3>
+          <p class="task__meta">Jasmel Acosta · <span class="mn">2021</span> Bolt EV · <span class="mn">1000</span> Brickell Plaza</p>
+        </div>
+        <div class="task__actions">
+          <button class="btn btn--primary btn--sm" type="button">Check IN</button>
+          <button class="btn btn--ghost btn--sm" type="button">Check OUT</button>
+        </div>
+      </section>
+
+      <!-- inventory -->
+      <section class="panel panel--inv" aria-labelledby="inv-title">
+        <header class="panel__head">
+          <h3 class="panel__title" id="inv-title">Inventory</h3>
+          <span class="panel__flag">2 LOW</span>
+        </header>
+        <ul>
+          <li class="irow">
+            <span class="irow__name">0W-20 Synthetic</span>
+            <span class="bar" aria-hidden="true"><span class="bar__fill" style="width:60%"></span></span>
+            <span class="irow__qty"><span class="mn">24</span> qt</span>
+          </li>
+          <li class="irow">
+            <span class="irow__name">Cabin Air Filter</span>
+            <span class="bar" aria-hidden="true"><span class="bar__fill bar__fill--warn" style="width:20%"></span></span>
+            <span class="irow__qty"><span class="mn">8</span> ea<span class="low">(LOW)</span></span>
+          </li>
+          <li class="irow">
+            <span class="irow__name">EV Coolant</span>
+            <span class="bar" aria-hidden="true"><span class="bar__fill bar__fill--warn" style="width:8%"></span></span>
+            <span class="irow__qty"><span class="mn">3</span> gal<span class="low">(LOW)</span></span>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MACALOCATOR · Concept 4 — Mayfair Club</title>
+<meta name="description" content="Mayfair Club concept for MACALOCATOR — a British private-members’ lounge for clients (racing green, brass, ivory, leather) and a charcoal mission control for staff, in one scroll.">
+<meta name="theme-color" content="#1F2B24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Sans+3:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+<style>
+/* ————— Mayfair Club · MACALOCATOR Concept 4 ————— */
+:root{
+  --green:#1F2B24;
+  --green-deep:#18211B;
+  --panel:#27362C;
+  --leather:#2E2A24;
+  --brass:#B08D57;
+  --brass-hi:#C5A06C;
+  --brass-ink:#241C10;
+  --ivory:#EFE9DC;
+  --sage:#A8B0A4;
+  --hairline:rgba(176,141,87,.28);
+  --emerald:#6FAE8F;
+  --amber:#D9A441;
+  --red:#C96A5B;
+  --charcoal:#22262B;
+  --charcoal-2:#272C33;
+  --ops-bg:#14171B;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font:400 16px/1.65 var(--sans);
+  color:var(--ivory);
+  background:
+    radial-gradient(1100px 520px at 75% -8%, rgba(176,141,87,.07), transparent 60%),
+    radial-gradient(900px 600px at -10% 108%, rgba(13,19,15,.75), transparent 65%),
+    var(--green);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--brass);color:var(--brass-ink)}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+h1,h2,h3,h4{text-wrap:balance}
+p{text-wrap:pretty}
+
+/* — utilities — */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-999px;top:0;z-index:60;background:var(--brass);color:var(--brass-ink);padding:.8em 1.3em;font-weight:700;font-size:13px;letter-spacing:.08em;text-decoration:none;border-radius:0 0 4px 0}
+.skip:focus{left:0}
+.shell{max-width:1280px;margin-inline:auto;padding-inline:clamp(20px,4vw,48px)}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.micro-label{font:600 11px/1.4 var(--sans);text-transform:uppercase;letter-spacing:.2em;color:var(--sage)}
+.middot{color:var(--brass);padding-inline:4px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px;border-radius:2px}
+
+/* — concept bar — */
+.concept-bar{background:var(--green-deep);border-bottom:1px solid var(--hairline)}
+.concept-bar__inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;min-height:54px;padding-block:8px}
+.concept-bar__brand{font:600 11px/1.5 var(--sans);text-transform:uppercase;letter-spacing:.22em;color:var(--sage)}
+.concept-bar__brand b{color:var(--ivory);font-weight:600}
+.concept-bar__back{font:600 12px/1 var(--sans);letter-spacing:.08em;color:var(--brass-hi);text-decoration:none;padding:10px 4px;transition:color .18s ease}
+.concept-bar__back:hover{color:var(--ivory)}
+
+/* — section eyebrows — */
+.eyebrow{display:flex;align-items:center;gap:16px;margin:36px 0 20px;font:600 11px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--hairline)}
+
+/* ————— SECTION A · the lounge ————— */
+
+/* Brass-ruled club header: thin rule above a thick rule */
+.club-header{position:relative;border-bottom:2px solid rgba(176,141,87,.55);padding-bottom:24px;margin-bottom:38px}
+.club-header::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:1px;background:rgba(176,141,87,.4)}
+.club-header__row{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.wordmark{font:600 clamp(26px,3vw,36px)/1.05 var(--serif);letter-spacing:.14em;color:var(--ivory)}
+.wordmark-sub{margin-top:7px;font:italic 500 14px/1 var(--serif);letter-spacing:.05em;color:var(--sage)}
+.club-nav{display:flex;gap:clamp(12px,2.2vw,28px);flex-wrap:wrap}
+.club-nav a{font:600 12.5px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:rgba(239,233,220,.85);text-decoration:none;padding:11px 2px;border-bottom:1px solid transparent;transition:color .18s ease,border-color .18s ease}
+.club-nav a:hover{color:var(--brass-hi);border-bottom-color:rgba(197,160,108,.6)}
+.club-nav a[aria-current="page"]{color:var(--brass-hi);border-bottom-color:var(--brass-hi)}
+.club-nav a.is-red{color:#D98F80}
+.club-nav a.is-red:hover{color:#EDB2A5;border-bottom-color:rgba(201,106,91,.6)}
+
+.lounge-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(300px,1fr);gap:26px;align-items:start}
+
+/* Hero — leather card in a brass frame */
+.tracker{
+  background:
+    radial-gradient(140% 120% at 85% -20%, rgba(176,141,87,.1), transparent 55%),
+    linear-gradient(165deg,#353028 0%,var(--leather) 42%,#282420 100%);
+  border:1px solid rgba(176,141,87,.55);
+  outline:1px solid rgba(176,141,87,.26);
+  outline-offset:-8px;
+  border-radius:5px;
+  padding:clamp(26px,3.2vw,42px);
+  box-shadow:0 30px 70px rgba(8,12,9,.5), inset 0 1px 0 rgba(239,233,220,.06);
+}
+.tracker__head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.tracker__title{margin-top:12px;font:600 clamp(30px,3.4vw,44px)/1.08 var(--serif);letter-spacing:.01em;color:var(--ivory)}
+.tracker__title em{font-style:italic;color:#F4EDDD}
+.tracker__tech{margin-top:12px;font:500 15px/1.5 var(--sans);color:var(--sage)}
+.tracker__tech b{color:var(--ivory);font-weight:600}
+.tracker__status{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--hairline);border-radius:999px;padding:10px 16px;background:rgba(176,141,87,.08)}
+.status-smallcaps{font:700 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--brass-hi)}
+
+.pulse{width:8px;height:8px;border-radius:50%;flex:none}
+.pulse--brass{background:var(--brass-hi);animation:pulse-brass 2.2s ease-out infinite}
+.pulse--green{background:var(--emerald);animation:pulse-green 2.2s ease-out infinite}
+@keyframes pulse-brass{0%{box-shadow:0 0 0 0 rgba(197,160,108,.5)}70%{box-shadow:0 0 0 9px rgba(197,160,108,0)}100%{box-shadow:0 0 0 0 rgba(197,160,108,0)}}
+@keyframes pulse-green{0%{box-shadow:0 0 0 0 rgba(111,174,143,.5)}70%{box-shadow:0 0 0 9px rgba(111,174,143,0)}100%{box-shadow:0 0 0 0 rgba(111,174,143,0)}}
+
+/* 6-step timeline — en route active */
+.timeline{display:flex;position:relative;margin:36px 0 34px}
+.timeline::before{content:"";position:absolute;top:6px;left:calc(100%/12);right:calc(100%/12);height:1px;background:rgba(176,141,87,.24)}
+.timeline::after{content:"";position:absolute;top:5px;left:calc(100%/12);width:calc(100%/3);height:3px;border-radius:2px;background:linear-gradient(90deg,rgba(176,141,87,.35),var(--brass))}
+.timeline li{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;z-index:1}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:transparent;border:1px solid rgba(176,141,87,.38);transition:border-color .18s ease,box-shadow .18s ease}
+.timeline li:hover .tl-dot{border-color:var(--brass-hi)}
+.timeline li.is-done .tl-dot{background:rgba(176,141,87,.55);border-color:rgba(176,141,87,.55)}
+.timeline li.is-active .tl-dot{width:14px;height:14px;margin-top:-1px;background:var(--brass-hi);border-color:var(--brass-hi);box-shadow:0 0 0 5px rgba(176,141,87,.18),0 0 18px rgba(197,160,108,.35)}
+.tl-label{font:600 10.5px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(168,176,164,.7);text-align:center}
+.timeline li.is-done .tl-label{color:var(--sage)}
+.timeline li.is-active .tl-label{color:var(--brass-hi);font-weight:700}
+
+.tracker__grid{display:grid;grid-template-columns:minmax(150px,.8fr) 1.1fr 1.1fr;gap:clamp(20px,2.6vw,38px);padding-top:28px;border-top:1px solid rgba(176,141,87,.22)}
+.eta__value{display:flex;align-items:baseline;gap:12px;margin-top:10px}
+.eta__num{font:600 clamp(46px,4.6vw,64px)/0.95 var(--serif);color:var(--brass-hi)}
+.eta__unit{font:700 12px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.eta__note{margin-top:12px;font:italic 500 13px/1.5 var(--serif);color:var(--sage)}
+.list-title{font:700 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-bottom:13px}
+.list-title--in{color:var(--brass-hi)}
+.list-title--out{color:var(--sage)}
+.svc li{position:relative;padding-left:26px;margin:10px 0;font-size:14.5px;line-height:1.5;color:rgba(239,233,220,.92)}
+.svc li::before{position:absolute;left:2px;top:0;font-size:13px}
+.svc--in li::before{content:"✓";color:var(--brass)}
+.svc--out li{color:rgba(239,233,220,.6)}
+.svc--out li::before{content:"–";color:rgba(201,106,91,.85);font-weight:700}
+
+/* Concierge chat — ivory bubbles on green */
+.chat{background:linear-gradient(180deg,#2A3A2F,var(--panel));border:1px solid var(--hairline);border-radius:5px;padding:clamp(20px,2.4vw,28px);box-shadow:0 18px 44px rgba(8,12,9,.35)}
+.chat__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:15px;border-bottom:1px solid var(--hairline);margin-bottom:18px}
+.chat__head .micro-label{color:var(--brass-hi)}
+.chat__meta{font:500 12px/1 var(--sans);color:var(--sage)}
+.chat__log{display:flex;flex-direction:column;gap:16px}
+.msg{max-width:88%}
+.msg p{font-size:14.5px;line-height:1.55}
+.bubble{display:inline-block;padding:12px 16px;text-align:left;box-shadow:0 6px 18px rgba(8,12,9,.25)}
+.msg--user{align-self:flex-end;text-align:right}
+.msg--user .bubble{background:#F3EDDE;color:#27241B;border-radius:12px 12px 3px 12px}
+.msg--bot .bubble{background:var(--ivory);color:#27241B;border-radius:12px 12px 12px 3px}
+.msg__who{display:block;font:700 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--brass-hi);margin-bottom:7px}
+.msg__time{display:block;margin-top:7px;font:500 11px/1 var(--sans);color:var(--sage)}
+.chat__composer{display:flex;gap:10px;margin-top:22px}
+.chat__input{flex:1;min-width:0;background:rgba(24,32,26,.72);border:1px solid var(--hairline);border-radius:3px;color:var(--ivory);font:400 14px/1.4 var(--sans);padding:12px 14px;transition:border-color .18s ease}
+.chat__input::placeholder{color:rgba(168,176,164,.75)}
+.chat__input:hover{border-color:rgba(176,141,87,.5)}
+.chat__send{flex:none;width:46px;height:46px;display:grid;place-items:center;background:var(--brass);color:var(--brass-ink);border:1px solid transparent;border-radius:3px;font-size:17px;line-height:1;transition:background-color .18s ease,transform .18s ease}
+.chat__send:hover{background:var(--brass-hi);transform:translateY(-1px)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 28px;border-radius:3px;border:1px solid transparent;font:700 13px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;transition:transform .18s ease,background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn--brass{background:var(--brass);color:var(--brass-ink)}
+.btn--brass:hover{background:var(--brass-hi);box-shadow:0 10px 24px rgba(176,141,87,.22)}
+.btn--red{border-color:rgba(201,106,91,.65);color:#E09A8B}
+.btn--red:hover{background:rgba(201,106,91,.14);border-color:#DA8071;color:#F0B3A7}
+.btn--ghost{border-color:rgba(176,141,87,.5);color:var(--brass-hi)}
+.btn--ghost:hover{background:rgba(176,141,87,.1);border-color:var(--brass-hi);color:#DCC093}
+.btn--red-solid{background:var(--red);color:#251109}
+.btn--red-solid:hover{background:#D88374;box-shadow:0 10px 24px rgba(201,106,91,.2)}
+.btn--outline{border-color:rgba(239,233,220,.3);color:var(--ivory)}
+.btn--outline:hover{border-color:rgba(239,233,220,.6);background:rgba(239,233,220,.06)}
+.btn--sm{min-height:40px;padding:0 18px;font-size:11.5px;letter-spacing:.13em}
+
+.actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+.actions .btn{flex:1;min-width:210px}
+
+/* Language footer */
+.lang-foot{margin-top:66px;border-top:1px solid var(--hairline)}
+.lang-foot__inner{display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;padding:22px 0 68px}
+.lang{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--sage);text-decoration:none;padding:10px 10px;border-radius:2px;transition:color .18s ease}
+.lang:hover{color:var(--ivory)}
+.lang[aria-current="true"]{color:var(--brass-hi);border-bottom:1px solid var(--brass)}
+.lang-foot .sep{color:var(--brass);font-size:12px}
+
+/* ————— distinction banner ————— */
+.divide{
+  background:linear-gradient(90deg,#9C7A47,var(--brass) 30%,var(--brass-hi) 50%,var(--brass) 70%,#9C7A47);
+  color:var(--brass-ink);
+  border-top:1px solid rgba(36,28,16,.4);
+  border-bottom:1px solid rgba(36,28,16,.4);
+  padding:32px clamp(20px,5vw,60px);
+  text-align:center;
+}
+.divide__lead{font:italic 600 clamp(21px,2.6vw,30px)/1.25 var(--serif);text-wrap:balance}
+.divide__post{margin-top:11px;font:700 12px/1.6 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(36,28,16,.82);text-wrap:balance}
+.divide__post .sep{padding-inline:14px;color:rgba(36,28,16,.55)}
+
+/* ————— SECTION B · mission control ————— */
+.ops{
+  background:
+    radial-gradient(1000px 480px at 50% -10%, rgba(176,141,87,.05), transparent 60%),
+    var(--ops-bg);
+  padding-bottom:26px;
+}
+.ops-header{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin:4px 0 26px}
+.ops-title{font:700 clamp(17px,1.8vw,21px)/1.3 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ivory)}
+.ops-title span{color:var(--sage);font-weight:600;letter-spacing:.18em}
+.live{display:inline-flex;align-items:center;gap:10px;font:700 11px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--emerald);border:1px solid rgba(111,174,143,.4);border-radius:999px;padding:10px 16px;background:rgba(111,174,143,.08)}
+
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:26px}
+.chip{background:var(--charcoal);border:1px solid var(--hairline);border-radius:4px;padding:18px 20px;display:flex;flex-direction:column;gap:7px;transition:border-color .18s ease,transform .18s ease,background-color .18s ease}
+.chip:hover{border-color:rgba(176,141,87,.55);transform:translateY(-1px);background:var(--charcoal-2)}
+.chip__num{font:700 30px/1 var(--sans);color:var(--ivory)}
+.chip__label{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--sage)}
+.chip--warn .chip__num{color:var(--amber)}
+
+.ops-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+.panel{background:var(--charcoal);border:1px solid var(--hairline);border-radius:4px;padding:20px 24px 22px;transition:border-color .18s ease}
+.panel:hover{border-color:rgba(176,141,87,.45)}
+.panel__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(176,141,87,.2)}
+.panel__title{font:700 11.5px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.panel__meta{font:600 11px/1 var(--sans);letter-spacing:.1em;color:rgba(168,176,164,.7)}
+
+/* Units — compact operational rows */
+.unit{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:13px 8px;border-bottom:1px solid rgba(239,233,220,.07);border-radius:3px;transition:background-color .18s ease}
+.unit:last-child{border-bottom:0}
+.unit:hover{background:rgba(176,141,87,.06)}
+.unit__name{font:600 15px/1.3 var(--sans);color:var(--ivory)}
+.unit__meta{font:600 12.5px/1 var(--sans);letter-spacing:.04em;color:var(--sage)}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font:600 11px/1 var(--sans);letter-spacing:.06em;border:1px solid;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill--amber{color:#E2B35C;background:rgba(217,164,65,.1);border-color:rgba(217,164,65,.4)}
+.pill--green{color:#83C2A2;background:rgba(111,174,143,.1);border-color:rgba(111,174,143,.4)}
+
+/* Task card */
+.task__title{font:700 20px/1.25 var(--sans);color:var(--ivory);margin-bottom:14px}
+.task{display:grid;grid-template-columns:96px 1fr;row-gap:10px;column-gap:14px}
+.task dt{font:600 11px/1.9 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+.task dd{font:500 14.5px/1.5 var(--sans);color:var(--ivory)}
+.task__actions{display:flex;gap:10px;margin-top:18px}
+.task__actions .btn{flex:1}
+
+/* Dispatch radio */
+.radio__body{display:flex;gap:14px;align-items:flex-start}
+.radio__icon{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid rgba(201,106,91,.45);color:#DD8B7B;display:grid;place-items:center;background:rgba(201,106,91,.1)}
+.radio__msg{font:500 15px/1.6 var(--sans);color:rgba(239,233,220,.95)}
+.radio__foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.radio__who{font:600 11px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--sage)}
+
+/* Inventory bars */
+.inv{display:flex;flex-direction:column;gap:17px}
+.inv__top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
+.inv__name{font:600 14px/1.3 var(--sans);color:var(--ivory)}
+.inv__val{font:600 13px/1 var(--sans);color:var(--sage)}
+.tag{margin-left:8px;font:700 10px/1 var(--sans);letter-spacing:.16em;padding:3px 8px;border-radius:999px;vertical-align:1px}
+.tag--amber{color:#E2B35C;background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.4)}
+.tag--red{color:#E0907F;background:rgba(201,106,91,.12);border:1px solid rgba(201,106,91,.45)}
+.bar{height:6px;border-radius:3px;background:#2B3138;overflow:hidden}
+.bar__fill{display:block;height:100%;border-radius:3px}
+.bar__fill--green{background:linear-gradient(90deg,#5E9C7F,var(--emerald))}
+.bar__fill--amber{background:linear-gradient(90deg,#B9862F,var(--amber))}
+.bar__fill--red{background:linear-gradient(90deg,#B25548,var(--red))}
+
+/* Colophon */
+.page-foot{border-top:1px solid rgba(239,233,220,.08);margin-top:26px}
+.page-foot p{text-align:center;padding:26px 0 36px;font:600 10.5px/1.7 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:rgba(168,176,164,.6)}
+
+/* ————— responsive ————— */
+@media (max-width:1120px){
+  .lounge-grid{grid-template-columns:1fr}
+  .tracker__grid{grid-template-columns:1fr 1fr}
+  .eta{grid-column:1/-1;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .eta__note{margin-top:0}
+  .ops-grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tracker__grid{grid-template-columns:1fr}
+  .actions .btn{min-width:100%}
+  .club-header__row{flex-direction:column;align-items:flex-start}
+  .tl-label{font-size:9px;letter-spacing:.07em}
+  .timeline li{gap:9px}
+  .unit{grid-template-columns:minmax(0,1fr) auto}
+  .unit .pill{order:3;grid-column:1/-1;justify-self:start;margin-top:2px}
+  .task__actions{flex-wrap:wrap}
+  .task__actions .btn{min-width:140px}
+  .radio__foot .btn{width:100%}
+}
+
+/* ————— reduced motion ————— */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="concept-bar">
+  <div class="shell concept-bar__inner">
+    <p class="concept-bar__brand"><b>MACALOCATOR</b><span class="middot">·</span>Concept 4 — Mayfair Club</p>
+    <a class="concept-bar__back" href="/themes/">← All concepts</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ═══════════ SECTION A — CLIENT (VIP) VIEW · THE LOUNGE ═══════════ -->
+  <section class="lounge" aria-labelledby="wordmark">
+    <div class="shell">
+      <p class="eyebrow">Section A — Client (VIP) view</p>
+
+      <header class="club-header">
+        <div class="club-header__row">
+          <div>
+            <h1 class="wordmark" id="wordmark">MACALOCATOR</h1>
+            <p class="wordmark-sub">Auto concierge — Miami</p>
+          </div>
+          <nav class="club-nav" aria-label="Primary">
+            <a href="#" aria-current="page">Dashboard</a>
+            <a href="#">Book Service</a>
+            <a href="#">Concierge</a>
+            <a href="#">Profile</a>
+            <a class="is-red" href="#">Emergency</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="lounge-grid">
+
+        <!-- Live Service Tracker — leather card, brass frame -->
+        <article class="tracker" aria-label="Live service tracker">
+          <header class="tracker__head">
+            <div>
+              <p class="micro-label">Live Service Tracker</p>
+              <h2 class="tracker__title">Battery <em>Diagnostic</em></h2>
+              <p class="tracker__tech"><b>Marco Díaz</b><span class="middot">·</span>EV &amp; Diagnostics</p>
+            </div>
+            <p class="tracker__status">
+              <span class="pulse pulse--brass" aria-hidden="true"></span>
+              <span class="status-smallcaps">Technician en route</span>
+            </p>
+          </header>
+
+          <ol class="timeline" aria-label="Service progress — six steps">
+            <li class="is-done"><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">Requested</span></li>
+            <li class="is-done"><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">Confirmed</span></li>
+            <li class="is-active" aria-current="step"><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">En route</span></li>
+            <li><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">On site</span></li>
+            <li><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">Testing</span></li>
+            <li><span class="tl-dot" aria-hidden="true"></span><span class="tl-label">Report</span></li>
+          </ol>
+
+          <div class="tracker__grid">
+            <div class="eta">
+              <p class="micro-label">Arrival in</p>
+              <p class="eta__value"><span class="eta__num num">12</span><span class="eta__unit">min</span></p>
+              <p class="eta__note">Tracking live · Brickell</p>
+            </div>
+            <div>
+              <h3 class="list-title list-title--in">Included</h3>
+              <ul class="svc svc--in">
+                <li>12V &amp; high-voltage health scan</li>
+                <li>Charging system test</li>
+                <li>Replacement quote if failing</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="list-title list-title--out">Not included</h3>
+              <ul class="svc svc--out">
+                <li>Battery replacement without approval</li>
+                <li>Traction pack opening</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Concierge chat -->
+        <aside class="chat" aria-label="Concierge chat">
+          <header class="chat__head">
+            <p class="micro-label">Concierge</p>
+            <p class="chat__meta">Replies in ~2 min</p>
+          </header>
+          <div class="chat__log">
+            <div class="msg msg--user">
+              <span class="bubble">¿Dónde está mi técnico?</span>
+              <span class="msg__time num">17:48</span>
+            </div>
+            <div class="msg msg--bot">
+              <span class="msg__who">Concierge</span>
+              <span class="bubble">Su técnico Marco está en camino — llega en ~12 minutos. Le avisaremos al llegar.</span>
+              <span class="msg__time num">17:49</span>
+            </div>
+          </div>
+          <div class="chat__composer">
+            <label class="sr-only" for="chat-input">Message the concierge</label>
+            <input class="chat__input" id="chat-input" type="text" placeholder="Ask the concierge…">
+            <button class="chat__send" type="button" aria-label="Send message to concierge">→</button>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="actions" role="group" aria-label="Quick actions">
+        <button class="btn btn--brass" type="button">Book Service</button>
+        <button class="btn btn--red" type="button">Emergency</button>
+        <button class="btn btn--ghost" type="button">Ask Concierge</button>
+      </div>
+    </div>
+
+    <footer class="lang-foot" aria-label="Language">
+      <div class="shell lang-foot__inner">
+        <a class="lang" href="#" aria-current="true">English</a>
+        <span class="sep">·</span>
+        <a class="lang" href="#">Español</a>
+        <span class="sep">·</span>
+        <a class="lang" href="#">Kreyòl</a>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ═══════════ distinction banner ═══════════ -->
+  <aside class="divide" aria-label="Two postures of one brand">
+    <p class="divide__lead">Same brand — two postures.</p>
+    <p class="divide__post">Client: the lounge<span class="sep">·</span>Staff: the control room</p>
+  </aside>
+
+  <!-- ═══════════ SECTION B — STAFF · MISSION CONTROL ═══════════ -->
+  <section class="ops" aria-labelledby="ops-title">
+    <div class="shell">
+      <p class="eyebrow">Section B — Staff · The control room</p>
+
+      <header class="ops-header">
+        <h2 class="ops-title" id="ops-title">Mission Control <span>— MACALOCATOR Operations</span></h2>
+        <p class="live"><span class="pulse pulse--green" aria-hidden="true"></span>Live</p>
+      </header>
+
+      <ul class="chips" aria-label="Operations summary">
+        <li class="chip"><span class="chip__num num">3</span><span class="chip__label">active</span></li>
+        <li class="chip"><span class="chip__num num">1/3</span><span class="chip__label">units busy</span></li>
+        <li class="chip chip--warn"><span class="chip__num num">2</span><span class="chip__label">low stock</span></li>
+        <li class="chip"><span class="chip__num num">47</span><span class="chip__label">events</span></li>
+      </ul>
+
+      <div class="ops-grid">
+
+        <!-- Units -->
+        <section class="panel" aria-label="Units on shift">
+          <header class="panel__head">
+            <h3 class="panel__title">Units</h3>
+            <span class="panel__meta num">3 on shift</span>
+          </header>
+          <ul>
+            <li class="unit">
+              <span class="unit__name">Marco Díaz</span>
+              <span class="pill pill--amber">en_route → client</span>
+              <span class="unit__meta num">ETA 12m</span>
+            </li>
+            <li class="unit">
+              <span class="unit__name">Ana Villalba</span>
+              <span class="pill pill--green">idle</span>
+              <span class="unit__meta">Brickell</span>
+            </li>
+            <li class="unit">
+              <span class="unit__name">James Wright</span>
+              <span class="pill pill--green">idle</span>
+              <span class="unit__meta">Downtown</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Active task -->
+        <section class="panel" aria-label="Active task">
+          <header class="panel__head">
+            <h3 class="panel__title">Active task</h3>
+            <span class="panel__meta num">18:42</span>
+          </header>
+          <h4 class="task__title">Battery Diagnostic</h4>
+          <dl class="task">
+            <dt>Client</dt><dd>Jasmel Acosta</dd>
+            <dt>Vehicle</dt><dd><span class="num">2021</span> Bolt EV</dd>
+            <dt>Location</dt><dd><span class="num">1000</span> Brickell Plaza</dd>
+          </dl>
+          <div class="task__actions">
+            <button class="btn btn--brass btn--sm" type="button">Check IN</button>
+            <button class="btn btn--outline btn--sm" type="button">Check OUT</button>
+          </div>
+        </section>
+
+        <!-- Dispatch radio -->
+        <section class="panel" aria-label="Dispatch radio">
+          <header class="panel__head">
+            <h3 class="panel__title">Dispatch radio</h3>
+            <span class="panel__meta num">Channel 2</span>
+          </header>
+          <div class="radio__body">
+            <span class="radio__icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" focusable="false">
+                <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"></circle>
+                <path d="M8.6 15.4a4.8 4.8 0 0 1 0-6.8"></path>
+                <path d="M15.4 8.6a4.8 4.8 0 0 1 0 6.8"></path>
+                <path d="M6 18a8.5 8.5 0 0 1 0-12"></path>
+                <path d="M18 6a8.5 8.5 0 0 1 0 12"></path>
+              </svg>
+            </span>
+            <p class="radio__msg">“All units: storm cell over the Beach — confirm shelter status.”</p>
+          </div>
+          <div class="radio__foot">
+            <span class="radio__who">Dispatch<span class="middot">·</span><span class="num">18:42</span></span>
+            <button class="btn btn--red-solid btn--sm" type="button">Broadcast</button>
+          </div>
+        </section>
+
+        <!-- Inventory -->
+        <section class="panel" aria-label="Van inventory">
+          <header class="panel__head">
+            <h3 class="panel__title">Inventory</h3>
+            <span class="panel__meta num">3 items</span>
+          </header>
+          <ul class="inv">
+            <li>
+              <div class="inv__top">
+                <span class="inv__name">0W-20</span>
+                <span class="inv__val num">24 qt</span>
+              </div>
+              <div class="bar" role="meter" aria-valuemin="0" aria-valuemax="30" aria-valuenow="24" aria-label="0W-20 oil, 24 quarts on hand">
+                <span class="bar__fill bar__fill--green" style="width:80%"></span>
+              </div>
+            </li>
+            <li>
+              <div class="inv__top">
+                <span class="inv__name">Cabin filter</span>
+                <span class="inv__val"><span class="num">8</span><span class="tag tag--amber">LOW</span></span>
+              </div>
+              <div class="bar" role="meter" aria-valuemin="0" aria-valuemax="30" aria-valuenow="8" aria-valuetext="8 on hand — low" aria-label="Cabin filters, low stock">
+                <span class="bar__fill bar__fill--amber" style="width:27%"></span>
+              </div>
+            </li>
+            <li>
+              <div class="inv__top">
+                <span class="inv__name">EV coolant</span>
+                <span class="inv__val"><span class="num">3</span><span class="tag tag--red">LOW</span></span>
+              </div>
+              <div class="bar" role="meter" aria-valuemin="0" aria-valuemax="30" aria-valuenow="3" aria-valuetext="3 on hand — low" aria-label="EV coolant, low stock">
+                <span class="bar__fill bar__fill--red" style="width:10%"></span>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <footer class="page-foot">
+      <p>MACALOCATOR<span class="middot">·</span>Concept 4 — Mayfair Club<span class="middot">·</span>Racing green · Brass · Ivory</p>
+    </footer>
+  </section>
+</main>
+</body>
+</html>
