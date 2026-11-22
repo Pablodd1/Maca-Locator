@@ -7,7 +7,7 @@ import { notify } from "../lib/notifyClient";
 import { speakHuman } from "@/lib/voice";
 import {
   Radar, MapPin, Package, CalendarDays, Radio, LogIn, LogOut,
-  PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send, Mic, MicOff, Volume2, VolumeX,
+  PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send, Mic, MicOff, Volume2, VolumeX, Sparkles,
 } from "lucide-react";
 
 // ─── MACALOCATOR Mission Control — administrator command center ────────────
@@ -31,6 +31,38 @@ export function MissionControl() {
   const [aiListening, setAiListening] = useState(false);
   const [aiVoiceOn, setAiVoiceOn] = useState(true);
   const recRef = useRef<any>(null);
+  // Jev System-1 dispatch suggestions: taskId → best unit
+  const [jevSuggest, setJevSuggest] = useState<Record<string, { unitId: string; label: string }>>({});
+  const [jevLoading, setJevLoading] = useState<string | null>(null);
+
+  const askJevAssign = async (taskId: string, taskType: string, taskAddress: string) => {
+    if (jevLoading) return;
+    setJevLoading(taskId);
+    try {
+      const res = await fetch("/api/jev/assign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task: { type: taskType, address: taskAddress },
+          staff: staff.map((s) => ({ id: s.id, name: s.name, specialty: s.specialty, status: s.status })),
+        }),
+      });
+      const data = await res.json();
+      if (data.unitId) {
+        setJevSuggest((prev) => ({
+          ...prev,
+          [taskId]: {
+            unitId: data.unitId,
+            label: `${data.unitName} · ${data.confidence} confidence · ${data.mode === "jev-latest" ? "Jev System-1" : "heuristic"}${data.humanReview ? " · needs review" : ""}`,
+          },
+        }));
+      }
+    } catch {
+      /* suggestion is best-effort */
+    } finally {
+      setJevLoading(null);
+    }
+  };
 
   useEffect(() => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -234,13 +266,30 @@ export function MissionControl() {
                     <div className="flex flex-wrap gap-2 items-center">
                       <select
                         className="h-9 px-2 rounded-lg border border-[#4A5548] text-xs font-bold"
-                        value={t.staffId || ""}
+                        value={t.staffId || jevSuggest[t.id]?.unitId || ""}
                         disabled={t.status === "completed"}
                         onChange={(e) => e.target.value && assignTask(t.id, e.target.value)}
                       >
                         <option value="">Assign unit…</option>
                         {staff.map((s) => <option key={s.id} value={s.id} disabled={s.status === "en_route" || s.status === "on_site"}>{s.name} — {s.specialty}{s.status !== "idle" ? ` (${s.status})` : ""}</option>)}
                       </select>
+                      {!t.staffId && t.status !== "completed" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-9 text-xs font-bold gap-1.5 border-[#B08D57] text-[#C5A06C] hover:bg-[#2E343A]"
+                          disabled={jevLoading === t.id}
+                          onClick={() => askJevAssign(t.id, t.type, t.address)}
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          {jevLoading === t.id ? "Scoring…" : "Suggest unit (Jev)"}
+                        </Button>
+                      )}
+                      {jevSuggest[t.id] && !t.staffId && (
+                        <span className="text-[10px] font-bold text-[#C5A06C] bg-[#33402F] border border-[#4A5548] rounded-full px-2.5 py-1">
+                          ◆ {jevSuggest[t.id].label}
+                        </span>
+                      )}
                       {t.status === "arrived" && (
                         <Button size="sm" className="h-9 bg-[#B08D57] hover:bg-[#C5A06C] text-xs font-bold gap-1.5" onClick={() => checkIn(t.id)}>
                           <LogIn className="w-3.5 h-3.5" /> Check IN

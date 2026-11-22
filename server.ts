@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 import { sendNotification, channelStatus, buildTwiml, type Channel } from "./lib/notify-server.ts";
+import jevAssign from "./api/jev/assign.ts";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -88,6 +89,40 @@ async function startServer() {
     res.status(result.ok ? 200 : 502).json(result);
   });
 
+  // Jev System-1 dispatch scoring — dev mirror (prod = api/jev/assign.ts)
+  app.post("/api/jev/assign", (req, res) => jevAssign(req as any, res as any));
+
+  // Jev triage — dev mirror of api/sms/webhook.ts jevTriage()
+  app.post("/api/jev/triage", async (req, res) => {
+    const { text } = req.body || {};
+    if (!text || !process.env.TYPESAFE_API_KEY) {
+      res.json({ intent: null, mode: "fallback" });
+      return;
+    }
+    try {
+      const { TypeSafeClient, choice } = await import("@typesafe-ai/sdk");
+      const client = new TypeSafeClient({ apiKey: process.env.TYPESAFE_API_KEY });
+      const r = await client.systemOne({
+        state: {
+          service: "MACALOCATOR two-way SMS (luxury mobile auto service, Miami). Messages may be EN/ES/Kreyòl.",
+          inbound_message: String(text).slice(0, 300),
+        },
+        questions: {
+          intent: choice("What is the client's intent?", {
+            emergency: "urgent roadside help now", complaint: "unhappy / service problem",
+            reschedule: "change appointment", confirm: "confirming appointment", question: "general question",
+          }),
+          severity: choice("How urgent?", { low: "routine", normal: "today", high: "soon", urgent: "immediately" }),
+          escalate: choice("Page staff to respond personally now?", { yes: "page staff", no: "auto-reply fine" }),
+        },
+      });
+      const a = (r as any).answers;
+      res.json({ intent: a.intent?.choice, severity: a.severity?.choice, escalate: a.escalate?.choice === "yes", mode: "jev-latest" });
+    } catch (e: any) {
+      res.json({ intent: null, error: e?.message, mode: "fallback" });
+    }
+  });
+
   // Two-way SMS webhook (Twilio) — dev mirror of api/sms/webhook.ts
   app.post("/api/sms/webhook", express.urlencoded({ extended: false }), async (req, res) => {
     const body = (req.body?.Body as string) || (req.query.Body as string) || "";
@@ -106,8 +141,24 @@ async function startServer() {
       reply = "MACALOCATOR: Of course — our concierge will call you shortly to reschedule. / Con gusto: le llamaremos para reprogramar.";
       intent = "reschedule";
     } else {
-      reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: le responderemos pronto.";
-      intent = "free-text (needs human)";
+      intent = "question";
+      try {
+        const r = await fetch(`http://localhost:${PORT}/api/jev/triage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: body }),
+        }).then((x) => x.json());
+        if (r && r.intent) intent = r.intent;
+        if (intent === "emergency") {
+          reply = "MACALOCATOR: Help is being arranged NOW — our response team is being paged this second. / Ayuda en camino AHORA.";
+        } else if (intent === "complaint") {
+          reply = "MACALOCATOR: Thank you for telling us — a senior concierge will reach out shortly. / Un conserje senior le contactará en breve.";
+        } else {
+          reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: le responderemos pronto.";
+        }
+      } catch {
+        reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: le responderemos pronto.";
+      }
     }
     console.log(`[sms-webhook] ${from}: "${body}" → ${intent}`);
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {

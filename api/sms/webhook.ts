@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { TypeSafeClient, choice } from "@typesafe-ai/sdk";
 
 // Two-way SMS webhook for Twilio (configure as the messaging webhook:
 // https://maca-locator.vercel.app/api/sms/webhook — method POST).
@@ -56,6 +57,46 @@ function replyFor(body: string): string | null {
   return null; // unknown → treat as free-text client message
 }
 
+function describeCanned(reply: string): string {
+  if (reply.startsWith("MACALOCATOR: Confirmed")) return "confirm";
+  if (reply.includes("reschedule")) return "reschedule";
+  if (reply.includes("no further automated")) return "stop";
+  return "confirm";
+}
+
+// Jev System-1 triage for free-text inbound messages.
+async function jevTriage(text: string): Promise<{ intent: string; severity: string; escalate: boolean } | null> {
+  if (!process.env.TYPESAFE_API_KEY) return null;
+  try {
+    const client = new TypeSafeClient({ apiKey: process.env.TYPESAFE_API_KEY });
+    const r = await client.systemOne({
+      state: {
+        service: "MACALOCATOR two-way SMS (luxury mobile auto service, Miami). Client messages may be English, Spanish, or Haitian Creole.",
+        inbound_message: text,
+      },
+      questions: {
+        intent: choice("What is the client's intent?", {
+          emergency: "needs urgent roadside help now",
+          complaint: "unhappy / service problem",
+          reschedule: "wants to change an appointment",
+          confirm: "confirming an appointment",
+          question: "general question",
+        }),
+        severity: choice("How urgent is this message?", { low: "routine", normal: "today", high: "soon", urgent: "immediately" }),
+        escalate: choice("Should staff be paged to respond personally right away?", { yes: "page staff now", no: "auto-reply is fine" }),
+      },
+    });
+    const a = r.answers as any;
+    return {
+      intent: a.intent?.choice || "question",
+      severity: a.severity?.choice || "normal",
+      escalate: a.escalate?.choice === "yes",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Twilio posts application/x-www-form-urlencoded
   const body = (req.body && req.body.Body) || (req.query.Body as string) || "";
@@ -69,19 +110,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const canned = replyFor(body);
   const live = channelStatus().sms;
 
-  // Always brief the staff channel about inbound client activity
-  await telegramAlert(
-    canned
-      ? `📲 MACALOCATOR — ${from} replied "${body}" → auto-answer sent.`
-      : `📲 MACALOCATOR — client message from ${from}: "${body}" — needs a human reply.`
-  );
+  // Free-text → Jev System-1 triage: emergency / complaint / reschedule /
+  // question + severity + escalate. Emergencies page the staff channel
+  // immediately; complaints ping for a human reply. Fallback: gentle
+  // concierge acknowledge.
+  let intent = canned ? describeCanned(canned) : "question";
+  let severity = canned ? "normal" : "unknown";
+  let escalate = false;
 
   let reply: string;
   if (canned) {
     reply = canned;
   } else {
-    reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: nuestro equipo le responderá pronto.";
+    const triage = await jevTriage(body);
+    if (triage) {
+      intent = triage.intent;
+      severity = triage.severity;
+      escalate = triage.escalate;
+    }
+    if (intent === "emergency") {
+      reply = "MACALOCATOR: Help is being arranged NOW — stay safe and with your vehicle if possible. Our response team is being paged this second. / Ayuda en camino AHORA — manténgase seguro.";
+    } else if (intent === "complaint") {
+      reply = "MACALOCATOR: Thank you for telling us — a senior concierge is reviewing your case personally and will reach out shortly. / Gracias — un conserje senior le contactará en breve.";
+    } else if (intent === "reschedule") {
+      reply = "MACALOCATOR: Of course — our concierge will call you shortly to reschedule. / Con gusto: le llamaremos para reprogramar.";
+    } else {
+      reply = "MACALOCATOR: Thank you — our concierge team has your message and will reply shortly. / Gracias: nuestro equipo le responderá pronto.";
+    }
   }
+
+  // Always brief the staff channel; emergencies page them
+  await telegramAlert(
+    escalate || intent === "emergency"
+      ? `🚨 MACALOCATOR URGENT (${severity}) — ${from}: "${body}" → ${intent}. REPLY PERSONALLY NOW.`
+      : `📲 MACALOCATOR — ${from} replied "${body}" → ${intent} (${severity}), auto-answer sent.`
+  );
 
   if (live) {
     try {
