@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 import { sendNotification, channelStatus, buildTwiml, type Channel } from "./lib/notify-server.ts";
 import jevAssign from "./api/jev/assign.ts";
+import jevInventory from "./api/jev/inventory.ts";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -25,14 +26,76 @@ async function startServer() {
         "You are the MACALOCATOR Mission Control AI — the operations assistant inside the administrator panel of a luxury mobile auto service in Miami & Miami Beach. You serve the dispatcher/owner: analyze live operations data provided in LIVE CONTEXT and answer with crisp, executive briefings (status, exceptions, staffing, inventory risks, what to do next). Reply in the administrator's language (default English; Spanish if they write Spanish). Be direct and numbers-first; cite the context you were given; if data is missing, say what to log or check.";
       const system = role === "mission_control" ? adminPersona : basePersona;
       const contextBlock = context ? `\n\nLIVE CONTEXT (authoritative, use it):\n${context}` : "";
+
+      // Jev System-1 pre-router (client role) — mirror of api/chat.ts
+      let jevMeta: any = null;
+      let emergencyOverride: string | null = null;
+      let moodInstruction = "";
+      if (role === "client" && process.env.TYPESAFE_API_KEY) {
+        try {
+          const lastUser = [...(messages || [])].reverse().find((m: any) => m.role === "user")?.parts?.[0]?.text || "";
+          if (lastUser) {
+            const { TypeSafeClient, choice } = await import("@typesafe-ai/sdk");
+            const jc = new TypeSafeClient({ apiKey: process.env.TYPESAFE_API_KEY });
+            const jr = await jc.systemOne({
+              state: {
+                service: "MACALOCATOR VIP concierge chat (luxury mobile auto service, Miami). Messages may be EN/ES/Kreyòl.",
+                inbound_message: String(lastUser).slice(0, 300),
+              },
+              questions: {
+                intent: choice("What does the client need right now?", {
+                  emergency: "urgent roadside danger or breakdown now",
+                  booking: "book or schedule a service",
+                  status: "asking about their service/technician",
+                  general: "anything else",
+                }),
+                sentiment: choice("How does the client feel?", {
+                  calm: "fine",
+                  dissatisfied: "annoyed or unhappy",
+                  upset: "angry or very frustrated",
+                }),
+                escalate: choice("Should staff be pinged to contact the client personally right away?", { yes: "ping staff", no: "not needed" }),
+              },
+            });
+            const ja: any = (jr as any).answers;
+            jevMeta = { intent: ja.intent?.choice, sentiment: ja.sentiment?.choice };
+            const pingStaff = ja.escalate?.choice === "yes" || jevMeta.sentiment === "upset";
+            if (jevMeta.intent === "emergency") {
+              emergencyOverride =
+                "🚨 MACALOCATOR Emergency Protocol — help is being arranged NOW.\n\nStay safe: if there is smoke, fire, or you are in a traffic lane, move away from the vehicle first. Our response team has been paged this second and a unit is being dispatched to your location.\n\nOpen the Emergency tab for one-tap dispatch with your GPS.\n\n🚨 Protocolo de Emergencia — la ayuda va en camino AHORA. Si hay humo o fuego, aléjese del vehículo. Abra la pestaña Emergencia para enviar su ubicación con un toque.";
+            } else if (pingStaff) {
+              moodInstruction = "\n\nLIVE CLIENT MOOD (from triage): this client is unhappy. Lead with a sincere acknowledgment, take ownership, offer a concrete fix and a personal callback from a senior concierge.";
+            } else if (jevMeta.sentiment === "dissatisfied") {
+              moodInstruction = "\n\nLIVE CLIENT MOOD (from triage): slightly annoyed — be extra warm and efficient.";
+            }
+            if ((jevMeta.intent === "emergency" || pingStaff) && process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+              fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  chat_id: process.env.TELEGRAM_CHAT_ID,
+                  text: jevMeta.intent === "emergency"
+                    ? `🚨 MACALOCATOR CONCIERGE — EMERGENCY in chat: "${String(lastUser).slice(0, 120)}" — unit dispatch requested`
+                    : `⚠️ MACALOCATOR CONCIERGE — unhappy VIP in chat (${jevMeta.sentiment}): "${String(lastUser).slice(0, 120)}" — personal outreach recommended`,
+                }),
+              }).catch(() => {});
+            }
+          }
+        } catch { /* Jev optional — Gemini proceeds */ }
+      }
+      if (emergencyOverride) {
+        res.json({ text: emergencyOverride, jev: jevMeta });
+        return;
+      }
+
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
         contents: messages,
         config: {
-          systemInstruction: system + contextBlock,
+          systemInstruction: system + moodInstruction + contextBlock,
         },
       });
-      res.json({ text: response.text });
+      res.json({ text: response.text, jev: jevMeta });
     } catch (error) {
       console.error("Gemini API Error:", error);
       res.status(500).json({ error: "Failed to generate content" });
@@ -91,6 +154,9 @@ async function startServer() {
 
   // Jev System-1 dispatch scoring — dev mirror (prod = api/jev/assign.ts)
   app.post("/api/jev/assign", (req, res) => jevAssign(req as any, res as any));
+
+  // Jev inventory judgment — dev mirror (prod = api/jev/inventory.ts)
+  app.post("/api/jev/inventory", (req, res) => jevInventory(req as any, res as any));
 
   // Jev triage — dev mirror of api/sms/webhook.ts jevTriage()
   app.post("/api/jev/triage", async (req, res) => {

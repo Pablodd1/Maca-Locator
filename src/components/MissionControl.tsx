@@ -34,6 +34,26 @@ export function MissionControl() {
   // Jev System-1 dispatch suggestions: taskId → best unit
   const [jevSuggest, setJevSuggest] = useState<Record<string, { unitId: string; label: string }>>({});
   const [jevLoading, setJevLoading] = useState<string | null>(null);
+  // Jev inventory verdicts
+  const [jevStock, setJevStock] = useState<{ mode: string; verdicts: Array<{ id: string; name: string; restockNow: boolean; urgency: string; orderQty: number; note: string; mode: string }> } | null>(null);
+  const [jevStockLoading, setJevStockLoading] = useState(false);
+
+  const askJevInventory = async () => {
+    if (jevStockLoading) return;
+    setJevStockLoading(true);
+    try {
+      const res = await fetch("/api/jev/inventory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: inventory }),
+      });
+      setJevStock(await res.json());
+    } catch {
+      /* best-effort */
+    } finally {
+      setJevStockLoading(false);
+    }
+  };
 
   const askJevAssign = async (taskId: string, taskType: string, taskAddress: string) => {
     if (jevLoading) return;
@@ -385,13 +405,44 @@ export function MissionControl() {
               <CardTitle className="text-sm font-bold flex items-center gap-1.5 text-[#C96A5B]"><ShoppingCart className="w-4 h-4" /> Shopping list</CardTitle>
               <CardDescription className="text-xs">Auto-built from items at/below threshold. / Lista de compras automática.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               {lowStock.length === 0 ? (
                 <p className="text-xs text-[#6FAE8F] font-bold">✓ All stocked — nothing to buy.</p>
               ) : (
                 <ul className="text-xs space-y-1.5 text-[#DCD8CC]">
                   {lowStock.map((i) => <li key={i.id} className="flex justify-between"><span>{i.name}</span><span className="font-bold text-[#C96A5B]">{i.qty}/{i.threshold}</span></li>)}
                 </ul>
+              )}
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-full h-9 text-xs font-bold gap-1.5 border-[#B08D57] text-[#C5A06C] hover:bg-[#2E343A]"
+                disabled={jevStockLoading}
+                onClick={askJevInventory}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                {jevStockLoading ? "Judging…" : "Jev restock review"}
+              </Button>
+              {jevStock && (
+                <div className="space-y-1.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8C0B4]">
+                    {jevStock.mode === "jev-latest" ? "Jev System-1 verdicts" : "Heuristic verdicts"}
+                  </p>
+                  {jevStock.verdicts.filter((v) => v.restockNow).map((v) => (
+                    <div key={v.id} className="flex items-center justify-between gap-2 bg-[#33402F] border border-[#4A5548] rounded-lg px-2.5 py-1.5">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-[#DCD8CC] truncate">{v.name}</p>
+                        <p className="text-[10px] text-[#B8C0B4]">{v.note}</p>
+                      </div>
+                      <Button size="sm" className="h-7 shrink-0 bg-[#B08D57] hover:bg-[#C5A06C] text-[#241C10] text-[10px] font-extrabold" onClick={() => restock(v.id, v.orderQty)}>
+                        Order {v.orderQty}
+                      </Button>
+                    </div>
+                  ))}
+                  {jevStock.verdicts.every((v) => !v.restockNow) && (
+                    <p className="text-xs text-[#6FAE8F] font-bold">✓ Jev: nothing needs ordering today.</p>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>
