@@ -25,7 +25,7 @@ async function streamToJson(stream: ReadableStream<Uint8Array>): Promise<any> {
 }
 
 type Booking = { id: string; type: string; date: string; time: string; status: string; vehicleId?: string };
-type NotifyResult = { channel: string; mode: "live" | "demo"; ok: boolean; to: string; detail: string };
+type NotifyResult = { channel: string; mode: "live" | "demo" | "jev-latest"; ok: boolean; to: string; detail: string };
 
 function channelStatus() {
   return {
@@ -135,7 +135,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const clientPhone = (client.clientPhone || process.env.NOTIFICATION_CLIENT_PHONE || "").replace(/[^\d+]/g, "");
     const clientName = client.clientName || "VIP client";
     const results: NotifyResult[] = [];
+
+    // Jev System-1 skip-logic: per booking, is a reminder worth sending?
+    // (e.g. already confirmed → lighter touch; demo fallback = remind all)
+    const jevRemind = async (b: Booking): Promise<boolean> => {
+      if (!process.env.TYPESAFE_API_KEY) return true;
+      try {
+        const { TypeSafeClient, choice } = await import("@typesafe-ai/sdk");
+        const jc = new TypeSafeClient({ apiKey: process.env.TYPESAFE_API_KEY });
+        const jr = await jc.systemOne({
+          state: {
+            service: "MACALOCATOR morning reminder sweep (luxury auto service, Miami). A same-day morning reminder is the standard, expected touch for upcoming services.",
+            booking: `${b.type} on ${b.date} at ${b.time}`,
+            booking_status: b.status,
+            hours_until: Math.round((new Date(`${b.date}T00:00:00`).getTime() - now) / 36e5),
+          },
+          questions: {
+            remind: choice("Is this reminder useful, or clearly redundant? (Redundant = service already in progress or already completed earlier today.)", {
+              yes: "send the reminder",
+              no: "clearly redundant — skip",
+            }),
+          },
+        });
+        return (jr as any).answers?.remind?.choice === "yes";
+      } catch {
+        return true; // Jev optional — default to reminding
+      }
+    };
+
+    let skipped = 0;
     for (const b of soon) {
+      const should = await jevRemind(b);
+      if (!should) {
+        skipped++;
+        results.push({ channel: "none", mode: "jev-latest", ok: true, to: clientName, detail: `skipped reminder for ${b.type} (Jev: unnecessary)` });
+        continue;
+      }
       const msg = reminderEn(b, "client vehicle");
       const staff = staffBrief(b, clientName);
       const batch = await Promise.all([
@@ -150,14 +185,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const report = {
       ranAt: new Date().toISOString(),
       bookingsScanned: bookings.length,
-      reminded: soon.length,
+      reminded: soon.length - skipped,
+      skippedByJev: skipped,
       channels: channelStatus(),
       live: results.filter((x) => x.mode === "live").length,
       demo: results.filter((x) => x.mode === "demo").length,
       failed: results.filter((x) => !x.ok).length,
       detail: results,
     };
-    await put(LAST_RUN, JSON.stringify({ ranAt: report.ranAt, reminded: soon.length, live: report.live, failed: report.failed }), { access: "private", allowOverwrite: true });
+    await put(LAST_RUN, JSON.stringify({ ranAt: report.ranAt, reminded: report.reminded, skippedByJev: skipped, live: report.live, failed: report.failed }), { access: "private", allowOverwrite: true });
     return res.status(200).json(report);
   } catch (err: any) {
     return res.status(502).json({ error: `Sweep error: ${err?.message || err}` });

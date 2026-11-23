@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,30 @@ export function ChatView() {
     }
   ]);
   const [input, setInput] = useState('');
+  // Jev emergency verdict → SOS action bar (Open Emergency / GPS dispatch)
+  const [sosActive, setSosActive] = useState(false);
+  const [gpsSent, setGpsSent] = useState(false);
+
+  const sendGpsDispatch = () => {
+    const send = (coords?: string) => {
+      fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          channel: "telegram",
+          message: `🚨 MACALOCATOR SOS — ${user?.name || "VIP client"} requested emergency dispatch from the concierge chat.${coords ? ` GPS: ${coords}` : " GPS unavailable — call client."} / Emergencia activada desde el chat.`,
+        }),
+      }).catch(() => {});
+      setGpsSent(true);
+    };
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (p) => send(`${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}`),
+        () => send(undefined),
+        { timeout: 8000 }
+      );
+    } else send(undefined);
+  };
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [speakResponses, setSpeakResponses] = useState(true);
@@ -128,6 +153,8 @@ export function ChatView() {
       const data = await response.json();
       if (!response.ok || !data.text) throw new Error('AI concierge unavailable');
       setMessages(prev => [...prev, { id: Date.now().toString(), role: 'model', text: data.text }]);
+      // Jev pre-router verdict: an emergency triggers the SOS action bar
+      if (data.jev?.intent === "emergency") setSosActive(true);
     } catch (error) {
       console.warn('[MACALOCATOR] Gemini API unavailable — demo concierge engaged.', error);
       // Demo mode: canned concierge so the showcase never dead-ends without a GEMINI_API_KEY.
@@ -169,6 +196,34 @@ export function ChatView() {
           Interactive chat assistant with fully responsive text & natural voice synthesis. Ask about on-site tune-ups, tire replacements, or battery calibrations.
         </CardDescription>
       </CardHeader>
+
+      {/* Jev SOS action bar — appears when the pre-router detects an emergency */}
+      {sosActive && (
+        <div className="bg-[#3A2F2C] border-b border-[#5A4A44] px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#C96A5B] animate-pulse shrink-0" />
+            <p className="text-xs font-bold text-[#E5B95C] leading-snug">
+              Emergency mode active — dispatch is standing by. · Emergencia activa — envío disponible.
+            </p>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={sendGpsDispatch}
+              disabled={gpsSent}
+              className="px-3 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#C96A5B] hover:bg-[#D57F70] text-white disabled:opacity-60"
+            >
+              {gpsSent ? "✓ Dispatch notified" : "Send my GPS now"}
+            </button>
+            <Link
+              to="/emergency"
+              className="px-3 py-1.5 rounded-lg text-[11px] font-extrabold border border-[#C96A5B] text-[#E5B95C] hover:bg-[#3A2F2C]/60"
+            >
+              Open Emergency →
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Doorstep Alert Reminder Bar */}
       <div className="bg-[#33402F]/70 border-b border-[#4A5548]/60 px-4 py-2 flex items-center gap-2">

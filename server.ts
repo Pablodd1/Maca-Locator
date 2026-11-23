@@ -258,6 +258,7 @@ async function startServer() {
     if (clientName || clientPhone) localClient = { clientName, clientPhone };
     res.json({ ok: true, count: localBookings.length, storedAt: new Date().toISOString() });
   });
+  let lastSweepReport: any = null;
   app.all("/api/cron/morning-sweep", async (_req, res) => {
     const now = Date.now();
     const soon = localBookings.filter((b) => {
@@ -267,7 +268,30 @@ async function startServer() {
     });
     const clientPhone = (localClient.clientPhone || "").replace(/[^\d+]/g, "");
     const detail: any[] = [];
+    let skipped = 0;
     for (const b of soon) {
+      // Jev skip-logic — mirror of api/cron/morning-sweep.ts
+      let should = true;
+      if (process.env.TYPESAFE_API_KEY) {
+        try {
+          const { TypeSafeClient, choice } = await import("@typesafe-ai/sdk");
+          const jc = new TypeSafeClient({ apiKey: process.env.TYPESAFE_API_KEY });
+          const jr = await jc.systemOne({
+          state: {
+            service: "MACALOCATOR morning reminder sweep (luxury auto service, Miami). A same-day morning reminder is the standard, expected touch for upcoming services.",
+            booking: `${b.type} on ${b.date} at ${b.time}`,
+            booking_status: b.status,
+          },
+            questions: { remind: choice("Is this reminder useful, or clearly redundant? (Redundant = service already in progress or already completed earlier today.)", { yes: "send the reminder", no: "clearly redundant — skip" }) },
+          });
+          should = (jr as any).answers?.remind?.choice === "yes";
+        } catch { should = true; }
+      }
+      if (!should) {
+        skipped++;
+        detail.push({ channel: "none", mode: "jev-latest", ok: true, to: localClient.clientName || "", detail: `skipped ${b.type} (Jev: unnecessary)` });
+        continue;
+      }
       const msg = `MACALOCATOR: Reminder — ${b.type} on ${b.date} at ${b.time}. Reply 1 to confirm or 2 to reschedule.`;
       const staff = `📋 MACALOCATOR Morning Sweep — ${b.type} · ${b.date} ${b.time} · Client: ${localClient.clientName || "VIP client"}.`;
       detail.push(...await Promise.all([
@@ -277,8 +301,10 @@ async function startServer() {
         sendNotification({ channel: "telegram", to: "", message: staff }),
       ]));
     }
-    res.json({ ranAt: new Date().toISOString(), bookingsScanned: localBookings.length, reminded: soon.length, detail });
+    lastSweepReport = { ranAt: new Date().toISOString(), reminded: soon.length - skipped, skippedByJev: skipped };
+    res.json({ ranAt: lastSweepReport.ranAt, bookingsScanned: localBookings.length, reminded: soon.length - skipped, skippedByJev: skipped, detail });
   });
+  app.get("/api/last-sweep", (_req, res) => res.json(lastSweepReport || { ranAt: null }));
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

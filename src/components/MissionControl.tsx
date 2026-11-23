@@ -37,6 +37,12 @@ export function MissionControl() {
   // Jev inventory verdicts
   const [jevStock, setJevStock] = useState<{ mode: string; verdicts: Array<{ id: string; name: string; restockNow: boolean; urgency: string; orderQty: number; note: string; mode: string }> } | null>(null);
   const [jevStockLoading, setJevStockLoading] = useState(false);
+  // Last morning-sweep report
+  const [lastSweep, setLastSweep] = useState<{ ranAt: string; reminded?: number; skippedByJev?: number } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/last-sweep").then((r) => r.json()).then(setLastSweep).catch(() => {});
+  }, []);
 
   const askJevInventory = async () => {
     if (jevStockLoading) return;
@@ -185,6 +191,11 @@ export function MissionControl() {
             <Stat label="Units busy" value={`${busy}/${staff.length}`} tone="text-[#C5A06C]" />
             <Stat label="Low stock" value={lowStock.length} tone={lowStock.length ? "text-[#C96A5B]" : "text-[#8FC7AA]"} />
             <Stat label="Events logged" value={ledger.length} tone="text-[#C5CBBF]" />
+            <Stat
+              label="Morning sweep"
+              value={lastSweep?.ranAt ? `${new Date(lastSweep.ranAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}${lastSweep.skippedByJev ? ` ·${lastSweep.skippedByJev} skipped` : ""}` : "—"}
+              tone={lastSweep?.ranAt ? "text-[#6FAE8F]" : "text-[#8B93A7]"}
+            />
           </div>
         </div>
         <div className="flex gap-1 mt-4 overflow-x-auto whitespace-nowrap">
