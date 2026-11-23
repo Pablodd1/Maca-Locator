@@ -43,11 +43,11 @@ function LiveServiceTracker() {
     if (!liveTask || liveTask.status === lastSpokenRef.current) return;
     lastSpokenRef.current = liveTask.status;
     const lines: Record<string, string> = {
-      assigned: "Good news — your technician is assigned and preparing to depart.",
-      en_route: `Your MACALOCATOR technician is on the way${eta != null ? `, about ${eta} minutes out` : ""}. You can watch the live map.`,
-      arrived: "Your technician has arrived and is ready to begin.",
-      in_service: "Your service is now in progress. We'll let you know the moment it's done.",
-      completed: "Your service is complete — thank you for choosing MACALOCATOR.",
+      assigned: "Good news — your technician's assigned and getting ready to head out.",
+      en_route: `Your technician's on the way${eta != null ? `, about ${eta} minutes out` : ""} — you can watch the map live.`,
+      arrived: "Your technician's just arrived and ready when you are.",
+      in_service: "We're working on your car now — I'll let you know the moment it's done.",
+      completed: "All done — your car's ready. Thanks for choosing MACALOCATOR.",
     };
     if (lines[liveTask.status]) speakHuman(lines[liveTask.status], "en");
     if (lines[liveTask.status]) {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldCheck, Send, User, LifeBuoy, Mic, MicOff, Volume2, VolumeX, Sparkles, MapPin } from "lucide-react";
-import { speakHuman } from "@/lib/voice";
+import { speakHuman, speakConversational } from "@/lib/voice";
 import { useOps, taskStatusLabel } from "../context/OpsContext";
 import { useAppState } from "../context/AppContext";
 
@@ -111,11 +111,9 @@ export function ChatView() {
 
   const speakText = (text: string) => {
     if (!speakResponses) return;
-    // The multilingual greeting is spoken in English only; regular replies are
-    // spoken in whichever language the concierge answered with.
-    const englishLine = text.split("\n").find((l) => /[a-z]/i.test(l)) || text;
-    const isMultilingualGreeting = text.includes("Byenvini");
-    speakHuman(isMultilingualGreeting ? englishLine : text);
+    // Conversational readback: the first couple of sentences, contractions,
+    // no markdown — what a person would say, not read.
+    speakConversational(text, undefined, 2);
   };
 
   const startListening = () => {

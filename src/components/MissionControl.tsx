@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAppState } from "../context/AppContext";
 import { useOps, taskStatusLabel, STATUS_ORDER, type TaskStatus } from "../context/OpsContext";
 import { notify } from "../lib/notifyClient";
-import { speakHuman } from "@/lib/voice";
+import { speakHuman, speakConversational } from "@/lib/voice";
 import {
   Radar, MapPin, Package, CalendarDays, Radio, LogIn, LogOut,
   PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send, Mic, MicOff, Volume2, VolumeX, Sparkles,
@@ -157,7 +157,7 @@ export function MissionControl() {
       const data = await res.json();
       const reply = data.text || "Mission AI unavailable — check server logs.";
       setAiReply(reply);
-      if (aiVoiceOn) speakHuman(reply);
+      if (aiVoiceOn) speakConversational(reply, undefined, 2);
     } catch {
       setAiReply("Mission AI unreachable (offline demo mode).");
     } finally {
