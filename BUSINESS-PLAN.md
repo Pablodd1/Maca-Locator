@@ -1,105 +1,231 @@
-# MACALOCATOR — Business Plan & Operating Model
+# MACALOCATOR — Business Plan
 
-*Luxury mobile auto service · Miami & Miami Beach · prepared 2026-11-23*
+*Luxury mobile auto service · Miami & Miami Beach · revised 2026-11-24*
 
----
+This replaces the first version (2026-11-23), which contained wrong figures. Section 10 lists what changed.
 
-## 1. Use-case review (fresh eyes)
+Every number below is printed by `npm run plan:figures` from `src/lib/businessModel.ts`, the same model behind **Mission Control → Business Plan**. `npm test` checks the arithmetic. Change an input on that tab and the plan moves with it.
 
-**What MACALOCATOR is today:** a concierge-grade, mobile-only auto service platform with (a) a VIP client app — live service tracker with technician GPS + ETA, trilingual (EN/ES/Kreyòl) AI concierge with a *human* voice, smart reminders across SMS/WhatsApp/voice-call/email, one-tap emergency dispatch with GPS; and (b) a Mission Control console — task manager with check-in/out, staff radio, inventory with Jev restock judgments, CRM capture (address/GPS/insurance/language/marketing opt-in) with export, and a System-1 decision layer (Jev) that watches routes, scores dispatches, triages SMS, routes chat emergencies, and skips redundant reminders.
+Each input carries one of three evidence levels:
 
-**Verdict:** the differentiation is real and rare — nobody in the mobile-mechanic space combines *membership + luxury positioning + trilingual concierge AI + live dispatch transparency*. The gap is that today the operations run on a demo simulation engine; going live needs the staffing/fleet/inventory below and provider keys for notifications.
+- **Verified** — taken from a primary source that was opened. Listed in Section 11.
+- **Reported** — appears in widely published secondary sources. Not independently opened.
+- **Assumption** — an estimate.
 
-**Who pays:** affluent Miami & Miami Beach households (condo/valet-parking reality = they cannot easily use a shop even if they wanted to), plus hotels and brokers as B2B2C channels.
+## 1. Where the product stands
 
----
+Built and working: a client app (live service tracker, trilingual concierge with voice, reminders over SMS, WhatsApp, voice call and email, emergency dispatch) and Mission Control (tasks with check-in and check-out, staff radio, inventory, CRM export, Jev decision layer).
 
-## 2. Market study (2025–26 data)
+Not real yet:
 
-| Fact | Number | Source |
+- Technician location, staff movement and stock levels are simulated in the browser.
+- Notification channels compose messages but send nothing until provider keys are added.
+- Sign-in for staff and for the APIs is still to be built. It has to be in place before any real client's name, phone, address, location or insurance details go in.
+- The concierge has no price list. It has quoted the same tire rotation at $75, $85 and $95, while the app's built-in replies and the client deck say $39.
+- No written estimate or customer authorization flow, which Florida law requires above a threshold (Section 7).
+
+## 2. Market
+
+Verified:
+
+| Fact | Figure | Source |
 |---|---|---|
-| US mobile vehicle repair market (2025) | **$4.27B → $7.09B by 2031** (~8–9% CAGR) | Mordor Intelligence |
-| US automotive service market (2024) | ~$188.5B, 5.9% CAGR to 2030 | Ken Research |
-| Average competitor mobile job | **$100–$200** per service; trip fees emerging ($60/visit from 2026) | YourMechanic / Wrench pricing pages |
-| Miami Beach households >$200K/yr | **~22%** (South Beach 33139: 18%; Fisher Island: richest US zip) | Census Reporter / QuickFacts |
-| Miami luxury car sales | Nation-leading (9,834 luxury units in a single quarter in prior peaks, +13.5% YoY) | Miami Today |
-| Miami technician wages | **$25–31/hr avg**; ASE-certified up to $30–40+/hr ($85.8K avg) | Indeed, ZipRecruiter, BLS |
-| Mobile-op insurance (full: garage liability + commercial auto + tools floater) | **$340–590/mo** solo; scales with payroll | Insureon / Barbee Jackson (FL) |
-| Startup cost, mobile mechanic | **$5K–20K** typical (vs $50–300K shop) — vans $15–30K used or ~$700/mo lease; tools $5–15K/van | Insureon |
-| Luxury car-concierge memberships | **$100–700/mo** typical; elite tiers $10K/yr (Aces Auto Elite founding = $10,000/yr); concierge car subs $998–2,699/mo | MotorEnvy, Aces, Park Place Select |
+| Mobile automotive repair services market, worldwide | $4.27B (2025) → $4.65B (2026) → $7.09B (2031), 8.82% a year | Mordor Intelligence |
+| North America share of that market | 42.18% | Mordor Intelligence |
+| Automotive service technician pay, Miami metro, May 2025 | median $23.82/hr, mean $26.85, 75th percentile $31.08, 90th $39.18 | BLS |
+| Same occupation, Florida / U.S. mean | $25.84 / $27.13 an hour | BLS |
+| YourMechanic diagnostic fee | starts at $130, varies by market | YourMechanic |
 
-**Positioning:** the competitors price **per job** and serve the mass market. The premium membership tier is visibly underserved in Miami — exactly where a white-glove, trilingual, membership model with transparent live dispatch lands.
+Not verified:
 
-**Sources:** [yourmechanic.com](https://www.yourmechanic.com) · [yourmechanic.com/estimates](https://www.yourmechanic.com/estimates) · [Wrench (Trustpilot)](https://www.trustpilot.com/review/yourmechanic.com) · [Indeed — Miami tech wages](https://www.indeed.com/career/automotive-technician/salaries/Miami--FL) · [ZipRecruiter — Miami](https://www.ziprecruiter.com/Salaries/Automotive-Technician-Salary-in-Miami,FL) · [BLS OOH](https://www.bls.gov/ooh/installation-maintenance-and-repair/automotive-service-technicians-and-mechanics.htm) · Mordor Intelligence · Ken Research · Census Reporter/QuickFacts · Miami Today · Insureon · Barbee Jackson · MotorEnvy · Aces Auto Elite.
+- **Size of the target segment.** The first version said about 22% of Miami Beach households earn over $200,000. That came from a search summary and no source was opened. The Census API now requires a key and Census Reporter blocked automated access. Closing this takes one free key and one query (ACS table B19001 for the target ZIP codes). Until then there is no measured figure for how many households can afford these tiers.
+- **A comparable membership price.** No published Miami mobile-maintenance membership was found. Express car-wash unlimited plans run about $20–50 a month (search summary). The "$100–700 a month concierge band" quoted earlier is withdrawn.
 
----
+## 3. Tiers and pricing
 
-## 3. Pricing tiers
+Prices are proposals, not a benchmark. Under Assumptions on the tab they can be changed.
 
-| | **Essential — $119/mo** | **Privé — $269/mo** ★ | **Prestige — $549/mo** |
+| | Essential | Privé | Prestige |
 |---|---|---|---|
-| Target mix | 40% | 44% | 16% |
-| Covered visits | 1/mo | 2/mo + quarterly detail | Unlimited (fair use 4/mo) + monthly detail |
-| Dispatch | Standard | Priority same-day | 24/7 priority roadside included |
-| Extras | 15% member pricing | WhatsApp line to technician, tire/battery season checks | 2nd household car 50%, dedicated tech, annual report |
+| Price per month | $119 | $269 | $549 |
+| Visits included per month | 1 | 2 | 2 (fair-use cap 4) |
+| Details included per month | 0 | quarterly | 1 |
+| Assumed share of members | 40% | 44% | 16% |
+| Labor cost per member | $55 | $132 | $177 |
+| Materials per member | $12 | $25 | $44 |
+| Direct cost per member | $66 | $157 | $221 |
+| Contribution per member | $53 | $112 | $328 |
+| Margin | 44% | 42% | 60% |
+| Price for a 50% margin | $133 | $314 | $441 |
 
-À-la-carte (members get 10–15% off): full diagnostics $129 · oil service $109 · detail $189–389 · roadside $149+ · brake job from $320.
+Blended contribution is $123 per member per month before any fixed cost.
 
-Blended member revenue: 0.4×119 + 0.44×269 + 0.16×549 = **$254/member/mo**. Benchmark check: $254 sits mid-range of the $100–700/mo concierge band and above the per-job mass market — correctly positioned.
+Two things follow:
 
----
+- All three tiers cover what they cost to deliver. The first version said Essential was sold at cost. That came from assuming every monthly visit used an oil change.
+- Privé has the thinnest margin and is assumed to be the largest tier. At $314 it would reach 50%. Whether to raise it is a pricing decision, not a finding.
 
-## 4. The 50-client operating model
+## 4. What 50 members need
 
-### 4.1 Demand
-- Covered visits: 50 × 1.2/mo = **60**
-- À-la-carte (brakes, batteries, extra details, roadside): **~25/mo**
-- **Total ≈ 85 jobs/mo ≈ 4/day** (21 working days)
+### Demand
 
-### 4.2 Staff (payroll loaded ≈ 30% over base)
-| Role | Count | Cost/mo |
+80 membership visits and 15.3 details a month, across 57 member vehicles (43 not electric, 25% electric assumed), plus about 5.5 à-la-carte jobs.
+
+### Staff and capacity
+
+| Role | Count | Load |
 |---|---|---|
-| Master Technician (EV & diagnostics) — Van 1 | 1 | ≈ $5.4K |
-| Technician (service & brakes, detail cross-trained) — Van 2 | 1 | ≈ $5.4K |
-| Detail Specialist (part-time 80h) | 1 | ≈ $2.1K |
-| Dispatcher (owner, Mission Control) | 1 | sweat equity |
-| EV high-voltage contractors (on-call, ~15% of jobs) | 2 | per-job |
+| Lead technician | 1 | 76% of billable hours booked, 33.9 hours a month unbooked |
+| Detailer | 1, part-time | 46.2 paid hours a month |
+| Dispatcher | Owner | unpaid in this model |
 
-### 4.3 Fleet & tools (one-time ≈ **$20K**)
-2 leased wrapped vans ($700/mo each) · 2 pro diagnostic scanners ($3.5K ea) · EV HV safety kit ($900) · jacks/stands/ramps ×2 ($700 ea) · torque sets ×2 · battery tester/charger ×2 · impact + compressor ×2 · detailing rig ($2.2K) · hand-tool complements ×2 ($2K ea) · TPMS + tire kit ($1.1K).
+One technician covers about 66 members, at 2.11 technician hours per member per month. A second is needed from 67 members.
 
-### 4.4 Materials — monthly par (≈ **$6.3K/mo**)
-160 qt full synthetic · 35 OEM oil filters · 15 cabin / 10 engine filters · 6 brake-pad sets · 3 rotor pairs · 8 AGM batteries · 6 gal EV coolant + 10 gal ICE coolant · 12 wiper pairs · bulbs · tire-repair consumables · detailing chemistry for 20 details · disposables & wear items. (Full itemized table lives in Mission Control → Business Plan → Materials.)
+Headcount including the owner is 3, so workers' compensation is not required at this size. It becomes required at the second technician.
 
-### 4.5 Logistics
-- **Zones:** Brickell/Downtown · South Beach/SoFi · Coral Gables/Grove · Wynwood/Edgewater/Design District · Fisher Island & Key Biscayne (scheduled only).
-- **Promises:** ≤60-min arrival Z1/Z2 (≤30 emergencies), ≤90/45 Z3/Z4.
-- Nightly van return + restock at a small storage unit ($400/mo); Saturday = detailing peak; storm playbook = radio broadcast + shelter confirms.
+### Fleet and tools
 
-### 4.6 Monthly P&L — computed by the live model (Mission Control → Business Plan)
-At **50 members**: revenue ≈ $17.9K (MRR $12.7K + à-la-carte $5.3K) vs costs ≈ $18–21K → **slightly negative — the pre-breakeven zone**.
-At **75 members** (model output): MRR $19.0K + à-la-carte $8.0K = **$27.0K revenue**; payroll $12.3K, fleet+fixed $6.1K (3 vans), materials $7.9K → **≈ +$0.7K/mo**.
-At **100 members**: ≈ +$1.2K/mo under strict coefficients (3 techs, 4 vans).
+| Item | Count | Monthly | One-time |
+|---|---|---|---|
+| Service van (per technician) | 1 | $750 lease + $420 fuel and upkeep | $9,700 tools + $1,500 wrap |
+| Detailing rig (per detailer) | 1 | $550 lease + $420 fuel and upkeep | $5,700 upfit + $1,500 wrap |
 
-**Breakeven: ≈ 73 members** on this cost curve.
+The first version had no vehicle for the detailer. Tool and upfit prices were not checked with suppliers; the item lists are on the tab.
 
-**Where the profit actually comes from (the model's key insight):** an Essential-tier "covered visit" costs ≈ $112 in labor+materials against $119/mo revenue — essentially at cost. Margin lives in (1) Privé & Prestige mix (44%+16% of members), (2) à-la-carte attach — brakes, batteries, details at 2.0–2.5× materials — target ≥ 0.6 à-la-carte jobs per member per month, and (3) defining the Essential covered visit as a capped "care visit" (diagnostics + fluids top-up, materials ≤ $35) rather than a full oil service. With those three levers the same 75-member base clears ≈ $4–6K/mo.
+### Materials to keep on hand, per month at 50 members
 
-**Capital need:** ≈ $45–60K (tools $20K, van deposits, 3–4 months runway) to cross the valley to ~75 members safely.
+| Item | Used | Cost | Keep on hand (3 weeks) | Paid by |
+|---|---|---|---|---|
+| Full synthetic oil | 21.6 qt | $162 | 14.9 qt | membership |
+| Oil filter | 3.6 | $43 | 2.5 | membership |
+| Cabin air filter | 3.2 | $48 | 2.2 | membership |
+| Engine air filter | 1.2 | $22 | 0.8 | membership |
+| Wiper set | 4.8 | $120 | 3.3 | membership |
+| Shop supplies | 80.0 visits | $320 | 55.4 | membership |
+| Detailing products | 15.3 details | $429 | 10.6 | membership |
+| AGM 12V battery | 1.2 | $210 | 0.8 | member, à-la-carte |
+| Brake pad set, one axle | 1.9 | $211 | 1.3 | member, à-la-carte |
+| Tire patch kit | 2.4 | $24 | 1.7 | member, à-la-carte |
 
----
+About $1,587 a month in materials, and $1,099 of stock on the shelf. The first version listed 160 quarts of oil and 8 batteries a month. Quantities here follow vehicle wear rates instead.
 
-## 5. Risks & mitigations
-1. **Demand concentration in luxury** → B2B2C hedge: hotel concierge desks + real-estate brokers (their clients = our clients) + corporate fleet accounts.
-2. **Technician shortage (EV-certified)** → pipeline via tech-school partnerships; contractors for surge; the Prestige dedicated-tech model makes techs brand ambassadors.
-3. **Parts price volatility** → 2.0–2.5× materials multiple baked into pricing; Jev inventory judgments prevent overstock.
-4. **Weather (storm season)** → scheduled-service model flexes; storm playbook; detailing dips offset by pre-storm battery/tire checks (a real Miami behavior).
-5. **Trust/keys anxiety** (technicians in private garages) → background-checked, uniformed, photo-in-app technicians with live GPS = the product's core promise.
+### À-la-carte work at 50 members
 
-## 6. KPIs on the Mission Control wall
-MRR & member mix · jobs/mo vs capacity · arrival-time SLA compliance % · repeat rate (target >90%) · NPS · à-la-carte attach rate · materials cost/job · reminder→confirm conversion · emergency response median.
+| Job | Jobs / mo | Price | Revenue / mo |
+|---|---|---|---|
+| 12V battery replacement | 1.20 | $433 | $518 |
+| Brake pads, one axle | 1.92 | $407 | $780 |
+| Tire patch or plug | 2.40 | $103 | $246 |
 
-## 7. 12-month ramp
-- **M1–3 "Founding 25":** founding pricing, building/hotel partnerships, 1 van + 1 master tech → 25 members / ~$6.2K MRR.
-- **M4–8 "To 50":** van 2 + tech 2, detail launch, referral engine (1 free detail/referral) → 50 members / ~$12.7K MRR / breakeven zone.
-- **M9–12 "50→75":** routing optimization, Prestige push, corporate accounts → 75 members / ~$19K MRR / profitable.
+Parts are billed at 2.0–2.2 times cost and labor at $110 an hour, both assumptions. PartsTech publishes a benchmark matrix of 1.7× to 4× depending on part price and says shop coaches recommend a 58% gross margin on parts. Repairs beyond these three items are not counted. The first version assumed $5,250 a month of à-la-carte revenue with nothing behind it.
+
+## 5. The money
+
+Profit is before any pay for the owner.
+
+| Members | 25 | 50 | 75 | 100 | 125 |
+|---|---|---|---|---|---|
+| Membership revenue | $6,345 | $12,690 | $19,035 | $25,380 | $31,725 |
+| À-la-carte revenue | $772 | $1,544 | $2,316 | $3,088 | $3,859 |
+| Technician pay | $6,527 | $6,527 | $12,165 | $12,165 | $12,165 |
+| Detailer pay | $520 | $1,039 | $1,559 | $2,078 | $2,598 |
+| Workers' comp | $0 | $0 | $549 | $570 | $591 |
+| Vehicles | $2,140 | $2,140 | $3,310 | $3,310 | $3,310 |
+| Insurance | $800 | $800 | $950 | $950 | $950 |
+| Overhead | $1,500 | $1,500 | $1,500 | $1,500 | $1,500 |
+| Materials and parts | $794 | $1,587 | $2,382 | $3,176 | $3,970 |
+| **Profit / (loss)** | **($5,163)** | **$640** | **($1,064)** | **$4,718** | **$10,501** |
+| Technicians | 1 | 1 | 2 | 2 | 2 |
+| Hours booked | 38% | 76% | 57% | 76% | 95% |
+
+Profitable member counts are 48–66 and 80 and up. The gap from 67 to 79 is the second technician arriving before the work has grown to fill the time.
+
+### What changes the answer at 50 members
+
+| Change | Profit / mo | Difference | Technicians |
+|---|---|---|---|
+| As entered | +$640 | — | 1 |
+| Visits take 40% longer | −$6,847 | −$7,487 | 2 |
+| Members trade down to 60 / 30 / 10 | −$1,149 | −$1,789 | 1 |
+| Wages 15% higher | −$495 | −$1,135 | 1 |
+| Nobody buys anything à-la-carte | −$459 | −$1,099 | 1 |
+| Only 70% of paid hours are billable | +$447 | −$193 | 1 |
+| Prestige members use all 4 visits | +$576 | −$64 | 1 |
+| Garage or valet handoff adds 15 min per visit | +$640 | $0 | 1 (90% booked) |
+| Members add $60/mo of other repairs | +$2,590 | +$1,950 | 1 |
+
+**One unmeasured number decides 50 members.** At up to 1.67 hours per visit, one technician suffices and the month is about +$640. At 1.75 hours a second is needed and the month is about −$6,847, a swing of roughly $7,500.
+
+At 75 members the same line sits between 1.0 and 1.25 hours: +$6,443 with one technician, −$1,064 with two.
+
+## 6. Cash to get there
+
+Members grow evenly from zero, a technician is hired from the first month, and vehicles are set up as the model needs them.
+
+| Time to reach 50 members | Most cash needed | Running total on arrival |
+|---|---|---|
+| 6 months | $47,217 | −$46,577 |
+| 9 months | $62,708 | −$62,068 |
+| 12 months | $77,966 | −$77,326 |
+| 18 months | $109,178 | −$108,539 |
+
+One-time spending is $21,400 to open ($3,000 set-up plus $18,400 for the first van and rig) and $11,200 more when the second van is added.
+
+The first version put the capital need at $45–60K with three or four months of runway. That understated it: reaching 50 members in 12 months costs about $78K and is still not paid back on arrival. Early months lose $5,000–10,000 each because a full technician, two vehicles, insurance and overhead are paid before the members exist.
+
+## 7. Rules that apply (Florida, verified)
+
+- **The Motor Vehicle Repair Act covers this business.** It names "mobile motor vehicle repair shops" and defines repair as "all maintenance of and modifications and repairs to motor vehicles, and diagnostic work incident thereto" (§559.903).
+- **Written estimates.** Above $150 a written estimate has to be prepared before any diagnostic or repair work, and the customer signs a disclosure choosing to request an estimate, decline one or set a dollar cap (§559.905).
+- **Overruns.** A shop may not "charge more than the written estimate plus $10 or 10 percent, whichever is greater, but not to exceed $50" without the customer's authorization (§559.909).
+- **Workers' compensation** is required at four or more employees, counting owners who are corporate officers or LLC members.
+- **Building access.** Associations commonly require a certificate of insurance before a vendor starts, often with the association as additional insured, at limits around $1M per occurrence. Some restrict vehicle maintenance on their premises.
+
+Not checked, and worth a lawyer and an accountant: how the estimate rules apply to work included in a membership, local business tax receipts, and sales tax on parts and labor.
+
+## 8. Risks
+
+1. **Visit time is unknown**, and at 50 members it decides between a small profit and a large loss. Garage and valet handoff in condo towers may add time that a driveway job does not.
+2. **Segment size is unmeasured** (Section 2).
+3. **Tier mix.** A shift toward Essential costs about $1,800 a month at 50 members.
+4. **Buildings can refuse access** or bar fluid work in garages, which would remove oil changes from the at-home promise.
+5. **The launch is the expensive part.** Every month spent below 48 members costs money.
+6. **The owner is unpaid** throughout these figures.
+
+## 9. What to do next
+
+1. Run a paid pilot with 10–15 founding members and one van, with the owner or one technician. Measure four things on every visit: technician time including access and travel, visits booked per tier, which tier people choose, and what members buy beyond the membership.
+2. Put those four numbers into Assumptions. The model then becomes a forecast instead of a range.
+3. Agree the second technician only when the first is above about 85% booked.
+4. Before any real client data: sign-in for the admin console and APIs, one price list that the app, the concierge and the deck all read, and a written estimate and authorization step.
+
+## 10. Corrections to the first version
+
+| First version said | Corrected |
+|---|---|
+| U.S. mobile repair market $4.27B → $7.09B | Worldwide. North America is 42% of it |
+| Essential sold at cost ($112 cost vs $119) | Direct cost $66, margin 44% |
+| 50 members need 2 technicians, 85 jobs, about $6,300 of materials | 1 technician, 80 visits plus 15 details, about $1,590 |
+| À-la-carte revenue $5,250 a month at 50 members | $1,544, from wear rates |
+| Loss of about $4,228 a month at 50; profit $1,200 at 100 | +$640 at 50; +$4,718 at 100 |
+| "Levers" that would add $4–6K a month | Withdrawn. They were never computed |
+| Capital need $45–60K | About $78K for a 12-month ramp to 50 |
+| Materials list of fixed quantities | Quantities derived from vehicles and wear rates |
+| No vehicle for the detailer | One detailing rig per detailer |
+| Miami Beach 22% over $200K; luxury sales stat; concierge price band | Withdrawn as unverified or outdated |
+
+## 11. Sources
+
+Opened and read:
+
+- Mordor Intelligence, [Mobile Automotive Repair Services Market](https://www.mordorintelligence.com/industry-reports/mobile-vehicle-repair-service-market)
+- U.S. Bureau of Labor Statistics, OEWS May 2025, occupation 49-3023, public API. Miami metro series `OEUM0033100000000493023xx`, Florida `OEUS1200000000000493023xx`, national `OEUN0000000000000493023xx`. Which series is which percentile was inferred from the values; the hourly mean and the annual mean agree at 2,080 hours.
+- [YourMechanic support](https://www.yourmechanic.com/support)
+- [PartsTech, parts markup matrix](https://www.partstech.com/parts-markup-matrix)
+- Florida Statutes [§559.903](https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0559/Sections/0559.903.html), [§559.905](https://www.flsenate.gov/laws/statutes/2025/559.905), [§559.909](https://www.flsenate.gov/laws/statutes/2025/559.909)
+- [Florida Division of Workers' Compensation, coverage requirements](https://www.myfloridacfo.com/division/wc/employer/coverage-requirements)
+- [The HOA Guide, vendor insurance requirements](https://www.thehoaguide.com/hoa-insurance-reserves/hoa-vendor-insurance-requirements)
+
+Search summaries only, not opened: battery life 3–5 years; brake pads 30,000–70,000 miles; cabin filter about 15,000 miles; on-site oil change 20–45 minutes and diagnostics 30–60 minutes; Miami detailer pay $15–20 an hour; cargo-van leases $700–850 a month; express car-wash memberships $20–50 a month; insurance about $180–360 a month for a solo operator. Indeed, ZipRecruiter and Insureon's cost figures could not be opened, so they are not used.
+
+Everything else in the model is an assumption and is labelled as one on the tab.
