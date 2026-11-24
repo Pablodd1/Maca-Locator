@@ -5,6 +5,7 @@ import { useAppState } from "../context/AppContext";
 import { useOps, taskStatusLabel, STATUS_ORDER, type TaskStatus } from "../context/OpsContext";
 import { notify } from "../lib/notifyClient";
 import { speakHuman, speakConversational } from "@/lib/voice";
+import { BusinessPlan } from "./BusinessPlan";
 import {
   Radar, MapPin, Package, CalendarDays, Radio, LogIn, LogOut,
   PhoneCall, ClipboardList, Plus, ShoppingCart, Bot, Send, Mic, MicOff, Volume2, VolumeX, Sparkles,
@@ -15,7 +16,7 @@ import {
 // staff radio, inventory & shopping, calendar load, and the full activity
 // ledger. Bilingual EN-first (admin-facing); trilingual tone kept in comms.
 
-type Section = "board" | "tasks" | "staff" | "inventory" | "ledger" | "ai";
+type Section = "board" | "tasks" | "staff" | "inventory" | "ledger" | "ai" | "plan";
 
 export function MissionControl() {
   const { user, vehicles, bookings } = useAppState();
@@ -199,7 +200,7 @@ export function MissionControl() {
           </div>
         </div>
         <div className="flex gap-1 mt-4 overflow-x-auto whitespace-nowrap">
-          {([["board", "Live Board"], ["tasks", "Task Manager"], ["staff", "Staff & Radio"], ["inventory", "Inventory"], ["ledger", "Activity Ledger"], ["ai", "Mission AI"]] as [Section, string][]).map(([id, label]) => (
+          {([["board", "Live Board"], ["tasks", "Task Manager"], ["staff", "Staff & Radio"], ["inventory", "Inventory"], ["ledger", "Activity Ledger"], ["ai", "Mission AI"], ["plan", "Business Plan"]] as [Section, string][]).map(([id, label]) => (
             <button
               key={id}
               onClick={() => setSection(id)}
@@ -558,6 +559,9 @@ export function MissionControl() {
           </CardContent>
         </Card>
       )}
+
+      {/* ── BUSINESS PLAN — 50-client operating model ── */}
+      {section === "plan" && <BusinessPlan />}
     </div>
   );
 }
